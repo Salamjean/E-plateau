@@ -20,7 +20,7 @@
                 </div>
                 <div class="card-footer p-3">
                     <p class="mb-0">
-                        <span class="text-success text-sm font-weight-bolder">40% </span>
+                        <span class="text-success text-sm font-weight-bolder">100% </span>
                         du total
                     </p>
                 </div>
