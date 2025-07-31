@@ -1,0 +1,56 @@
+            <nav id="sidebar">
+               <div class="sidebar_blog_1">
+                  <div class="sidebar-header">
+                     <div class="logo_section">
+                        <a href="{{route('user.dashboard')}}"><img class="logo_icon img-responsive" src="images/logo/logo_icon.png" alt="#" /></a>
+                     </div>
+                  </div>
+                  <div class="sidebar_user_info">
+                     <div class="icon_setting"></div>
+                     <div class="user_profle_side">
+                        <div class="user_img"><img class="img-responsive" src="{{ optional(Auth::user())->profile_picture 
+                                                ? asset('storage/' . Auth::user()->profile_picture) 
+                                                : asset('assets/images/profiles/useriii.jpeg') }}" 
+                                        alt="Profile Picture" /></div>
+                            <div class="user_info">
+                           <h6>{{ Auth::user()->name }} <br>{{ Auth::user()->prenom }}</h6>
+                           <p><span class="online_animation"></span> En ligne</p>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="sidebar_blog_2">
+                  <h4>Menu général</h4>
+                  <ul class="list-unstyled components">
+
+                     <li><a href="{{route('user.dashboard')}}"><i class="fa fa-dashboard yellow_color"></i> <span>Tableau de bord</span></a></li>
+                     <li>
+                        <a href="#element" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-diamond purple_color"></i> <span>Extrait de naissance</span></a>
+                        <ul class="collapse list-unstyled" id="element">
+                           <li style="text-align: center">Demande :</li>
+                           <li><a href="general_elements.html">> <span>Extrait avec certificat</span></a></li>
+                           <li><a href="media_gallery.html">> <span>Extrait sans certificat</span></a></li>
+                           <li><a href="icons.html">> <span>Liste des demandes</span></a></li>
+                        </ul>
+                     </li>
+                     <li>
+                        <a href="#apps" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-object-group blue2_color"></i> <span>Extrait de décès</span></a>
+                        <ul class="collapse list-unstyled" id="apps">
+                           <li style="text-align: center">Demande :</li>
+                           <li><a href="general_elements.html">> <span>Extrait avec certificat</span></a></li>
+                           <li><a href="media_gallery.html">> <span>Extrait sans certificat</span></a></li>
+                           <li><a href="icons.html">> <span>Liste des demandes</span></a></li>
+                        </ul>
+                     </li>
+                     <li class="active">
+                        <a href="#additional_page" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-clone yellow_color"></i> <span>Extrait de mariage</span></a>
+                        <ul class="collapse list-unstyled" id="additional_page">
+                           <li style="text-align: center">Demande :</li>
+                           <li><a href="media_gallery.html">> <span>Extrait de mariage</span></a></li>
+                           <li><a href="icons.html">> <span>Liste des demandes</span></a></li>
+                        </ul>
+                     </li>
+                     <li><a href="map.html"><i class="fa fa-map purple_color2"></i> <span>Rendez-vous de mariage</span></a></li>
+                  </ul>
+               </div>
+            </nav>
