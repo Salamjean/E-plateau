@@ -52,7 +52,7 @@
                 <div class="col-xl-4 d-flex align-items-stretch">
                   <div class="icon-box" data-aos="zoom-out" data-aos-delay="500">
                     <i class="bi bi-inboxes"></i>
-                    <h4>Acte de décès</h4>
+                    <h4>Acte de mariage</h4>
                     <p>- Connaitre le numéro de registre</p>
                     <p>- Connaitre la date de registre</p>
                     <p>- Avoir une copie de l'extrait</p>

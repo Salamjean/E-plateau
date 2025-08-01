@@ -103,6 +103,19 @@ Route::middleware('doctor')->prefix('doctor')->group(function(){
         Route::get('/birth/{id}', [DeclarationNaissance::class, 'show'])->name('statement.show');
         Route::get('/mairie/{id}', [DeclarationNaissance::class, 'mairieshow'])->name('naissHopmairie.show');
     });
+
+     //Les routes pour les declarations de naissance 
+      Route::prefix('statement')->group(function () {
+        Route::get('/death', [DeclarationNaissance::class, 'index'])->name('statement.index');
+        Route::get('/death/create', [DeclarationNaissance::class, 'create'])->name('statement.create');
+        Route::post('/death/create', [DeclarationNaissance::class, 'store'])->name('statement.store');
+        Route::get('/death/edit/{naisshop}', [DeclarationNaissance::class, 'edit'])->name('statement.edit');
+        Route::put('/death/edit/{naisshop}', [DeclarationNaissance::class, 'update'])->name('statement.update');
+        Route::get('/death/delete/{naisshop}', [DeclarationNaissance::class, 'delete'])->name('statement.delete');
+        Route::get('/death/download/{id}', [DeclarationNaissance::class, 'download'])->name('statement.download');
+        Route::get('/death/{id}', [DeclarationNaissance::class, 'show'])->name('statement.show');
+        Route::get('/mairie/{id}', [DeclarationNaissance::class, 'mairieshow'])->name('naissHopmairie.show');
+    });
 });
 
 
