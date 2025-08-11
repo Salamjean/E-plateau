@@ -191,7 +191,7 @@
                         text: '{{ Session::get('error') }}',
                         showConfirmButton: true,  // Afficher le bouton OK
                         confirmButtonText: 'OK',  // Texte du bouton
-                        color: '#ffffff'          // Texte blanc
+                        color: 'red'          // Texte blanc
                     });
                 </script>
             @endif
@@ -230,8 +230,10 @@
                         <td>{{ $doctor->fonction }}</td>
                         <td>{{ $doctor->sexe }}</td>
                         <td>
-                            <button class="edit"><a href="#" class="edit"><i class="fas fa-edit"></i></a></button>
-                            <button class="delete"><a href="#" class="delete"><i class="fas fa-trash"></i></a></button>
+                            <button class="edit"><a href="{{ route('doctor.edit', $doctor->id) }}" class="edit"><i class="fas fa-edit"></i></a></button>
+                            <button class="delete" onclick="confirmDelete('{{ route('doctor.delete', $doctor->id) }}')">
+                                <i class="fas fa-trash"></i>
+                            </button>
                         </td>
                     </tr>
                     @empty
@@ -273,6 +275,24 @@
                 $('#patients-table').DataTable().search(this.value).draw();
             });
         });
+
+        function confirmDelete(route) {
+            Swal.fire({
+                title: 'Êtes-vous sûr?',
+                text: "Vous ne pourrez pas revenir en arrière!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Oui, supprimer!',
+                cancelButtonText: 'Annuler'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Rediriger vers l'URL de suppression
+                    window.location.href = route;
+                }
+            });
+        }
     </script>
 
 @endsection

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Doctor;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DoctorRequest;
+use App\Http\Requests\UpdateDoctorRequest;
 use App\Models\Doctor;
 use App\Models\ResetCodePassword;
 use App\Notifications\SendEmailToDoctorAfterRegistrationNotification;
@@ -85,5 +86,37 @@ class DoctorController extends Controller
             ->paginate(10);
     
         return view('hopital.doctor.index', compact('doctors'));
+    }
+
+    public function edit(Doctor $doctor){
+        return view('hopital.doctor.edit', compact('doctor'));
+    }
+
+    public function update(UpdateDoctorRequest $request,Doctor $doctor){
+        try {
+            $doctor->name = $request->name;
+            $doctor->prenom = $request->prenom;
+            $doctor->email = $request->email;
+            $doctor->description = $request->description;
+            $doctor->contact = $request->contact;
+            $doctor->sexe = $request->sexe;
+            $doctor->fonction = $request->fonction;
+            $doctor->update();
+
+            return redirect()->route('doctor.index')->with('success','Les informations du personnel ont été mises à jour avec succès.');
+        } catch (Exception $e) {
+            // dd($e);
+            throw new Exception('error','Une erreur est survenue lors de la modification du personnel');
+        }
+    }
+
+    public function delete(Doctor $doctor){
+        try {
+            $doctor->archive();
+            return redirect()->route('doctor.index')->with('success1','Le personnel a été supprimé avec succès.');
+        } catch (Exception $e) {
+            // dd($e);
+            throw new Exception('error','Une erreur est survenue lors de la suppression du personnel');
+        }
     }
 }

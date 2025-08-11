@@ -41,8 +41,8 @@ class SendEmailToDoctorAfterRegistrationNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('Plateau access : Compte du personnel crée avec succès') // Sujet mis à jour
-            ->from('contact@edemarchee-ci.com', 'Plateau access')
+            ->subject('Plateau-Apps : Compte du personnel crée avec succès') // Sujet mis à jour
+            ->from('contact@edemarchee-ci.com', 'Plateau-Apps')
             ->view('emails.doctor_registration', [
                 'code' => $this->code,
                 'email' => $this->email,

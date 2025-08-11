@@ -10,12 +10,6 @@
       </a>
   </div>
 
-  {{-- Ajoute un logo ici centré --}}
-  <div class="text-center my-2">
-      <img src="{{ asset('assets4/img/logoo.png') }}" alt="Logo" style="width: 100px; height: auto;">
-  </div>
-  {{-- Fin de l'ajout du logo --}}
-
       <li class="ms-nav-item ms-nav-user dropdown">
           <a href="#" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 
               <img class="ms-user-img ms-img-round float-right" style="width: 50px; height: 40px; border-radius: 50%; object-fit: cover;" src="

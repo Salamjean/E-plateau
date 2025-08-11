@@ -20,7 +20,7 @@
         <a href="{{route('home')}}" class="logo d-flex align-items-center me-auto">
           <!-- Uncomment the line below if you also wish to use an image logo -->
           <!-- <img src="assets/img/logo.png" alt=""> -->
-          <h1 class="sitename">Plateau access</h1>
+          <h1 class="sitename">Plateau Apps</h1>
         </a>
 
         <nav id="navmenu" class="navmenu">
@@ -46,7 +46,7 @@
           <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
         </nav>
 
-        <a class="cta-btn d-none d-sm-block" href="{{route('user.login')}}">Se connecter</a>
+        <a class="cta-btn d-none d-sm-block" href="{{route('login')}}">Se connecter</a>
 
       </div>
 

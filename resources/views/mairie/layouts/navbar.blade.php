@@ -4,13 +4,13 @@
               <span class="mdi mdi-chevron-double-left" style="color:black"></span>
             </button>
             <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-              <a class="navbar-brand brand-logo-mini" href="index.html"><img src="../assets/images/logo-mini.svg" alt="logo" /></a>
+              <a class="navbar-brand brand-logo-mini" href="{{route('mairie.dashboard')}}"><img src="{{asset('assets/assets/img/logo plateau.png')}}" alt="logo" width="50px" /></a>
             </div>
             <ul class="navbar-nav navbar-nav-right">
               
               <li class="nav-item nav-logout d-none d-lg-block">
-                <a class="nav-link" href="index.html">
-                  <i class="mdi mdi-home-circle"></i>
+                <a class="nav-link" href="{{route('mairie.logout')}}">
+                  <i class="mdi mdi-home-circle"></i> Déconnexion
                 </a>
               </li>
             </ul>

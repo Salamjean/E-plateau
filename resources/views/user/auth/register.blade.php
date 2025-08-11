@@ -10,8 +10,8 @@
     <title>User register</title>
     <style>
         :root {
-            --primary-color: #4361ee;
-            --secondary-color: #3f37c9;
+            --primary-color: #1977cc;
+            --secondary-color: #1977cc;
             --accent-color: #4895ef;
             --error-color: #f72585;
             --success-color: #4cc9f0;
@@ -317,7 +317,7 @@
                 <h2>Bienvenue !</h2>
                 <p>Rejoignez notre communauté et bénéficiez de tous nos services en créant un compte personnel.</p>
                 <p>Déjà inscrit ? Connectez-vous pour accéder à votre espace.</p>
-                <a href="{{route('user.login')}}" class="login-btn animate__animated animate__pulse animate__infinite animate__slower">
+                <a href="{{route('login')}}" class="login-btn animate__animated animate__pulse animate__infinite animate__slower">
                     <i class="fas fa-sign-in-alt"></i> Se connecter
                 </a>
             </div>
@@ -348,7 +348,7 @@
                 <div class="form-row">
                     <div class="input-group">
                         <i class="fas fa-user input-icon"></i>
-                        <input class="input-field" type="text" name="name" placeholder=" " value="{{ old('name') }}" required />
+                        <input class="input-field" type="text" name="name" placeholder=" " value="{{ old('name') }}" />
                         <label class="input-label" for="name">Nom</label>
                         @error('name')
                             <div class="error-message">
@@ -359,7 +359,7 @@
 
                     <div class="input-group">
                         <i class="fas fa-user input-icon"></i>
-                        <input class="input-field" type="text" name="prenom" placeholder=" " value="{{ old('prenom') }}" required />
+                        <input class="input-field" type="text" name="prenom" placeholder=" " value="{{ old('prenom') }}" />
                         <label class="input-label" for="prenom"> Prénom</label>
                         @error('prenom')
                             <div class="error-message">
@@ -376,7 +376,7 @@
 
                 <div class="input-group">
                     <i class="fas fa-envelope input-icon"></i>
-                    <input class="input-field" type="email" name="email" placeholder=" " value="{{ old('email') }}" required />
+                    <input class="input-field" type="email" name="email" placeholder=" " value="{{ old('email') }}" />
                     <label class="input-label" for="email">Adresse Email</label>
                     @error('email')
                         <div class="error-message">
@@ -388,7 +388,7 @@
                 <div class="form-row">
                     <div class="input-group">
                         <i class="fas fa-key input-icon"></i>
-                        <input class="input-field" type="password" name="password" id="password" placeholder=" " required />
+                        <input class="input-field" type="password" name="password" id="password" placeholder=" " />
                         <label class="input-label" for="password">Mot de passe</label>
                         <i class="fas fa-eye password-toggle" id="togglePassword"></i>
                         @error('password')
@@ -400,7 +400,7 @@
 
                     <div class="input-group">
                         <i class="fas fa-key input-icon"></i>
-                        <input class="input-field" type="password" name="password_confirmation" id="password_confirmation" placeholder=" " required />
+                        <input class="input-field" type="password" name="password_confirmation" id="password_confirmation" placeholder=" " />
                         <label class="input-label" for="password_confirmation">Confirmation</label>
                     </div>
                 </div>

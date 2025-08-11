@@ -19,10 +19,7 @@
 
         <div class="col-xl-12 col-md-12">
             <div class="ms-panel">
-                <div class="ms-panel-header ms-panel-custome">
-                    <h6>Ajout d'un directeur</h6>
-                    <a href="{{ route('directeur.create') }}" class="add-patient"><i class="fas fa-bars"></i>&emsp; Liste docteur</a>
-                </div>
+                
                 <div class="ms-panel-body">
                     <form class="needs-validation" method="POST" enctype="multipart/form-data" action="{{ route('directeur.store') }}" novalidate>
                         @csrf
@@ -262,7 +259,6 @@
                     text: '{{ Session::get('success1') }}',
                     showConfirmButton: true,
                     confirmButtonText: 'OK',
-                    background: '#ffcccc',
                     color: '#b30000'
                 });
             </script>
@@ -276,7 +272,6 @@
                     text: '{{ Session::get('success') }}',
                     showConfirmButton: true,
                     confirmButtonText: 'OK',
-                    background: '#ccffcc',
                     color: '#006600'
                 });
             </script>
@@ -290,8 +285,7 @@
                     text: '{{ Session::get('error') }}',
                     showConfirmButton: true,
                     confirmButtonText: 'OK',
-                    background: '#f86750',
-                    color: '#ffffff'
+                    color: 'red'
                 });
             </script>
         @endif
@@ -318,8 +312,8 @@
                     <td>{{ $director->email }}</td>
                     <td>{{ $director->contact }}</td>
                     <td>
-                        <button class="edit"><a href="#" class="edit"><i class="fas fa-edit"></i></a></button>
-                        <button class="delete"><a href="#" class="delete"><i class="fas fa-trash"></i></a></button>
+                        <button class="edit"><a href="{{ route('directeur.edit', $director->id) }}" class="edit"><i class="fas fa-edit"></i></a></button>
+                        <button class="delete"><a href="{{ route('directeur.delete', $director->id) }}" class="delete"><i class="fas fa-trash"></i></a></button>
                     </td>
                 </tr>
                 @empty

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Doctor\Naissance;
 
 use App\Http\Controllers\Controller;
+use App\Models\DeclarationDeces;
 use App\Models\DeclarationNaissance as ModelsDeclarationNaissance;
 use App\Models\Enfant;
 use Illuminate\Http\Request;
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Endroid\QrCode\Writer\PngWriter;
 use Endroid\QrCode\QrCode;
+use Exception;
 use PDF;
 
 class DeclarationNaissance extends Controller
@@ -224,5 +226,81 @@ class DeclarationNaissance extends Controller
 
         // Retourner le PDF pour téléchargement direct
         return $pdf->download("declaration_{$declaration->id}.pdf");
+    }
+
+    public function edit(ModelsDeclarationNaissance $naisshop){
+        return view('doctor.naissance.edit', compact('naisshop'));
+    }
+
+    public function update(Request $request, ModelsDeclarationNaissance $naisshop)
+    {
+        try {
+            // Validation des données
+            $validatedData = $request->validate([
+                'NomM' => 'required',
+                'PrM' => 'required',
+                'contM' => 'required',
+                'dateM' => 'required|date',
+                'NomP' => 'required',
+                'PrP' => 'required',
+                'contP' => 'required',
+                'CNI_Pere' => 'required',
+                'lien' => 'required',
+                'codeCMU' => 'required',
+                'nombreEnf' => 'required|integer|min:1',
+                'NomEnf' => 'required',
+                'commune' => 'required',
+            ]);
+    
+            // Gestion du fichier CNI de la mère
+            if ($request->hasFile('CNI_mere')) {
+                // Supprimer l'ancien fichier s'il existe
+                if ($naisshop->CNI_mere && Storage::exists($naisshop->CNI_mere)) {
+                    Storage::delete($naisshop->CNI_mere);
+                }
+    
+                $path = $request->file('CNI_mere')->store('public/images/naissances/cni');
+                $validatedData['CNI_mere'] = str_replace('public/', '', $path);
+            }
+    
+            // Mise à jour des informations principales
+            $naisshop->update($validatedData);
+    
+            // Gestion des enfants
+            $naisshop->enfants()->delete(); // Supprime les anciens enfants
+    
+            // Crée les nouveaux enfants
+            for ($i = 1; $i <= $request->nombreEnf; $i++) {
+                Enfant::create([
+                    'declaration_naissance_id' => $naisshop->id,
+                    'date_naissance' => $request->input('DateNaissance_enfant_'.$i),
+                    'sexe' => $request->input('sexe_enfant_'.$i),
+                    'nombreEnf' => $request->nombreEnf
+                ]);
+            }
+    
+            return redirect()->route('statement.index')
+                ->with('success', 'Déclaration de naissance mise à jour avec succès');
+    
+        } catch (Exception $e) {
+            return back()->withInput()
+                ->with('error', 'Erreur lors de la mise à jour: '.$e->getMessage());
+        }
+    }
+
+    public function show($id)
+    {
+        $naisshop = ModelsDeclarationNaissance::findOrFail($id); // Récupérer les données ou générer une erreur 404 si non trouvé
+        return view('doctor.naissance.details', compact('naisshop'));
+    }
+
+    public function delete(ModelsDeclarationNaissance $naisshop){
+        try {
+            $naisshop->delete();
+            return redirect()->route('statement.index')->with('success1','La declaration a été supprimé avec succès.');
+        } catch (Exception $e) {
+            // dd($e);
+            throw new Exception('error','Une erreur est survenue lors de la suppression du Docteur');
+        }
     }
 }

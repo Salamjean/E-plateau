@@ -10,8 +10,8 @@
     <title>User login</title>
     <style>
         :root {
-            --primary-color: #4361ee;
-            --secondary-color: #3f37c9;
+            --primary-color: #1977cc;
+            --secondary-color: #1977cc;
             --accent-color: #4895ef;
             --error-color: #f72585;
             --success-color: #4cc9f0;
@@ -76,7 +76,7 @@
             font-weight: 700;
             color: var(--primary-color);
             margin-bottom: 5px;
-            background: linear-gradient(to right, #4361ee, #3a0ca3);
+            background: linear-gradient(to right, #1977cc, #1977cc);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             position: relative;
@@ -91,7 +91,7 @@
             transform: translateX(-50%);
             width: 50px;
             height: 3px;
-            background: linear-gradient(to right, #4361ee, #3a0ca3);
+            background: linear-gradient(to right, #1977cc, #1977cc);
             border-radius: 3px;
         }
 

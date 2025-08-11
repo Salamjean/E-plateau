@@ -76,7 +76,7 @@
                     <div class="ms-card-body media">
                         <div class="media-body">
                             <h6>Naissance/Jour</h6>
-                            <p class="ms-card-change text-center">0</p>
+                            <p class="ms-card-change text-center">{{ $naisshop }}</p>
                         </div>
                     </div>
                     <i class="fas fa-user ms-icon-mr"></i>
@@ -89,7 +89,7 @@
                     <div class="ms-card-body media">
                         <div class="media-body">
                             <h6>Décès/Jour</h6>
-                            <p class="ms-card-change text-center">0</p>
+                            <p class="ms-card-change text-center">{{ $deceshop }}</p>
                         </div>
                     </div>
                     <i class="fa fa-school ms-icon-mr"></i>
@@ -102,7 +102,7 @@
                     <div class="ms-card-body media">
                         <div class="media-body">
                             <h6>Déclaration/jour</h6>
-                            <p class="ms-card-change text-center">0</p>
+                            <p class="ms-card-change text-center">{{ $total }}</p>
                         </div>
                     </div>
                     <i class="fas fa-briefcase-medical ms-icon-mr"></i>
@@ -112,7 +112,7 @@
     </div>
 </div>
     <!-- Les déclarations récentes -->
-    {{-- <div class="row">
+    <div class="row">
         <div class="col-xl-6 col-md-12 mb-4">
             <div class="ms-panel">
                 <div class="ms-panel-header">
@@ -135,9 +135,9 @@
                     @endif
                 </div>
             </div>
-        </div> --}}
+        </div>
 
-        {{-- <div class="col-xl-6 col-md-12 mb-4">
+        <div class="col-xl-6 col-md-12 mb-4">
             <div class="ms-panel">
                 <div class="ms-panel-header">
                     Déclaration de décès récentes
@@ -159,7 +159,7 @@
                     @endif
                 </div>
             </div>
-        </div> --}}
+        </div>
     </div>
 
       <!-- Graphiques -->
@@ -175,9 +175,9 @@
         </div>
     </div>
 </div>
-{{-- <script>
-    // const naissData = @json(array_values($naissData)); 
-    // const decesData = @json(array_values($decesData)); 
+<script>
+    const naissData = @json(array_values($naissData)); 
+    const decesData = @json(array_values($decesData)); 
     const months = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'];
     const naissCtx = document.getElementById('naissChart').getContext('2d');
     const decesCtx = document.getElementById('decesChart').getContext('2d');
@@ -275,6 +275,6 @@
             }
         }
     });
-</script> --}}
+</script>
 </div>
 @endsection

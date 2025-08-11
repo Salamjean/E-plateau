@@ -14,7 +14,7 @@ class AdminSeeder extends Seeder
     public function run(): void
     {
        Mairie::create([
-            'name' => 'Mairie - Plateau',
+            'name' => 'plateau',
             'email' => 'admin@gmail.com',
             'password' => Hash::make('azertyui'),
         ]);

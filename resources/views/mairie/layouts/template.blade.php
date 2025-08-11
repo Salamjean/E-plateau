@@ -20,7 +20,7 @@
     <!-- Layout styles -->
     <link rel="stylesheet" href="{{asset('assetsMairie/css/demo_1/style.css')}}" />
     <!-- End layout styles -->
-    <link rel="shortcut icon" href="{{asset('assetsMairie/images/favicon.png')}}" />
+    <link rel="shortcut icon" href="{{asset('assets/assets/img/logo plateau.png')}}" />
   </head>
   <body>
     <div class="container-scroller">

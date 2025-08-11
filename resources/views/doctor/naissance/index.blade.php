@@ -252,15 +252,15 @@
                             @endif
                         </td>
                         <td>
-                            <button class="edit"><a href="#" class="edit"><i class="fas fa-edit"></i></a></button>
+                            <button class="edit"><a href="{{ route('statement.edit', $naisshop->id) }}" class="edit"><i class="fas fa-edit"></i></a></button>
                         </td>
                         <td>
-                            <button class="delete" onclick="confirmDelete('#')">
+                            <button class="delete" onclick="confirmDelete('{{ route('statement.delete', $naisshop->id) }}')">
                                 <i class="fas fa-trash"></i>
                             </button>
                         </td>
                         <td>
-                            <button class="eye"><a href="#" class="eye"><i class="fas fa-eye"></i></a></button>
+                            <button class="eye"><a href="{{ route('statement.show', $naisshop->id) }}" class="eye"><i class="fas fa-eye"></i></a></button>
                         </td>
                         <td>
                             <button class="eye">

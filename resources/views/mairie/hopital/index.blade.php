@@ -1,5 +1,6 @@
 @extends('mairie.layouts.template')
 @section('content')
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <div class="container-fluid px-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="fw-semibold text-primary">Liste des hôpitaux</h1>
@@ -14,36 +15,28 @@
                 <table class="table table-hover align-middle mb-0">
                     <thead class="bg-light-primary">
                         <tr>
-                            <th>Nom de l'hôpital</th>
-                            <th>Responsable</th>
-                            <th>Type</th>
-                            <th>Commune</th>
-                            <th>Contact</th>
+                            <th class="text-center">Nom de l'hôpital</th>
+                            <th class="text-center">Responsable</th>
+                            <th class="text-center">Type</th>
+                            <th class="text-center">Commune</th>
+                            <th class="text-center">Contact</th>
                             <th class="text-center">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse($hopital as $item)
-                        <tr class="border-top">
-                            <td>
-                                <div class="d-flex align-items-center">
-                                    @if($item->profile_picture)
-                                    <img src="{{ asset('storage/'.$item->profile_picture) }}" 
-                                         class="rounded-circle me-3" width="40" height="40" alt="Logo">
-                                    @else
-                                    <div class="bg-secondary rounded-circle d-flex justify-content-center align-items-center me-3" 
-                                         style="width: 40px; height: 40px;">
-                                        <i class="fas fa-hospital text-white"></i>
-                                    </div>
-                                    @endif
-                                    <div>
+                        <tr class="border-top" style="text-align: center">
+                            <td class="text-center" style="text-align: center">
+                                <div  style="text-align: center">
+                                   
+                                    <div class="text-center" style="text-align: center">
                                         <h6 class="mb-0">{{ $item->nomHop }}</h6>
                                         <small class="text-muted">{{ $item->email }}</small>
                                     </div>
                                 </div>
                             </td>
-                            <td>{{ $item->name }}</td>
-                            <td>
+                            <td class="text-center">{{ $item->name }}</td>
+                            <td class="text-center">
                                 @switch($item->type)
                                     @case('hôpital-general')
                                         <span class="badge bg-info">Hôpital Général</span>
@@ -64,8 +57,8 @@
                                         <span class="badge bg-light text-dark">{{ $item->type }}</span>
                                 @endswitch
                             </td>
-                            <td>{{ $item->commune }}</td>
-                            <td>{{ $item->contact }}</td>
+                            <td class="text-center">{{ $item->commune }}</td>
+                            <td class="text-center">{{ $item->contact }}</td>
                             <td class="text-end pe-4">
                                 <div class="d-flex justify-content-center" style="gap:10px" >
                                     <a href="#" 

@@ -3,9 +3,13 @@
 namespace App\Http\Controllers\Hopital;
 
 use App\Http\Controllers\Controller;
+use App\Models\DeclarationDeces;
+use App\Models\DeclarationNaissance;
+use App\Models\Doctor;
 use App\Models\Hopital;
 use App\Models\ResetCodePasswordHop;
 use App\Notifications\SendEmailToHopitalAfterRegistrationNotification;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -16,67 +20,65 @@ class HopialController extends Controller
     public function dashboard(Request $request)
     {
         // Récupérer le sousadmin connecté
-        $hopital = auth('hopital')->user();
+        $sousadmin = auth('hopital')->user();
 
-        // // Récupérer les détails du sousadmin
-        // $sousadminDetails = SousAdmin::find($sousadmin->id);
+        // Récupérer les détails du sousadmin
+        $sousadminDetails = Doctor::find($sousadmin->id);
 
-        // // Récupérer le mois et l'année sélectionnés, ou la date actuelle par défaut
-        // $selectedMonth = $request->input('month', Carbon::now()->month);
-        // $selectedYear = $request->input('year', Carbon::now()->year);
+        // Récupérer le mois et l'année sélectionnés, ou la date actuelle par défaut
+        $selectedMonth = $request->input('month', Carbon::now()->month);
+        $selectedYear = $request->input('year', Carbon::now()->year);
 
-        // // Compter le total des déclarations pour le mois sélectionné
-        // $communeAdmin = $sousadmin->nomHop;
-        // $docteur = SousAdmin::where('nomHop', $communeAdmin)
-        //     ->whereYear('created_at', $selectedYear)
-        //     ->count();
-        // $naisshop = NaissHop::where('NomEnf', $communeAdmin)
-        //     ->whereYear('created_at', $selectedYear)
-        //     ->count();
-        // $deceshop = DecesHop::where('nomHop', $communeAdmin)
-        //     ->whereYear('created_at', $selectedYear)
-        //     ->count();
+        // Compter le total des déclarations pour le mois sélectionné
+        $communeAdmin = $sousadmin->nomHop;
+        $docteur = Doctor::where('nomHop', $communeAdmin)
+            ->whereYear('created_at', $selectedYear)
+            ->count();
+        $naisshop = DeclarationNaissance::where('NomEnf', $communeAdmin)
+            ->whereYear('created_at', $selectedYear)
+            ->count();
+        $deceshop = DeclarationDeces::where('nomHop', $communeAdmin)
+            ->whereYear('created_at', $selectedYear)
+            ->count();
 
-        // // Récupérer les données pour les graphiques (Naissances)
-        // $naissData = NaissHop::where('NomEnf', $communeAdmin)
-        //     ->whereYear('created_at', $selectedYear)
-        //     ->selectRaw('MONTH(created_at) as month, COUNT(*) as count')
-        //     ->groupBy('month')
-        //     ->orderBy('month')
-        //     ->pluck('count', 'month')->toArray();
+        // Récupérer les données pour les graphiques (Naissances)
+        $naissData = DeclarationNaissance::where('NomEnf', $communeAdmin)
+            ->whereYear('created_at', $selectedYear)
+            ->selectRaw('MONTH(created_at) as month, COUNT(*) as count')
+            ->groupBy('month')
+            ->orderBy('month')
+            ->pluck('count', 'month')->toArray();
 
-        // // Remplir les données manquantes pour les naissances
-        // $naissData = array_replace(array_fill(1, 12, 0), $naissData);
+        // Remplir les données manquantes pour les naissances
+        $naissData = array_replace(array_fill(1, 12, 0), $naissData);
 
-        // // Calculer le total des déclarations
-        // $total = $naisshop + $deceshop;
+        // Calculer le total des déclarations
+        $total = $naisshop + $deceshop;
 
-        // // Récupérer les données pour les graphiques (Décès)
-        // $decesData = DecesHop::where('nomHop', $communeAdmin)
-        //     ->whereYear('created_at', $selectedYear)
-        //     ->selectRaw('MONTH(created_at) as month, COUNT(*) as count')
-        //     ->groupBy('month')
-        //     ->orderBy('month')
-        //     ->pluck('count', 'month')->toArray();
+        // Récupérer les données pour les graphiques (Décès)
+        $decesData = DeclarationDeces::where('nomHop', $communeAdmin)
+            ->whereYear('created_at', $selectedYear)
+            ->selectRaw('MONTH(created_at) as month, COUNT(*) as count')
+            ->groupBy('month')
+            ->orderBy('month')
+            ->pluck('count', 'month')->toArray();
 
-        // // Remplir les données manquantes pour les décès
-        // $decesData = array_replace(array_fill(1, 12, 0), $decesData);
+        // Remplir les données manquantes pour les décès
+        $decesData = array_replace(array_fill(1, 12, 0), $decesData);
 
         // Passer les données à la vue
-        return view('hopital.dashboard');
 
-
-        // return view('doctor.dashboard', compact(
-        //     'sousadminDetails',
-        //     'naisshop',
-        //     'deceshop',
-        //     'docteur',
-        //     'total',
-        //     'selectedMonth',
-        //     'selectedYear',
-        //     'naissData',
-        //     'decesData'
-        // ));
+        return view('hopital.dashboard', compact(
+            'sousadminDetails',
+            'naisshop',
+            'deceshop',
+            'docteur',
+            'total',
+            'selectedMonth',
+            'selectedYear',
+            'naissData',
+            'decesData'
+        ));
     }
 
     public function create(){

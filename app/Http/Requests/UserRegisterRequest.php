@@ -26,7 +26,7 @@ class UserRegisterRequest extends FormRequest
             'prenom' => 'required',
             'email' => 'required|email|unique:users,email',
             'contact' => 'required',
-            'CMU' => 'required',
+            'CMU' => 'nullable',
             'password' => [
                 'required',
                 'min:8',

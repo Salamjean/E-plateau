@@ -1,4 +1,5 @@
 @extends('hopital.layouts.template')
+
 @section('content')
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -12,7 +13,7 @@
                     <div class="ms-card-body media">
                         <div class="media-body">
                             <h6>Total Docteur</h6>
-                            <p class="ms-card-change">0</p>
+                            <p class="ms-card-change">{{ $docteur }}</p>
                         </div>
                     </div>
                     <i class="fas fa-stethoscope ms-icon-mr"></i>
@@ -26,7 +27,7 @@
                     <div class="ms-card-body media">
                         <div class="media-body">
                             <h6>Total Naissance</h6>
-                            <p class="ms-card-change">0</p>
+                            <p class="ms-card-change">{{ $naisshop }}</p>
                         </div>
                     </div>
                     <i class="fas fa-user ms-icon-mr"></i>
@@ -40,7 +41,7 @@
                     <div class="ms-card-body media">
                         <div class="media-body">
                             <h6 class="bold">Total Décès</h6>
-                            <p class="ms-card-change">0</p>
+                            <p class="ms-card-change">{{ $deceshop }}</p>
                         </div>
                     </div>
                     <i class="fa fa-church ms-icon-mr"></i>
@@ -54,7 +55,7 @@
                     <div class="ms-card-body media">
                         <div class="media-body">
                             <h6 class="bold">Total Déclaration</h6>
-                            <p class="ms-card-change">0</p>
+                            <p class="ms-card-change">{{ $total }}</p>
                         </div>
                     </div>
                     <i class="fas fa-briefcase-medical ms-icon-mr"></i>
@@ -83,7 +84,7 @@
         </div>
     </div>
 </div>
-{{-- <script>
+<script>
     const naissData = @json(array_values($naissData)); 
     const decesData = @json(array_values($decesData)); 
     const months = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'];
@@ -183,5 +184,5 @@
             }
         }
     });
-</script> --}}
+</script>
 @endsection

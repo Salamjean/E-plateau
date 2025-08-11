@@ -14,10 +14,10 @@
       <!-- Dashboard -->
       <li class="menu-item">
         <a href="#" class="has-chevron" data-toggle="collapse" data-target="#dashboard" aria-expanded="false" aria-controls="dashboard">
-          <span><i class="material-icons fs-16">dashboard</i>Tableau de board </span>
+          <span><i class="material-icons fs-16">dashboard</i>Tableau de bord </span>
         </a>
         <ul id="dashboard" class="collapse" aria-labelledby="dashboard" data-parent="#side-nav-accordion">
-          <li> <a href="#">E-Côte d'Ivoire</a> </li>
+          <li> <a href="{{ route('hopital.dashboard') }}">Tableau de bord </a> </li>
         </ul>
       </li>
       <!-- /Dashboard -->
@@ -48,7 +48,7 @@
           <span><i class="far fa-check-square"></i>Statistique</span>
         </a>
         <ul id="appointment" class="collapse" aria-labelledby="appointment" data-parent="#side-nav-accordion">
-          <li> <a href="#">Statistique</a> </li>
+          <li> <a href="{{route('hopital.stat')}}">Statistique</a> </li>
         </ul>
       </li>
       <!-- /Appointment -->

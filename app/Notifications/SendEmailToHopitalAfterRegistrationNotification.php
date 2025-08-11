@@ -42,7 +42,7 @@ class SendEmailToHopitalAfterRegistrationNotification extends Notification
     {
         return (new MailMessage)
             ->subject('Mairie - Plateau : Hôpital est enregistré auprès de la mairie du plateau') // Sujet mis à jour
-            ->from('contact@edemarchee-ci.com', 'Plateau access')
+            ->from('contact@edemarchee-ci.com', 'Plateau-Apps')
             ->view('emails.hopital_registration', [
                 'code' => $this->code,
                 'email' => $this->email,

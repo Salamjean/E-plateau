@@ -1,7 +1,7 @@
 <aside id="ms-side-nav" class="side-nav fixed ms-aside-scrollable ms-aside-left">
     <!-- Logo -->
     <div class="logo-sn ms-d-block-lg">
-      <div style="background-color:azure; margin-top:10px"><a class="pl-0 ml-0 text-center" href="index.html"> {{ Auth::guard('doctor')->user()->nomHop }} </a></div><br>
+      <div style="background-color:azure; margin-top:10px"><a class="pl-0 ml-0 text-center" href="{{ route('doctor.dashboard') }}"> {{ Auth::guard('doctor')->user()->nomHop }} </a></div><br>
       <a href="{{ route('doctor.dashboard') }}" class="text-center ms-logo-img-link"> <img class="ms-user-img ms-img-round" style="
         width: 70px;
         height: 70px;
@@ -28,10 +28,10 @@
       <!-- Dashboard -->
       <li class="menu-item">
         <a href="#" class="has-chevron" data-toggle="collapse" data-target="#dashboard" aria-expanded="false" aria-controls="dashboard">
-          <span><i class="material-icons fs-16">dashboard</i>Tableau de board </span>
+          <span><i class="material-icons fs-16">dashboard</i>Tableau de bord </span>
         </a>
         <ul id="dashboard" class="collapse" aria-labelledby="dashboard" data-parent="#side-nav-accordion">
-          <li> <a href="{{ route('doctor.dashboard') }}">E-Côte d'Ivoire</a> </li>
+          <li> <a href="{{ route('doctor.dashboard') }}">Tableau de bord</a> </li>
         </ul>
       </li>
       <!-- /Dashboard -->
@@ -52,8 +52,8 @@
           <span><i class="fas fa-school"></i>Déclaration Décès</span>
         </a>
         <ul id="department" class="collapse" aria-labelledby="department" data-parent="#side-nav-accordion">
-          <li> <a href="#">Faire Déclaration</a> </li>
-          <li> <a href="#">Liste Déclaration</a> </li>
+          <li> <a href="{{route('statement.create.death')}}">Faire Déclaration</a> </li>
+          <li> <a href="{{route('statement.index.death')}}">Liste Déclaration</a> </li>
         </ul>
       </li>
       <!-- /Department -->
@@ -63,7 +63,7 @@
           <span><i class="fas fa-list-alt"></i>Statistique</span>
         </a>
         <ul id="schedule" class="collapse" aria-labelledby="schedule" data-parent="#side-nav-accordion">
-          <li> <a href="#">Statistique</a> </li>
+          <li> <a href="{{route('doctor.stat')}}">Statistique</a> </li>
         </ul>
       </li><br><br>
 
@@ -73,7 +73,7 @@
             <span><i class="fas fa-list-alt"></i>Signature</span>
           </a>
           <ul id="signature" class="collapse" aria-labelledby="signature" data-parent="#side-nav-accordion">
-            <li> <a href="#">Emarger</a> </li>
+            <li> <a href="{{route('doctor.signature')}}">Emarger</a> </li>
           </ul>
         </li><br><br>
       <!-- /signature -->

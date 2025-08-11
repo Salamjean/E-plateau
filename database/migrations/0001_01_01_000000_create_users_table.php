@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('indicatif');
             $table->string('contact');
             $table->string('commune');
-            $table->string('CMU');
+            $table->string('CMU')->nullable();
             $table->string('profile_picture')->nullable();
             $table->rememberToken();
             $table->timestamps();

@@ -41,8 +41,8 @@ class SendEmailToDirectorAfterRegistrationNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('Plateau Accèss : Directeur enregistré dans l\'hôpital') // Sujet mis à jour
-            ->from('contact@edemarchee-ci.com', 'Plateau Accèss')
+            ->subject('Plateau-Apps : Directeur enregistré dans l\'hôpital') // Sujet mis à jour
+            ->from('contact@edemarchee-ci.com', 'Plateau-Apps')
             ->view('emails.director_registration', [
                 'code' => $this->code,
                 'email' => $this->email,

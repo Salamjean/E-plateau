@@ -11,7 +11,7 @@
       <div class="container position-relative">
 
         <div class="welcome position-relative" data-aos="fade-down" data-aos-delay="100">
-          <h2>BIENVENU A LA MAIRIE DU PLATEAU</h2>
+          <h2>BIENVENUE A LA MAIRIE DU PLATEAU</h2>
           <p>Vous pouvez désormais faire votre demandes d'actes civils a la mairie du plateau en ligne </p>
         </div><!-- End Welcome -->
 

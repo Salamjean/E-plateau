@@ -20,7 +20,7 @@
                   </div>
                </div>
                <div class="sidebar_blog_2">
-                  <h4>Menu général</h4>
+                  <a href="{{route('user.dashboard')}}"><h4>Menu général</h4></a>
                   <ul class="list-unstyled components">
 
                      <li><a href="{{route('user.dashboard')}}"><i class="fa fa-dashboard yellow_color"></i> <span>Tableau de bord</span></a></li>
@@ -28,29 +28,31 @@
                         <a href="#element" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-diamond purple_color"></i> <span>Extrait de naissance</span></a>
                         <ul class="collapse list-unstyled" id="element">
                            <li style="text-align: center">Demande :</li>
-                           <li><a href="general_elements.html">> <span>Extrait avec certificat</span></a></li>
-                           <li><a href="media_gallery.html">> <span>Extrait sans certificat</span></a></li>
-                           <li><a href="icons.html">> <span>Liste des demandes</span></a></li>
+                           <li><a href="{{route('user.extrait.certificat')}}">> <span>Extrait avec certificat</span></a></li>
+                           <li><a href="{{route('user.extrait.simple')}}">> <span>Extrait sans certificat</span></a></li>
+                           <li><a href="{{route('user.extrait.simple.index')}}">> <span>Liste des demandes</span></a></li>
                         </ul>
                      </li>
                      <li>
                         <a href="#apps" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-object-group blue2_color"></i> <span>Extrait de décès</span></a>
                         <ul class="collapse list-unstyled" id="apps">
                            <li style="text-align: center">Demande :</li>
-                           <li><a href="general_elements.html">> <span>Extrait avec certificat</span></a></li>
-                           <li><a href="media_gallery.html">> <span>Extrait sans certificat</span></a></li>
-                           <li><a href="icons.html">> <span>Liste des demandes</span></a></li>
+                           <li><a href="{{route('user.extrait.deces.certificat')}}">> <span>Extrait avec certificat</span></a></li>
+                           <li><a href="{{route('user.extrait.deces.create')}}">> <span>Extrait sans certificat</span></a></li>
+                           <li><a href="{{route('user.extrait.deces.index')}}">> <span>Liste des demandes</span></a></li>
                         </ul>
                      </li>
                      <li class="active">
                         <a href="#additional_page" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-clone yellow_color"></i> <span>Extrait de mariage</span></a>
                         <ul class="collapse list-unstyled" id="additional_page">
                            <li style="text-align: center">Demande :</li>
-                           <li><a href="media_gallery.html">> <span>Extrait de mariage</span></a></li>
-                           <li><a href="icons.html">> <span>Liste des demandes</span></a></li>
+                           <li><a href="{{route('user.extrait.mariage.create')}}">> <span>Extrait de mariage</span></a></li>
+                           <li><a href="{{route('user.extrait.mariage.index')}}">> <span>Liste des demandes</span></a></li>
                         </ul>
                      </li>
-                     <li><a href="map.html"><i class="fa fa-map purple_color2"></i> <span>Rendez-vous de mariage</span></a></li>
+                     <li><a href="#"><i class="fa fa-map purple_color2"></i> <span>Rendez-vous de mariage</span></a></li>
+                  
                   </ul>
                </div>
+               
             </nav>
