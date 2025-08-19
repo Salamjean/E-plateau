@@ -22,8 +22,10 @@ class NaissanceCertificat extends Model
         'prenompere',
         'datepere',
         'etat',
+        'statut_livraison',
         'user_id',  // Ajout de user_id
         'agent_id',  // Ajout de agent_id
+        'livreur_id',  // Ajout de livreur_id
     ];
 
     // Définir la relation avec l'utilisateur
@@ -37,6 +39,10 @@ class NaissanceCertificat extends Model
         return $this->belongsTo(Agent::class, 'agent_id');
     }
 
+    public function livreur()
+    {
+        return $this->belongsTo(Livreur::class, 'livreur_id');
+    }
     
 
 public static function getNextId() // Rendez la méthode publique et statique

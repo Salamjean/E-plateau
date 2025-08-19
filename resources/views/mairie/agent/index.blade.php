@@ -61,8 +61,8 @@
   }
 
   .table thead th {
-    background-color: #637ec8;
-    color: var(--secondary-color);
+    background-color: #f1f5ff;
+    color: #0033c4;
     font-weight: 600;
     border: none;
     padding: 12px 15px;
@@ -406,20 +406,18 @@
                         <td>{{ $agent->contact }}</td>
                         <td>{{ $agent->commune }}</td>
                         <td>
-                            <form action="#" method="GET">
+                            <form action="{{route('agent.edit', $agent->id)}}" method="GET">
                                 @csrf
-                                <button style="margin-left:50%" type="submit" ><a href="#" class="edit"><i class="fas fa-edit"></i></a></button>
+                                <button style="margin-left:50%" type="submit" ><a href="{{route('agent.edit', $agent->id)}}" class="edit"><i class="fas fa-edit"></i></a></button>
                             </form>
                         </td>
                         <td>
-                        <form action="#" method="POST" onsubmit="return confirm('Voulez-vous vraiment supprimer cet agent ?');" 
-                            style="display: flex; justify-content:center; align-items:center">
+                        <form action="{{ route('agent.destroy', $agent->id) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('Voulez-vous vraiment supprimer cet agent ?');">
                             @csrf
                             @method('DELETE')
-                                <button type="button" class="delete" 
-                                onclick="confirmDelete('#')">
-                                <i class="fas fa-trash"></i>
-                                </button>
+                            <button type="submit" class="btn btn-danger btn-sm">
+                                <i class="fas fa-trash-alt"></i> 
+                            </button>
                         </form>
                     </td>
                     </tr>

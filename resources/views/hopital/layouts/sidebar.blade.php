@@ -31,6 +31,15 @@
           <li> <a href="{{ route('doctor.index') }}">Liste Personnel</a> </li>
         </ul>
       </li>
+      <li class="menu-item">
+        <a href="#" class="has-chevron" data-toggle="collapse" data-target="#sanitary" aria-expanded="false" aria-controls="sanitary">
+          <span><i class="fas fa-stethoscope"></i>Centre de santé</span>
+        </a>
+        <ul id="sanitary" class="collapse" aria-labelledby="sanitary" data-parent="#side-nav-accordion">
+          <li> <a href="{{ route('sanitary.create') }}">Ajout centre de santé</a> </li>
+          <li> <a href="{{ route('sanitary.index') }}">Liste centre de santé</a> </li>
+        </ul>
+      </li>
       <!-- hopital -->
       <li class="menu-item">
         <a href="#" class="has-chevron" data-toggle="collapse" data-target="#schedule" aria-expanded="false" aria-controls="schedule">

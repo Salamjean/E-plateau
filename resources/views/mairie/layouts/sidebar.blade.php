@@ -59,6 +59,12 @@
               <span class="menu-title text-white">Mariage</span>
             </a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{route('mairie.rendezvous.index')}}">
+              <i class="mdi mdi-contacts menu-icon text-white"></i>
+              <span class="menu-title text-white">Rendez-vous de mariage</span>
+            </a>
+          </li>
            <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#ui-agent" aria-expanded="false" aria-controls="ui-agent">
               <i class="mdi mdi-crosshairs-gps menu-icon text-white"></i>
@@ -79,16 +85,16 @@
            <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#ui-Hôpital" aria-expanded="false" aria-controls="ui-Hôpital">
               <i class="mdi mdi-crosshairs-gps menu-icon text-white"></i>
-              <span class="menu-title text-white">Hôpital</span>
+              <span class="menu-title text-white">Service de déclaration</span>
               <i class="menu-arrow"></i>
             </a>
             <div class="collapse" id="ui-Hôpital">
               <ul class="nav flex-column sub-menu text-white">
                 <li class="nav-item text-white" >
-                  <a class="nav-link text-white" href="{{route('hopital.create')}}">Ajout d'un Hôpital</a>
+                  <a class="nav-link text-white" href="{{route('hopital.create')}}">Ajout d'un hôpital</a>
                 </li>
                 <li class="nav-item ">
-                  <a class="nav-link text-white" href="{{route('hopital.index')}}">Listes des Hôpitaux</a>
+                  <a class="nav-link text-white" href="{{route('hopital.index')}}">Listes des hôpitaux</a>
                 </li>
               </ul>
             </div>
@@ -96,16 +102,16 @@
            <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#ui-Caissier" aria-expanded="false" aria-controls="ui-Caissier">
               <i class="mdi mdi-crosshairs-gps menu-icon text-white"></i>
-              <span class="menu-title text-white">Caissier</span>
+              <span class="menu-title text-white">Agent Financier</span>
               <i class="menu-arrow"></i>
             </a>
             <div class="collapse" id="ui-Caissier">
               <ul class="nav flex-column sub-menu text-white">
                 <li class="nav-item text-white" >
-                  <a class="nav-link text-white" href="pages/ui-features/buttons.html">Ajout d'un Caissier</a>
+                  <a class="nav-link text-white" href="{{route('caisse.create')}}">Ajout d'un financier</a>
                 </li>
                 <li class="nav-item ">
-                  <a class="nav-link text-white" href="pages/ui-features/dropdowns.html">Listes des Caissiers</a>
+                  <a class="nav-link text-white" href="{{route('caisse.index')}}">Listes des financiers</a>
                 </li>
               </ul>
             </div>
@@ -113,16 +119,16 @@
            <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#ui-Livreur" aria-expanded="false" aria-controls="ui-Livreur">
               <i class="mdi mdi-crosshairs-gps menu-icon text-white"></i>
-              <span class="menu-title text-white">Livreur</span>
+              <span class="menu-title text-white">Service Livraison</span>
               <i class="menu-arrow"></i>
             </a>
             <div class="collapse" id="ui-Livreur">
               <ul class="nav flex-column sub-menu text-white">
                 <li class="nav-item text-white" >
-                  <a class="nav-link text-white" href="pages/ui-features/buttons.html">Ajout d'un Livreur</a>
+                  <a class="nav-link text-white" href="{{route('post.create')}}">Ajout du service</a>
                 </li>
                 <li class="nav-item ">
-                  <a class="nav-link text-white" href="pages/ui-features/dropdowns.html">Listes des Livreurs</a>
+                  <a class="nav-link text-white" href="{{route('post.index')}}">Information sur le service</a>
                 </li>
               </ul>
             </div>
@@ -136,13 +142,13 @@
             <div class="collapse" id="ui-Historique">
               <ul class="nav flex-column sub-menu text-white">
                 <li class="nav-item text-white" >
-                  <a class="nav-link text-white" href="pages/ui-features/buttons.html">Naissance</a>
+                  <a class="nav-link text-white" href="{{route('mairie.history.taskend')}}">Naissance</a>
                 </li>
                 <li class="nav-item ">
-                  <a class="nav-link text-white" href="pages/ui-features/dropdowns.html">Décès</a>
+                  <a class="nav-link text-white" href="{{route('mairie.history.taskenddeces')}}">Décès</a>
                 </li>
                 <li class="nav-item ">
-                  <a class="nav-link text-white" href="pages/ui-features/dropdowns.html">Mariage</a>
+                  <a class="nav-link text-white" href="{{route('mairie.history.taskendmariages')}}">Mariage</a>
                 </li>
               </ul>
             </div>

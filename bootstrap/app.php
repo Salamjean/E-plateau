@@ -18,6 +18,10 @@ return Application::configure(basePath: dirname(__DIR__))
             'doctor' => \App\Http\Middleware\DoctorMiddleware::class,
             'agent' => \App\Http\Middleware\AgentMiddleware::class,
             'director' => \App\Http\Middleware\DirectorMiddleware::class,
+            'caisse' => \App\Http\Middleware\CaisseMiddleware::class,
+            'admin' => \App\Http\Middleware\AdminMiddleware::class,
+            'poste' => \App\Http\Middleware\PosteMiddleware::class,
+            'livreur' => \App\Http\Middleware\LivreurMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

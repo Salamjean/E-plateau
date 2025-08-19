@@ -60,6 +60,22 @@ return [
             'driver' => 'session',
             'provider' => 'agents',
         ],
+        'caisse' => [
+            'driver' => 'session',
+            'provider' => 'caisses',
+        ],
+        'poste' => [
+            'driver' => 'session',
+            'provider' => 'postes',
+        ],
+        'livreur' => [
+            'driver' => 'session',
+            'provider' => 'livreurs',
+        ],
+        'admin' => [
+            'driver' => 'session',
+            'provider' => 'admins',
+        ],
     ],
 
     /*
@@ -103,6 +119,22 @@ return [
         'agents' => [
             'driver' => 'eloquent',
             'model' => env('AUTH_MODEL', App\Models\Agent::class),
+        ],
+        'caisses' => [
+            'driver' => 'eloquent',
+            'model' => env('AUTH_MODEL', App\Models\Caisse::class),
+        ],
+        'admins' => [
+            'driver' => 'eloquent',
+            'model' => env('AUTH_MODEL', App\Models\SuperAdmin::class),
+        ],
+        'postes' => [
+            'driver' => 'eloquent',
+            'model' => env('AUTH_MODEL', App\Models\Poste::class),
+        ],
+        'livreurs' => [
+            'driver' => 'eloquent',
+            'model' => env('AUTH_MODEL', App\Models\Livreur::class),
         ],
 
         // 'users' => [

@@ -19,6 +19,8 @@ class DecesCertificat extends Model
         'etat',
         'user_id',  
         'agent_id', 
+        'livreur_id', 
+        'statut_livraison', 
     ];
 
     // Définir la relation avec l'utilisateur
@@ -30,6 +32,10 @@ class DecesCertificat extends Model
     public function agent()
     {
         return $this->belongsTo(Agent::class, 'agent_id');
+    }
+    public function livreur()
+    {
+        return $this->belongsTo(Livreur::class, 'livreur_id');
     }
 
     public static function getNextId()

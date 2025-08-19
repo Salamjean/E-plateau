@@ -68,11 +68,8 @@
             </a>
             <div class="collapse" id="ui-Livreur">
               <ul class="nav flex-column sub-menu text-white">
-                <li class="nav-item text-white" >
-                  <a class="nav-link text-white" href="pages/ui-features/buttons.html">Ajout d'un Livreur</a>
-                </li>
                 <li class="nav-item ">
-                  <a class="nav-link text-white" href="pages/ui-features/dropdowns.html">Listes des Livreurs</a>
+                  <a class="nav-link text-white" href="{{route('agent.delivery')}}">Listes des Livreurs</a>
                 </li>
               </ul>
             </div>
@@ -92,7 +89,7 @@
                   <a class="nav-link text-white" href="{{route('agent.history.taskenddeces')}}">Décès</a>
                 </li>
                 <li class="nav-item ">
-                  <a class="nav-link text-white" href="pages/ui-features/dropdowns.html">Mariage</a>
+                  <a class="nav-link text-white" href="{{route('agent.history.taskendmariages')}}">Mariage</a>
                 </li>
               </ul>
             </div>

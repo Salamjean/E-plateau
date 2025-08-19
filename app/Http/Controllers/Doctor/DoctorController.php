@@ -11,6 +11,7 @@ use App\Notifications\SendEmailToDoctorAfterRegistrationNotification;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
@@ -18,7 +19,8 @@ use Illuminate\Support\Facades\Notification;
 class DoctorController extends Controller
 {
     public function create(){
-        return view('hopital.doctor.create');
+        $sanitaires = DB::table('sanitaires')->pluck('name_hospial');
+        return view('hopital.doctor.create',compact('sanitaires'));
     }
     public function store(DoctorRequest $request)
     {
@@ -89,7 +91,8 @@ class DoctorController extends Controller
     }
 
     public function edit(Doctor $doctor){
-        return view('hopital.doctor.edit', compact('doctor'));
+         $sanitaires = DB::table('sanitaires')->pluck('name_hospial');
+        return view('hopital.doctor.edit', compact('doctor','sanitaires'));
     }
 
     public function update(UpdateDoctorRequest $request,Doctor $doctor){

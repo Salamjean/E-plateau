@@ -85,11 +85,16 @@
                                 <label for="fonctionSelect">Fonction</label>
                                 <div class="input-group">
                                     <select class="form-control" name="fonction" id="fonctionSelect" required>
-                                        <option value="" disabled {{ !isset($doctor->fonction) ? 'selected' : '' }}>Sélectionnez une fonction</option>
-                                        <option value="Médecin" {{ (isset($doctor->fonction) && $doctor->fonction == 'Médecin') ? 'selected' : '' }}>Médecin(e)</option>
-                                        <option value="Sage-femme" {{ (isset($doctor->fonction) && $doctor->fonction == 'Sage-femme') ? 'selected' : '' }}>Sage-femme</option>
-                                        <option value="Infirmier" {{ (isset($doctor->fonction) && $doctor->fonction == 'Infirmier') ? 'selected' : '' }}>Infirmier(e)</option>
-                                    </select>
+                                    <option value="" disabled {{ !isset($doctor->fonction) ? 'selected' : '' }}>
+                                        Sélectionnez une fonction
+                                    </option>
+                                    @foreach($sanitaires as $sanitaire)
+                                        <option value="{{ $sanitaire }}" 
+                                            {{ (isset($doctor->fonction) && $doctor->fonction == $sanitaire) ? 'selected' : '' }}>
+                                            {{ $sanitaire }}
+                                        </option>
+                                    @endforeach
+                                </select>
                                     <div class="valid-feedback">Correct</div>
                                 </div>
                                 @error('fonction')

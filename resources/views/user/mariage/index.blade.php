@@ -354,9 +354,7 @@
                                         <i class="fas fa-inbox"></i>
                                         <h5 class="mt-3">Aucune demande trouvée</h5>
                                         <p class="text-muted">Vous n'avez effectué aucune demande d'extrait de mariage</p>
-                                        <a href="{{ route('user.extrait.mariage.create') }}" class="btn btn-new-request mt-2">
-                                            <i class="fas fa-plus-circle me-2"></i>Faire une demande
-                                        </a>
+                                        
                                     </div>
                                 </td>
                             </tr>

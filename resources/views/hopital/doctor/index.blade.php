@@ -214,7 +214,7 @@
                         <th class="text-center">Email</th>
                         <th class="text-center">Description</th>
                         <th class="text-center">Contact</th>
-                        <th class="text-center">Fonction</th>
+                        <th class="text-center">Centre affecté</th>
                         <th class="text-center">Sexe</th>
                         <th class="text-center" colspan="2">Action</th>
                     </tr>

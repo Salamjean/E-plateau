@@ -67,15 +67,43 @@ class DemandeDecesAgentController extends Controller
     public function updateEtat(Request $request, $id)
     {
         $deces = DecesCertificat::findOrFail($id);
+
+        // Validation de l'état
         $request->validate([
-            'etat' => 'required|string|in:en attente,réçu,terminé', // Ajouter les états possibles
+            'etat' => 'required|string|in:en attente,réçu,terminé',
         ]);
 
         // Mise à jour de l'état
         $deces->etat = $request->etat;
+
+        // Si l'état est "terminé" ET choix_option = "livraison" ET pas encore de code
+        if ($deces->etat === 'terminé' && $deces->choix_option === 'livraison' && is_null($deces->livraison_code)) {
+            // Générer un code de livraison unique
+            $livraisonCode = 'LIVD' . str_pad(mt_rand(1, 9999999), 7, '0', STR_PAD_LEFT);
+
+            // Vérifier que le code est unique
+            while (DecesCertificat::where('livraison_code', $livraisonCode)->exists()) {
+                $livraisonCode = 'LIVD' . str_pad(mt_rand(1, 9999999), 7, '0', STR_PAD_LEFT);
+            }
+
+            // Mettre à jour la demande
+            $deces->livraison_id = 1; // à adapter si tu gères plusieurs livraisons
+            $deces->livraison_code = $livraisonCode;
+            $deces->statut_livraison = 'en attente';
+        }
+
+        // Sauvegarder
         $deces->save();
-        
-        return redirect()->route('agent.demandes.deces.index')->with('success', 'Etat de la demande a été mis à jour.');
+
+        // Redirection en fonction de l'état
+        if ($deces->etat === 'terminé') {
+            return redirect()->route('agent.history.taskenddeces')
+                ->with('success', 'État mis à jour avec succès' .
+                    ($deces->choix_option === 'livraison' ? ' et livraison initiée (Code: ' . $deces->livraison_code . ')' : ''));
+        } else {
+            return redirect()->route('agent.demandes.deces.index')
+                ->with('success', 'État mis à jour avec succès');
+        }
     }
 
     public function editSimple($id)
@@ -91,17 +119,42 @@ class DemandeDecesAgentController extends Controller
 
     public function updateEtatSimple(Request $request, $id)
     {
-        $decesdeja = DecesSimple::findOrFail($id);
-        $request->validate([
-            'etat' => 'required|string|in:en attente,réçu,terminé', 
-        ]);
+        $deces = DecesSimple::findOrFail($id);
 
-        // Mise à jour de l'état
-        $decesdeja->etat = $request->etat;
-        $decesdeja->save();
-        
-        return redirect()->route('agent.demandes.deces.index')->with('success', 'Etat de la demande a été mis à jour.');
+        // Mise à jour de l'état depuis le formulaire
+        $deces->etat = $request->etat;
+
+        // Si l'état est "terminé" ET choix_option = "livraison" ET pas encore de code
+        if ($deces->etat === 'terminé' && $deces->choix_option === 'livraison' && is_null($deces->livraison_code)) {
+            // Générer un code de livraison unique
+            $livraisonCode = 'LIVD' . str_pad(mt_rand(1, 9999999), 7, '0', STR_PAD_LEFT);
+
+            // Vérifier que le code est unique
+            while (DecesSimple::where('livraison_code', $livraisonCode)->exists()) {
+                $livraisonCode = 'LIVD' . str_pad(mt_rand(1, 9999999), 7, '0', STR_PAD_LEFT);
+            }
+
+            // Mettre à jour la demande
+            $deces->livraison_id = 1; // à remplacer si tu gères plusieurs livraisons
+            $deces->livraison_code = $livraisonCode;
+            $deces->statut_livraison = 'en attente';
+        }
+
+        // Sauvegarder
+        $deces->save();
+
+        // Redirection en fonction de l'état
+        if ($deces->etat === 'terminé') {
+            return redirect()->route('agent.history.taskenddeces')
+                ->with('success', 'État mis à jour avec succès' . 
+                    ($deces->choix_option === 'livraison' ? ' et livraison initiée (Code: ' . $deces->livraison_code . ')' : ''));
+        } else {
+            return redirect()->route('agent.demandes.deces.index')
+                ->with('success', 'État mis à jour avec succès');
+        }
     }
+
+
 
     public function declarationDeces(){
 
@@ -117,5 +170,29 @@ class DemandeDecesAgentController extends Controller
             'deceshops' => $deceshops,
             'sousadmin' => $sousadmin
         ]);
+    }
+
+
+    public function initierLivraison($id)
+    {
+        $deces = DecesSimple::findOrFail($id); // Changé NaissanceSimple en Deces
+        
+        // Générer un code de livraison unique
+        $livraisonCode = 'LIV' . str_pad(mt_rand(1, 9999999), 7, '0', STR_PAD_LEFT);
+        
+        // Vérifier que le code est unique
+        while (DecesSimple::where('livraison_code', $livraisonCode)->exists()) { // Changé le modèle ici aussi
+            $livraisonCode = 'LIV' . str_pad(mt_rand(1, 9999999), 7, '0', STR_PAD_LEFT);
+        }
+        
+        // Mettre à jour la demande de décès
+        $deces->livraison_id = 1;
+        $deces->livraison_code = $livraisonCode;
+        $deces->statut_livraison = 'en attente';
+        
+        // Sauvegarder les modifications
+        $deces->save();
+        
+        return redirect()->route('agent.history.taskenddeces')->with('success', 'Livraison initiée avec succès. Code: ' . $livraisonCode);
     }
 }

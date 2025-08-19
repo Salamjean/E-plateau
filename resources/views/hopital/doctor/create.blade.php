@@ -83,13 +83,13 @@
                          <!-- Fonction et Sexe -->
                          <div class="form-row">
                             <div class="col-md-6 mb-3">
-                                <label for="fonctionSelect">Fonction</label>
+                                <label for="fonctionSelect">Centre de santé</label>
                                 <div class="input-group">
                                     <select class="form-control" name="fonction" id="fonctionSelect" required>
-                                        <option value="" disabled selected>Sélectionnez une fonction</option>
-                                        <option value="Médecin">Médecin(e)</option>
-                                        <option value="Sage-femme">Sage-femme</option>
-                                        <option value="Infirmier">Infirmier(e)</option>
+                                        <option value="" disabled selected>Sélectionnez un centre de santé</option>
+                                        @foreach($sanitaires as $sanitaire)
+                                            <option value="{{ $sanitaire }}">{{ $sanitaire }}</option>
+                                        @endforeach
                                     </select>
                                     <div class="valid-feedback">Correct</div>
                                 </div>

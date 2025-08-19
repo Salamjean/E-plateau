@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Mairie;
+use App\Models\SuperAdmin;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -18,5 +19,6 @@ class AdminSeeder extends Seeder
             'email' => 'admin@gmail.com',
             'password' => Hash::make('azertyui'),
         ]);
+       
     }
 }

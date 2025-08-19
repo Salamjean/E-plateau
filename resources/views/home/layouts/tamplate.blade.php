@@ -10,7 +10,7 @@
   <meta name="keywords" content="">
 
   <!-- Favicons -->
-  <link href="{{asset('assets/assets/img/plateau.jpeg')}}" rel="icon">
+  <link href="{{asset('assets/assets/img/logo plateau.png')}}" rel="icon">
   <link href="{{asset('assets/assets/img/apple-touch-icon.png')}}" rel="apple-touch-icon">
 
   <!-- Fonts -->

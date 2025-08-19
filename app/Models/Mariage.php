@@ -16,6 +16,8 @@ class Mariage extends Model
         'commune',
         'etat',
         'agent_id',  
+        'statut_livraison',  
+        'livreur_id',  
     ];
 
     public function user()
@@ -26,6 +28,11 @@ class Mariage extends Model
     public function agent()
     {
         return $this->belongsTo(Agent::class, 'agent_id');
+    }
+
+    public function livreur()
+    {
+        return $this->belongsTo(Livreur::class, 'livreur_id');
     }
 
     public static function getNextId()

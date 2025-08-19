@@ -88,7 +88,7 @@
     text-align: center;
   }
 
-  .status-en-attente {
+  .status-terminé {
     background-color: var(--warning-color);
     color: white;
   }
@@ -98,7 +98,7 @@
     color: white;
   }
 
-  .status-refusee {
+  .status-terminé {
     background-color: var(--danger-color);
     color: white;
   }
@@ -335,6 +335,8 @@
           <table class="table align-items-center" id="dataTable1">
             <thead>
               <tr class="text-center">
+                <th>Code de livraison	</th>
+                <th>Statut de livraison	</th>
                 <th>Demandeur</th>
                 <th>Hôpital</th>
                 <th>Date décès</th>
@@ -351,6 +353,15 @@
             <tbody>
               @forelse ($taskenddeces as $deces)
                 <tr class="text-center">
+                  <td  class="badge bg-success text-white">{{ $deces->livraison_code ?? 'Retrait sur place'}}</td>
+                  <td>
+                    <span class="badge 
+                      @if($deces->statut_livraison == 'en attente') badge-warning
+                      @elseif($deces->statut_livraison == 'en cours') badge-success
+                      @else badge-danger @endif">
+                      {{ $deces->statut_livraison }}
+                    </span>
+                  </td>
                   <td>{{ $deces->user ? $deces->user->name.' '.$deces->user->prenom : 'Inconnu' }}</td>
                   <td>{{ $deces->nomHopital }}</td>
                   <td>{{ $deces->dateDces }}</td>
@@ -449,7 +460,7 @@
                 </tr>
               @empty
                 <tr>
-                  <td colspan="11" class="empty-state">
+                  <td colspan="13" class="empty-state">
                     <i class="fas fa-folder-open"></i>
                     <h5>Aucun décès déclaré trouvé</h5>
                   </td>
@@ -477,6 +488,8 @@
           <table class="table align-items-center" id="dataTable2">
             <thead>
               <tr class="text-center">
+                <th>Code de livraison</th>
+                <th>Statut de livraison</th>
                 <th>Demandeur</th>
                 <th>Nom défunt</th>
                 <th>N° registre</th>
@@ -494,6 +507,15 @@
             <tbody>
               @forelse ($taskenddecedejas as $dece)
                 <tr class="text-center">
+                  <td  class="badge bg-success text-white">{{ $dece->livraison_code ?? 'Retrait sur place'}}</td>
+                  <td>
+                    <span class="badge 
+                      @if($dece->statut_livraison == 'en attente') badge-warning
+                      @elseif($dece->statut_livraison == 'en cours') badge-success
+                      @else badge-danger @endif">
+                      {{ $dece->statut_livraison }}
+                    </span>
+                  </td>
                   <td>{{ $dece->user ? $dece->user->name.' '.$dece->user->prenom : 'Inconnu' }}</td>
                   <td>{{ $dece->name }}</td>
                   <td>{{ $dece->numberR }}</td>
@@ -641,7 +663,7 @@
                 </tr>
               @empty
                 <tr>
-                  <td colspan="12" class="empty-state">
+                  <td colspan="14" class="empty-state">
                     <i class="fas fa-folder-open"></i>
                     <h5>Aucun décès enregistré trouvé</h5>
                   </td>

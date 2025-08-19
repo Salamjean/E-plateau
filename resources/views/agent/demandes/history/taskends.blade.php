@@ -87,7 +87,7 @@
     text-align: center;
   }
 
-  .status-en-attente {
+  .status-terminé {
     background-color: var(--warning-color);
     color: white;
   }
@@ -97,7 +97,7 @@
     color: white;
   }
 
-  .status-refusee {
+  .status-terminé {
     background-color: var(--danger-color);
     color: white;
   }
@@ -316,6 +316,8 @@
           <table class="table align-items-center" id="dataTable1">
             <thead>
               <tr class="text-center">
+                <th>Code de livraison	</th>
+                <th>Statut de livraison	</th>
                 <th>Demandeur</th>
                 <th>Hôpital</th>
                 <th>Nom du nouveau-né</th>
@@ -331,6 +333,15 @@
             <tbody>
               @forelse ($taskendnaissances as $naissance)
                 <tr class="text-center">
+                  <td  class="badge bg-success text-white">{{ $naissance->livraison_code ?? 'Retrait sur place'}}</td>
+                  <td>
+                    <span class="badge 
+                      @if($naissance->statut_livraison == 'en attente') badge-warning
+                      @elseif($naissance->statut_livraison == 'en cours') badge-success
+                      @else badge-danger @endif">
+                      {{ $naissance->statut_livraison }}
+                    </span>
+                  </td>
                   <td>{{ $naissance->user->name.' '.$naissance->user->prenom }}</td>
                   <td>{{ $naissance->nomHopital }}</td>
                   <td>{{ $naissance->nomDefunt }}</td>
@@ -419,7 +430,7 @@
                 </tr>
               @empty
                 <tr>
-                  <td colspan="10" class="empty-state">
+                  <td colspan="12" class="empty-state">
                     <i class="fas fa-folder-open"></i>
                     <h5>Aucune demande avec certificat trouvée</h5>
                   </td>
@@ -447,6 +458,8 @@
           <table class="table align-items-center" id="dataTable2">
             <thead>
               <tr class="text-center">
+                <th>Code de livraison</th>
+                <th>Statut de livraison</th>
                 <th>Demandeur</th>
                 <th>Type</th>
                 <th>Nom</th>
@@ -460,6 +473,15 @@
             <tbody>
               @forelse ($taskendnaissanceDs as $naissanceD)
                 <tr class="text-center">
+                  <td  class="badge bg-success text-white">{{ $naissanceD->livraison_code ?? 'Retrait sur place'}}</td>
+                  <td>
+                    <span class="badge 
+                      @if($naissanceD->statut_livraison == 'en attente') badge-warning
+                      @elseif($naissanceD->statut_livraison == 'en cours') badge-success
+                      @else badge-danger @endif">
+                      {{ $naissanceD->statut_livraison }}
+                    </span>
+                  </td>
                   <td>{{ $naissanceD->user ? $naissanceD->user->name : 'Inconnu' }}</td>
                   <td>{{ $naissanceD->type }}</td>
                   <td>{{ $naissanceD->name }}</td>
@@ -504,7 +526,7 @@
                 </tr>
               @empty
                 <tr>
-                  <td colspan="8" class="empty-state">
+                  <td colspan="10" class="empty-state">
                     <i class="fas fa-folder-open"></i>
                     <h5>Aucune demande sans certificat trouvée</h5>
                   </td>

@@ -21,7 +21,7 @@ class UserAuthenticate extends Controller
     public function handleLogin(UserLoginRequest $request): RedirectResponse
     {
         if (!Auth::attempt($request->only('email', 'password'), $request->filled('remember'))) {
-            return redirect()->route('user.login')->withErrors([
+            return redirect()->route('login')->withErrors([
                 'email' => 'Le mot de passe incorrect.',
             ]);
         }
@@ -59,7 +59,7 @@ class UserAuthenticate extends Controller
             $users->profile_picture = $profilePicturePath;
             $users->save();
 
-            return redirect()->route('user.login')->with('success', 'Votre compte a été créé avec succès. Vous pouvez vous connecter.');
+            return redirect()->route('login')->with('success', 'Votre compte a été créé avec succès. Vous pouvez vous connecter.');
 
         } catch (\Exception $e) {
             Log::error('Error during registration: ' . $e->getMessage());

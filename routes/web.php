@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\AuthenticateAdmin;
 use App\Http\Controllers\Agent\AgentController;
 use App\Http\Controllers\Agent\AgentDashboard;
 use App\Http\Controllers\Agent\AuthenticateAgent;
@@ -7,6 +9,13 @@ use App\Http\Controllers\Agent\Demandes\DemandeAgentController;
 use App\Http\Controllers\Agent\Demandes\DemandeDecesAgentController;
 use App\Http\Controllers\Agent\Demandes\DemandeHistory;
 use App\Http\Controllers\Agent\Demandes\DemandeMariageAgentController;
+use App\Http\Controllers\Caisse\AuthenticateCaisse;
+use App\Http\Controllers\Caisse\CaisseController;
+use App\Http\Controllers\Caisse\CaisseDashboard;
+use App\Http\Controllers\Delivery\AuthenticateDelivery;
+use App\Http\Controllers\Delivery\DeliveryController;
+use App\Http\Controllers\Delivery\DeliveryDashboard;
+use App\Http\Controllers\Delivery\LivraisonDelivery;
 use App\Http\Controllers\Director\AuthenticateDirector;
 use App\Http\Controllers\Director\DirectorController;
 use App\Http\Controllers\Director\DirectorDashboard;
@@ -18,18 +27,26 @@ use App\Http\Controllers\Doctor\DoctorDashboard;
 use App\Http\Controllers\Doctor\Naissance\DeclarationNaissance;
 use App\Http\Controllers\Doctor\StatistiqueController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Hopital\AddHopitalController;
 use App\Http\Controllers\Hopital\AuthenticateHopial;
 use App\Http\Controllers\Hopital\HopialController;
 use App\Http\Controllers\Hopital\StatistiqueController as HopitalStatistiqueController;
+use App\Http\Controllers\Poste\LivraisonExtraitController;
 use App\Http\Controllers\Mairie\Declaration\DeclarationController;
 use App\Http\Controllers\Mairie\Demandes\DemandeController;
+use App\Http\Controllers\Mairie\Demandes\Demandeshistory;
 use App\Http\Controllers\Mairie\MairieAuthenticate;
 use App\Http\Controllers\Mairie\MairieController;
+use App\Http\Controllers\Mairie\MairieRendezVousController;
+use App\Http\Controllers\Poste\AuthenticatePoste;
+use App\Http\Controllers\Poste\PosteController;
+use App\Http\Controllers\Poste\PosteDashboard;
 use App\Http\Controllers\User\Extrait\Deces\DecesCertificatController;
 use App\Http\Controllers\User\Extrait\Deces\DecesSimpleConroller;
 use App\Http\Controllers\User\Extrait\Mariage\MariageController;
 use App\Http\Controllers\User\Extrait\Naissance\CertificatNaissance;
 use App\Http\Controllers\User\Extrait\Naissance\SimpleController;
+use App\Http\Controllers\User\RendezVousController;
 use App\Http\Controllers\User\UserAuthenticate;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\VerificationCM;
@@ -41,8 +58,33 @@ Route::prefix('/')->group( function(){
     Route::get('/',[HomeController::class,'home'])->name('home');
 });
 
+//Les routes de gestion du @super admin
+Route::prefix('admin')->group(function () {
+    Route::get('/login', [AuthenticateAdmin::class, 'login'])->name('admin.login');
+    Route::post('/login', [AuthenticateAdmin::class, 'handleLogin'])->name('admin.handleLogin');
+});
 
-//Les routes de gestion users 
+Route::middleware('auth:admin')->prefix('admin')->group(function () {
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    Route::get('/logout', [AdminController::class, 'logout'])->name('admin.logout');
+
+    Route::prefix('mairie')->group(function(){
+        Route::get('/index', [MairieController::class, 'index'])->name('admin.index');
+        Route::get('/index/archive', [MairieController::class, 'archive'])->name('admin.archive');
+        Route::get('/create', [MairieController::class, 'create'])->name('admin.create');
+        Route::post('/store', [MairieController::class, 'store'])->name('admin.store');
+        Route::post('/add-solde', [MairieController::class, 'addSolde'])->name('admin.add_solde');
+
+        Route::delete('/{vendor}/archive', [MairieController::class, 'archive'])->name('vendor.archive');
+        Route::put('/mairie/unarchive/{id}', [MairieController::class, 'unarchive'])->name('mairie.unarchive');
+        Route::delete('/{vendor}/delete', [MairieController::class, 'vendordelete'])->name('vendor.delete');
+    });
+
+});        
+
+
+
+//Les routes de gestion @users 
 Route::prefix('user')->group(function(){
     Route::get('/login',[UserAuthenticate::class,'login'])->name('login');
     Route::post('/login',[UserAuthenticate::class,'handleLogin'])->name('user.handleLogin');
@@ -88,11 +130,16 @@ Route::middleware('auth')->prefix('user')->group(function(){
      //La route de verification du CMN
      Route::post('/verifier-code-dm', [VerificationCM::class, 'verifierCMN'])->name('code.verifie.cmn');
      Route::post('/deces/verifierCodeCMD', [VerificationCM::class, 'verifierCMD'])->name('code.verifie.cmd');
-     
+
+
+     //Les routes pour prendre un rendez-vous de mariage
+        Route::get('/rendezvous/index', [RendezvousController::class, 'index'])->name('user.rendezvous.index');
+        Route::get('/rendezvous/create', [RendezvousController::class, 'create'])->name('user.rendezvous.create');
+        Route::post('/rendezvous', [RendezvousController::class, 'store'])->name('user.rendezvous.store');
 });
 
 
-//Les routes de gestion de la mairie
+//Les routes de gestion de la @mairie
 Route::prefix('mairie')->group(function(){
     Route::get('/login',[MairieAuthenticate::class,'login'])->name('mairie.login');
     Route::post('/login',[MairieAuthenticate::class,'handleLogin'])->name('mairie.handleLogin');
@@ -104,19 +151,41 @@ Route::middleware('mairie')->prefix('mairie')->group(function(){
 
      //routes des gestion des hopitaux par la mairie 
     Route::prefix('hopital')->group(function(){
-        Route::get('/create',[HopialController::class, 'create'])->name('hopital.create');
-        Route::get('/index',[HopialController::class, 'index'])->name('hopital.index');
+        Route::get('/hoscreate',[HopialController::class, 'create'])->name('hopital.create');
+        Route::get('/hosindex',[HopialController::class, 'index'])->name('hopital.index');
         Route::post('/create',[HopialController::class, 'store'])->name('hopital.store');
+        Route::get('hopital/{id}/edit', [HopialController::class, 'edit'])->name('hopital.edit');
+        Route::put('hopital/{id}', [HopialController::class, 'update'])->name('hopital.update');
+        Route::delete('hopital/{id}', [HopialController::class, 'destroy'])->name('hopital.destroy');
     });
 
     //Les routes de gestion des agents d'état civil 
     Route::prefix('agent')->group(function(){
         Route::get('/', [AgentController::class, 'index'])->name('agent.index');
-        Route::get('/create', [AgentController::class, 'create'])->name('agent.create');
+        Route::get('/createadd', [AgentController::class, 'create'])->name('agent.create');
         Route::post('/create', [AgentController::class, 'store'])->name('agent.store');
+        Route::get('/{id}/edit', [AgentController::class, 'edit'])->name('agent.edit');
+        Route::put('/{id}', [AgentController::class, 'update'])->name('agent.update');
+        Route::delete('delete/{id}', [AgentController::class, 'destroy'])->name('agent.destroy');
     });
 
-    //Les routes de gestions des arrivées des demandes naissance, deces et mariages
+    //Les routes de gestion de la caisse de la mairie
+    Route::prefix('cash')->group(function(){
+        Route::get('/indexcash', [CaisseController::class, 'index'])->name('caisse.index');
+        Route::get('/createcash', [CaisseController::class, 'create'])->name('caisse.create');
+        Route::post('/create', [CaisseController::class, 'store'])->name('caisse.store');
+        Route::get('/{caisse}/edit', [CaisseController::class, 'edit'])->name('caisse.edit');
+    });
+
+    //Les routes de gestion de la caisse de la mairie
+    Route::prefix('post')->group(function(){
+        Route::get('/indexpost', [PosteController::class, 'index'])->name('post.index');
+        Route::get('/createpost', [PosteController::class, 'create'])->name('post.create');
+        Route::post('/create', [PosteController::class, 'store'])->name('post.store');
+        Route::get('/{post}/edit', [PosteController::class, 'edit'])->name('post.edit');
+    });
+
+     //Les routes de gestions des arrivées des demandes naissance, deces et mariages
      Route::get('/all/requests/birth', [DemandeController::class, 'index'])->name('mairie.demandes.naissance.index'); 
      Route::get('/all/requests/death', [DemandeController::class, 'indexDeces'])->name('mairie.demandes.deces.index');  
      Route::get('/all/requests/wedding', [DemandeController::class, 'indexWedding'])->name('mairie.demandes.wedding.index');  
@@ -125,10 +194,20 @@ Route::middleware('mairie')->prefix('mairie')->group(function(){
      //les routes de gestions des arrivées des declarations naissance et deces 
      Route::get('/statement/birth', [DeclarationController::class, 'naissance'])->name('mairie.declaration.naissance.index');
      Route::get('/death/statementde', [DeclarationController::class, 'deces'])->name('mairie.declaration.deces.index');
+
+     //Historiques des demandes 
+     Route::get('/task/end/naissance',[Demandeshistory::class, 'taskend'])->name('mairie.history.taskend');
+     Route::get('/task/end/deces',[Demandeshistory::class, 'taskenddeces'])->name('mairie.history.taskenddeces');
+     Route::get('/task/end/mariages',[Demandeshistory::class, 'taskendmariages'])->name('mairie.history.taskendmariages');
+
+     //Les routes de gestion des rendez-vous par la mairie 
+     Route::get('/rendezvous/index', [MairieRendezVousController::class, 'index'])->name('mairie.rendezvous.index');
+     Route::put('/rendezvous/{id}', [MairieRendezVousController::class, 'update'])->name('rendezvous.update');
+
 });
 
 
-//Les routes de gestions de l'hopital
+//Les routes de gestions de l'@hopital
 Route::prefix('hopital')->group(function() {
     Route::get('/login', [AuthenticateHopial::class, 'login'])->name('hopital.login');
     Route::post('/login', [AuthenticateHopial::class, 'handleLogin'])->name('hopital.handleLogin');
@@ -137,6 +216,13 @@ Route::prefix('hopital')->group(function() {
 Route::middleware('hopital')->prefix('hopital')->group(function(){
      Route::get('/dashboard',[HopialController::class,'dashboard'])->name('hopital.dashboard');
      Route::get('/logout', [HopialController::class, 'logout'])->name('hopital.logout');
+
+     //Les routes pour les ajouts des sanitaires
+     Route::prefix('sanitary')->group(function(){
+        Route::get('/indexsanitary',[AddHopitalController::class,'index'])->name('sanitary.index');
+        Route::get('/createsanitary',[AddHopitalController::class,'create'])->name('sanitary.create');
+        Route::post('/createsanitary',[AddHopitalController::class,'store'])->name('sanitary.store');
+     });
 
      //Les routes de gestion des personnels par l'hopital 
      Route::prefix('personal')->group(function(){
@@ -163,7 +249,7 @@ Route::middleware('hopital')->prefix('hopital')->group(function(){
 });
 
 
-//Les routes de gestions des personnels
+//Les routes de gestions des @personnels
 Route::prefix('doctor')->group(function() {
     Route::get('/login', [AuthenticateDoctor::class, 'login'])->name('doctor.login');
     Route::post('/login', [AuthenticateDoctor::class, 'handleLogin'])->name('doctor.handleLogin');
@@ -210,7 +296,7 @@ Route::middleware('doctor')->prefix('doctor')->group(function(){
 });
 
 
-//Les routes de gestions des directeurs 
+//Les routes de gestions des @directeurs 
 Route::prefix('director')->group(function() {
     Route::get('/login', [AuthenticateDirector::class, 'login'])->name('directeur.login');
     Route::post('/login', [AuthenticateDirector::class, 'handleLogin'])->name('directeur.handleLogin');
@@ -228,7 +314,7 @@ Route::middleware('director')->prefix('director')->group(function(){
      Route::get('/director/download', [DirectorStatistiqueController::class, 'download'])->name('directeur.download.stat');
 });
 
-//Les routes de gestion des agents
+//Les routes de gestion des @agents
 Route::prefix('agent')->group(function() {
     Route::get('/login', [AuthenticateAgent::class, 'login'])->name('agent.login');
     Route::post('/login', [AuthenticateAgent::class, 'handleLogin'])->name('agent.handleLogin');
@@ -257,6 +343,7 @@ Route::middleware('auth:agent')->prefix('agent')->group(function(){
         Route::post('/deces/{id}/update-etat', [DemandeDecesAgentController::class, 'updateEtat'])->name('agent.demandes.deces.update');
         Route::get('/decesdeja/{id}/edit', [DemandeDecesAgentController::class, 'editSimple'])->name('agent.demandes.deces.edit.simple');
         Route::post('/decesdeja/{id}/update-etat', [DemandeDecesAgentController::class, 'updateEtatSimple'])->name('agent.demandes.deces.update.simple');
+        Route::post('/demandes/deces/{id}/initier-livraison', [DemandeDecesAgentController::class, 'initierLivraison'])->name('agent.demandes.deces.initier-livraison');
 
 
         //Les routes des demandes recuperer mariages
@@ -272,6 +359,74 @@ Route::middleware('auth:agent')->prefix('agent')->group(function(){
         //Historiques des traitements effectuer par l'agent 
         Route::get('/task/end/naissance',[DemandeHistory::class, 'taskend'])->name('agent.history.taskend');
         Route::get('/task/end/deces',[DemandeHistory::class, 'taskenddeces'])->name('agent.history.taskenddeces');
+        Route::get('/task/end/mariages',[DemandeHistory::class, 'taskendmariages'])->name('agent.history.taskendmariages');
+
+        //Routes pour avoir la liste des livreurs par l'agent
+        Route::get('/delivery/index',[AgentController::class,'delivery'])->name('agent.delivery');
+});
+
+//Les routes de getsion de @caisses 
+Route::prefix('caisse')->group(function() {
+    Route::get('/login', [AuthenticateCaisse::class, 'login'])->name('caisse.login');
+    Route::post('/login', [AuthenticateCaisse::class, 'handleLogin'])->name('caisse.handleLogin');
+});
+
+Route::middleware('auth:caisse')->prefix('caisse')->group(function(){
+    Route::get('/dahboard', [CaisseDashboard::class, 'dashboard'])->name('caisse.dashboard');
+    Route::get('/logout', [CaisseDashboard::class, 'logout'])->name('caisse.logout');
+});
+
+
+//Les routes de getsion de @postes 
+Route::prefix('post')->group(function() {
+    Route::get('/login', [AuthenticatePoste::class, 'login'])->name('post.login');
+    Route::post('/login', [AuthenticatePoste::class, 'handleLogin'])->name('post.handleLogin');
+});
+
+Route::middleware('auth:poste')->prefix('post')->group(function(){
+    Route::get('/dahboard', [PosteDashboard::class, 'dashboard'])->name('post.dashboard');
+    Route::get('/logout', [PosteDashboard::class, 'logout'])->name('post.logout');
+
+    //La route des demandes à livrer
+    Route::prefix('livraison')->group(function () {
+        Route::get('/createed', [LivraisonExtraitController::class, 'create'])->name('livraison.create');
+        Route::post('/posted/attribuer-demande', [LivraisonExtraitController::class, 'attribuerDemande'])->name('poste.attribuer-demande');
+        Route::get('/poste/demandes-attribuees', [LivraisonExtraitController::class, 'demandesAttribuees'])->name('poste.demandes-attribuees');
+        Route::get('/poste/demandes-livree', [LivraisonExtraitController::class, 'demandesLivree'])->name('poste.demandes-livree');
+        Route::post('/poste/assigner-livreur', [LivraisonExtraitController::class, 'assignerLivreur'])->name('poste.assigner-livreur');
+    });
+
+    //Gestion des livreurs par la poste 
+    Route::prefix('delivery')->group(function(){
+        Route::get('/index',[DeliveryController::class, 'index'])->name('delivery.index');
+        Route::get('/create',[DeliveryController::class, 'create'])->name('delivery.create');
+        Route::post('/create',[DeliveryController::class, 'store'])->name('delivery.store');
+        Route::get('/edit/{delivery}',[DeliveryController::class, 'edit'])->name('delivery.edit');
+        Route::put('/edit/{delivery}',[DeliveryController::class, 'update'])->name('delivery.update');
+        Route::delete('/delete/{delivery}',[DeliveryController::class, 'delete'])->name('delivery.delete');
+    });
+});
+
+//Les routes de getsion de @livreur 
+Route::prefix('delivery')->group(function() {
+    Route::get('/login', [AuthenticateDelivery::class, 'login'])->name('delivery.login');
+    Route::post('/login', [AuthenticateDelivery::class, 'handleLogin'])->name('delivery.handleLogin');
+});
+
+Route::middleware('auth:livreur')->prefix('delivery')->group(function(){
+    Route::get('/dahboard', [DeliveryDashboard::class, 'dashboard'])->name('delivery.dashboard');
+    Route::get('/logout', [DeliveryDashboard::class, 'logout'])->name('delivery.logout');
+    Route::post('/livreur/toggle-disponibilite', [DeliveryDashboard::class, 'toggleDisponibilite'])->name('livreur.toggleDisponibilite');
+
+    //Gestion des livraison par le livreur
+    Route::get('/livraison',[LivraisonDelivery::class,'delivery'])->name('livreur.livraison');
+    Route::get('/delivery/livree',[LivraisonDelivery::class,'livree'])->name('livreur.livree');
+
+    Route::get('/livraison/validate', [LivraisonDelivery::class, 'validated'])->name('livreur.validated');
+    Route::post('/livraison/validate', [LivraisonDelivery::class, 'validated']);
+    Route::post('/check-reference', [LivraisonDelivery::class, 'checkReference'])->name('livreur.check-reference');
+    
+    
 });
 
 
@@ -284,5 +439,13 @@ Route::get('/validate-director-account/{email}', [AuthenticateDirector::class, '
 Route::post('/validate-director-account/{email}', [AuthenticateDirector::class, 'submitDefineAccess'])->name('directeur.validate');
 Route::get('/validate-agent-account/{email}', [AuthenticateAgent::class, 'defineAccess']);
 Route::post('/validate-agent-account/{email}', [AuthenticateAgent::class, 'submitDefineAccess'])->name('agent.validate');
+Route::get('/validate-caisse-account/{email}', [AuthenticateCaisse::class, 'defineAccess']);
+Route::post('/validate-caisse-account/{email}', [AuthenticateCaisse::class, 'submitDefineAccess'])->name('caisse.validate');
+Route::get('/validate-mairie-account/{email}', [MairieAuthenticate::class, 'defineAccess']);
+Route::post('/validate-mairie-account/{email}', [MairieAuthenticate::class, 'submitDefineAccess'])->name('mairie.validate');
+Route::get('/validate-post-account/{email}', [AuthenticatePoste::class, 'defineAccess']);
+Route::post('/validate-post-account/{email}', [AuthenticatePoste::class, 'submitDefineAccess'])->name('post.validate');
+Route::get('/validate-delivery-account/{email}', [AuthenticateDelivery::class, 'defineAccess']);
+Route::post('/validate-delivery-account/{email}', [AuthenticateDelivery::class, 'submitDefineAccess'])->name('delivery.validate');
  
 

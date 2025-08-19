@@ -5,7 +5,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <title>Espace Mairie</title>
+    <title>Agent - Espace</title>
     <!-- plugins:css -->
     <link rel="stylesheet" href="{{asset('assetsMairie/vendors/mdi/css/materialdesignicons.min.css')}}">
     <link rel="stylesheet" href="{{asset('assetsMairie/vendors/flag-icon-css/css/flag-icon.min.css')}}">

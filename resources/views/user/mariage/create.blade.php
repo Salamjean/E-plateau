@@ -180,6 +180,20 @@
         display: inline-block;
     }
 
+    
+        /* Style pour la popup de livraison */
+    .swal-delivery-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+
+    @media (max-width: 600px) {
+        .swal-delivery-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
     @keyframes fadeIn {
         from { opacity: 0; transform: translateY(10px); }
         to { opacity: 1; transform: translateY(0); }
@@ -335,35 +349,59 @@
     });
 
     function showLivraisonPopup() {
-        Swal.fire({
+       Swal.fire({
             title: 'Informations de Livraison',
             width: '700px',
             html: `
-                <div style="display: grid; grid-template-columns: 1fr 1fr; grid-gap: 10px;">
+                <div class="swal-delivery-grid">
                     <div>
                         <label for="swal-montant_timbre" style="font-weight: bold">Timbre</label>
                         <input id="swal-montant_timbre" class="swal2-input text-center" value="50" readonly>
-                        <label for="swal-montant_timbre" style="font-size:13px; color:red">Pour la phase pilote les frais de timbre sont fournir par Kks-technologies</label>
+                        <small style="color:#666">Frais couverts par Kks-technologies</small>
                     </div>
                     <div>
                         <label for="swal-montant_livraison" style="font-weight: bold">Frais Livraison</label>
                         <input id="swal-montant_livraison" class="swal2-input text-center" value="50" readonly>
-                        <label for="swal-montant_livraison" style="font-size:13px; color:red">Pour la phase pilote les frais des livraisons sont fixés à 1500 Fcfa</label>
+                        <small style="color:#666">Frais fixes pour la livraison</small>
                     </div>
-                    <div><input id="swal-nom_destinataire" class="swal2-input text-center" placeholder="Nom du destinataire"></div>
-                    <div><input id="swal-prenom_destinataire" class="swal2-input text-center" placeholder="Prénom du destinataire"></div>
-                    <div><input id="swal-email_destinataire" class="swal2-input text-center" placeholder="Email du destinataire"></div>
-                    <div><input id="swal-contact_destinataire" class="swal2-input text-center" placeholder="Contact du destinataire"></div>
-                    <div><input id="swal-adresse_livraison" class="swal2-input text-center" placeholder="Adresse de livraison"></div>
-                    <div><input id="swal-code_postal" class="swal2-input text-center" placeholder="Code postal"></div>
-                    <div><input id="swal-ville" class="swal2-input text-center" placeholder="Ville"></div>
-                    <div><input id="swal-commune_livraison" class="swal2-input text-center" placeholder="Commune"></div>
-                    <div><input id="swal-quartier" class="swal2-input text-center" placeholder="Quartier"></div>
+                    <div>
+                        <label for="swal-nom_destinataire" style="font-weight: bold">Nom</label>
+                        <input id="swal-nom_destinataire" class="swal2-input" placeholder="Nom du destinataire">
+                    </div>
+                    <div>
+                        <label for="swal-prenom_destinataire" style="font-weight: bold">Prénom</label>
+                        <input id="swal-prenom_destinataire" class="swal2-input" placeholder="Prénom du destinataire">
+                    </div>
+                    <div>
+                        <label for="swal-email_destinataire" style="font-weight: bold">Email</label>
+                        <input id="swal-email_destinataire" class="swal2-input" placeholder="Email du destinataire" type="email">
+                    </div>
+                    <div>
+                        <label for="swal-contact_destinataire" style="font-weight: bold">Téléphone</label>
+                        <input id="swal-contact_destinataire" class="swal2-input" placeholder="Contact du destinataire" type="tel">
+                    </div>
+                    <div>
+                        <label for="swal-adresse_livraison" style="font-weight: bold">Adresse</label>
+                        <input id="swal-adresse_livraison" class="swal2-input" placeholder="Adresse complète">
+                    </div>
+                    <div>
+                        <label for="swal-ville" style="font-weight: bold">Ville</label>
+                        <input id="swal-ville" class="swal2-input" placeholder="Ville de livraison">
+                    </div>
+                    <div>
+                        <label for="swal-commune_livraison" style="font-weight: bold">Commune</label>
+                        <input id="swal-commune_livraison" class="swal2-input" placeholder="Commune">
+                    </div>
+                    <div>
+                        <label for="swal-quartier" style="font-weight: bold">Quartier</label>
+                        <input id="swal-quartier" class="swal2-input" placeholder="Quartier">
+                    </div>
                 </div>`,
             icon: 'info',
             showCancelButton: true,
-            confirmButtonText: 'Payer',
+            confirmButtonText: 'Payer maintenant',
             cancelButtonText: 'Annuler',
+            confirmButtonColor: '#1977cc',
             focusConfirm: false,
             preConfirm: () => {
                 const nom_destinataire = document.getElementById('swal-nom_destinataire').value;
@@ -371,16 +409,14 @@
                 const email_destinataire = document.getElementById('swal-email_destinataire').value;
                 const contact_destinataire = document.getElementById('swal-contact_destinataire').value;
                 const adresse_livraison = document.getElementById('swal-adresse_livraison').value;
-                const code_postal = document.getElementById('swal-code_postal').value;
                 const ville = document.getElementById('swal-ville').value;
                 const commune_livraison = document.getElementById('swal-commune_livraison').value;
                 const quartier = document.getElementById('swal-quartier').value;
                 const montant_timbre = document.getElementById('swal-montant_timbre').value;
                 const montant_livraison = document.getElementById('swal-montant_livraison').value;
 
-                if (!nom_destinataire || !prenom_destinataire || !email_destinataire || !contact_destinataire || 
-                    !adresse_livraison || !code_postal || !ville || !commune_livraison || !quartier) {
-                    Swal.showValidationMessage("Veuillez remplir tous les champs pour la livraison.");
+                if (!nom_destinataire || !prenom_destinataire || !email_destinataire || !contact_destinataire || !adresse_livraison || !ville || !commune_livraison || !quartier || !montant_timbre || !montant_livraison) {
+                    Swal.showValidationMessage("Veuillez remplir tous les champs obligatoires");
                     return false;
                 }
                 return {
@@ -389,22 +425,119 @@
                     email_destinataire: email_destinataire,
                     contact_destinataire: contact_destinataire,
                     adresse_livraison: adresse_livraison,
-                    code_postal: code_postal,
                     ville: ville,
                     commune_livraison: commune_livraison,
                     quartier: quartier,
-                    montant_timbre: montant_timbre,
-                    montant_livraison: montant_livraison,
+                    montant_timbre: parseFloat(montant_timbre),
+                    montant_livraison: parseFloat(montant_livraison),
                 };
             }
         }).then((result) => {
             if (result.isConfirmed) {
                 const formData = result.value;
-                const form = document.getElementById('demandeForm');
-                initiateCinetPayPayment(formData, form);
+                initializeCinetPay(formData); // Appel de la fonction CinetPay
             } else if (result.dismiss === Swal.DismissReason.cancel) {
+                // Si l'utilisateur clique sur annuler, sélectionner l'option 1
                 document.getElementById('option1').checked = true;
             }
+        });
+    }
+
+    function initializeCinetPay(formData) {
+        // Configuration CinetPay
+        CinetPay.setConfig({
+            apikey: '{{ config("services.cinetpay.api_key") }}',
+            site_id: '{{ config("services.cinetpay.site_id") }}',
+            mode: 'PRODUCTION'
+        });
+
+        // ID de transaction
+        const transactionId = 'EXT-' + Date.now();
+        
+        // Montant total
+        const totalAmount = formData.montant_timbre + formData.montant_livraison;
+
+        // Chargement
+        Swal.fire({
+            title: 'Redirection en cours',
+            html: 'Préparation du paiement...',
+            allowOutsideClick: true,
+            didOpen: () => Swal.showLoading()
+        });
+
+        // Données client
+        const customer = {
+            name: '{{ Auth::user()->name ?? "Client" }}',
+            email: '{{ Auth::user()->email ?? "contact@client.com" }}',
+            phone: '{{ Auth::user()->telephone ?? "00000000" }}'
+        };
+
+        // Paiement
+        CinetPay.getCheckout({
+            transaction_id: transactionId,
+            amount: totalAmount,
+            currency: 'XOF',
+            channels: 'ALL',
+            description: `Paiement pour livraison d'extrait de naissance`,
+            customer_name: customer.name,
+            customer_email: customer.email,
+            customer_phone_number: customer.phone,
+            customer_address: formData.adresse_livraison,
+            customer_city: formData.ville,
+            customer_country: 'CI',
+            customer_state: 'CI',
+            customer_zip_code: '00225'
+        });
+
+        // Gestion réponse
+        CinetPay.waitResponse(function(data) {
+            Swal.close();
+            if (data.status === "ACCEPTED") {
+                // Ajouter les données de livraison au formulaire
+                const form = document.getElementById('naissanceForm');
+                
+                // Créer des champs cachés pour les données de livraison
+                const hiddenFields = [
+                    { name: 'livraison_nom', value: formData.nom_destinataire },
+                    { name: 'livraison_prenom', value: formData.prenom_destinataire },
+                    { name: 'livraison_email', value: formData.email_destinataire },
+                    { name: 'livraison_telephone', value: formData.contact_destinataire },
+                    { name: 'livraison_adresse', value: formData.adresse_livraison },
+                    { name: 'livraison_ville', value: formData.ville },
+                    { name: 'livraison_commune', value: formData.commune_livraison },
+                    { name: 'livraison_quartier', value: formData.quartier },
+                    { name: 'montant_total', value: totalAmount },
+                    { name: 'transaction_id', value: transactionId }
+                ];
+
+                hiddenFields.forEach(field => {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = field.name;
+                    input.value = field.value;
+                    form.appendChild(input);
+                });
+
+                // Soumettre le formulaire
+                formSubmitted = true;
+                form.submit();
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Échec du paiement',
+                    text: data.message || 'Erreur lors du traitement'
+                });
+            }
+        });
+
+        // Gestion erreurs
+        CinetPay.onError(function(error) {
+            Swal.close();
+            Swal.fire({
+                icon: 'error',
+                title: 'Erreur',
+                html: `Une erreur est survenue<br><small>${error.message || 'Veuillez réessayer'}</small>`
+            });
         });
     }
 

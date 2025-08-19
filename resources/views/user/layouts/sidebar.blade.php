@@ -2,16 +2,18 @@
                <div class="sidebar_blog_1">
                   <div class="sidebar-header">
                      <div class="logo_section">
-                        <a href="{{route('user.dashboard')}}"><img class="logo_icon img-responsive" src="images/logo/logo_icon.png" alt="#" /></a>
+                        <a href="{{route('user.dashboard')}}"><img class="logo_icon img-responsive" src="{{ optional(Auth::user())->profile_picture 
+                                                ? asset('storage/' . Auth::user()->profile_picture) 
+                                                : asset('assets/images/profiles/useriii.jpeg') }}" alt="#" /></a>
                      </div>
                   </div>
                   <div class="sidebar_user_info">
                      <div class="icon_setting"></div>
                      <div class="user_profle_side">
-                        <div class="user_img"><img class="img-responsive" src="{{ optional(Auth::user())->profile_picture 
+                        <div class="user_img"><img class=" img-responsive" src="{{ optional(Auth::user())->profile_picture 
                                                 ? asset('storage/' . Auth::user()->profile_picture) 
                                                 : asset('assets/images/profiles/useriii.jpeg') }}" 
-                                        alt="Profile Picture" /></div>
+                                        alt="Profile Picture"/></div>
                             <div class="user_info">
                            <h6>{{ Auth::user()->name }} <br>{{ Auth::user()->prenom }}</h6>
                            <p><span class="online_animation"></span> En ligne</p>
@@ -50,8 +52,15 @@
                            <li><a href="{{route('user.extrait.mariage.index')}}">> <span>Liste des demandes</span></a></li>
                         </ul>
                      </li>
-                     <li><a href="#"><i class="fa fa-map purple_color2"></i> <span>Rendez-vous de mariage</span></a></li>
-                  
+
+                     <li class="active">
+                        <a href="#additional_rend" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-clone yellow_color"></i> <span>Rendez-vous de mariage</span></a>
+                        <ul class="collapse list-unstyled" id="additional_rend">
+                           <li style="text-align: center">Rendez-vous:</li>
+                           <li><a href="{{route('user.rendezvous.create')}}">> <span>Prendre un rendez-vous</span></a></li>
+                           <li><a href="{{route('user.rendezvous.index')}}">> <span>Liste des rendez-vous</span></a></li>
+                        </ul>
+                     </li>
                   </ul>
                </div>
                

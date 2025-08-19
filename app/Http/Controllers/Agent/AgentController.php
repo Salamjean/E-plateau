@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Agent;
 
 use App\Http\Controllers\Controller;
 use App\Models\Agent;
+use App\Models\Livreur;
 use App\Models\NaissanceCertificat;
 use App\Models\ResetCodePasswordAgent;
 use App\Notifications\SendEmailToAgentAfterRegistrationNotification;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Storage;
 
 class AgentController extends Controller
 {
@@ -132,4 +134,84 @@ class AgentController extends Controller
                 return redirect()->route('agent.demandes.naissance.index')->with('error', 'La demande de naissance n\'existe pas.');
             }
         }
+
+        public function delivery()
+        {
+            $agent = Auth::guard('agent')->user();
+            $livreurs = Livreur::whereNull('archived_at')
+                ->where('communeM', $agent->communeM)
+                ->paginate(10);
+
+            return view('agent.livreur.index', compact('livreurs'));
+        }
+
+        public function edit($id)
+        {
+            $agent = Agent::findOrFail($id);
+            return view('mairie.agent.edit', compact('agent'));
+        }
+
+        public function update(Request $request, $id)
+        {
+            $agent = Agent::findOrFail($id);
+
+            // Validation
+            $validated = $request->validate([
+                'name' => 'required|string|max:255',
+                'prenom' => 'required|string|max:255',
+                'email' => 'required|email|unique:agents,email,' . $agent->id,
+                'contact' => 'required|string|min:10',
+                'commune' => 'required|string|max:255',
+                'profile_picture' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
+            ]);
+
+            try {
+                // Traitement de l'image
+                if ($request->hasFile('profile_picture')) {
+                    // Supprimer l'ancienne image si nécessaire
+                    if ($agent->profile_picture) {
+                        Storage::disk('public')->delete($agent->profile_picture);
+                    }
+                    $agent->profile_picture = $request->file('profile_picture')->store('profile_pictures', 'public');
+                }
+
+                // Mise à jour des infos
+                $agent->name = $request->name;
+                $agent->prenom = $request->prenom;
+                $agent->email = $request->email;
+                $agent->contact = $request->contact;
+                $agent->commune = $request->commune;
+                $agent->save();
+
+                return redirect()->route('agent.index')
+                    ->with('success', 'Agent mis à jour avec succès.');
+
+            } catch (\Exception $e) {
+                Log::error('Error updating agent: ' . $e->getMessage());
+                return back()->withErrors(['error' => 'Une erreur est survenue : ' . $e->getMessage()])->withInput();
+            }
+        }
+
+        public function destroy($id)
+        {
+            try {
+                $agent = Agent::findOrFail($id);
+
+                // Supprimer la photo si elle existe
+                if ($agent->profile_picture) {
+                    Storage::disk('public')->delete($agent->profile_picture);
+                }
+
+                $agent->delete();
+
+                return redirect()->route('agent.index')
+                    ->with('success', 'Agent supprimé avec succès.');
+            } catch (\Exception $e) {
+                Log::error('Error deleting agent: ' . $e->getMessage());
+                return back()->withErrors(['error' => 'Une erreur est survenue lors de la suppression.']);
+            }
+        }
+
+
+
 }

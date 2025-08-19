@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\DecesCertificat;
 use App\Models\DecesSimple;
 use App\Models\DeclarationNaissance;
+use App\Models\Mariage;
 use App\Models\NaissanceCertificat;
 use App\Models\NaissanceSimple;
 use Illuminate\Http\Request;
@@ -57,5 +58,18 @@ class DemandeHistory extends Controller
             'taskenddeces',
             'taskenddecedejas'
         ));
+    }
+
+    public function taskendmariages(){
+        // Récupérer l'admin connecté
+        $admin = Auth::guard('agent')->user();
+
+         // Récupération des mariages terminés
+         $taskendmariages = Mariage::where('etat', 'terminé')
+         ->where('agent_id', $admin->id) // Filtrage par agent
+         ->latest()
+         ->paginate(10);
+
+        return view('agent.demandes.history.taskendmariages',compact('taskendmariages'));
     }
 }

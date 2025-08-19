@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Storage;
 
 class HopialController extends Controller
 {
@@ -167,6 +168,73 @@ class HopialController extends Controller
             return redirect()->back()->withErrors(['error' => 'Une erreur est survenue : ' . $e->getMessage()]);
         }
     }
+
+    public function edit($id)
+    {
+        $hopital = Hopital::findOrFail($id);
+        return view('mairie.hopital.edit', compact('hopital'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $hopital = Hopital::findOrFail($id);
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:hopitals,email,' . $hopital->id,
+            'contact' => 'required|string|min:10',
+            'nomHop' => 'required|string|max:255',
+            'commune' => 'required|string|max:255',
+            'type' => 'required|string|max:255',
+        ]);
+
+        try {
+            $hopital->name = $request->name;
+            $hopital->email = $request->email;
+            $hopital->contact = $request->contact;
+            $hopital->nomHop = $request->nomHop;
+            $hopital->commune = $request->commune;
+            $hopital->type = $request->type;
+
+            if ($request->hasFile('profile_picture')) {
+                // Supprimer ancienne image
+                if ($hopital->profile_picture) {
+                    Storage::disk('public')->delete($hopital->profile_picture);
+                }
+                $hopital->profile_picture = $request->file('profile_picture')->store('profile_pictures', 'public');
+            }
+
+            $hopital->save();
+
+            return redirect()->route('hopital.index')
+                ->with('success', 'Hôpital mis à jour avec succès.');
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => 'Une erreur est survenue : ' . $e->getMessage()]);
+        }
+    }
+
+
+    public function destroy($id)
+    {
+        try {
+            $hopital = Hopital::findOrFail($id);
+
+            // Supprimer l’image de profil si elle existe
+            if ($hopital->profile_picture) {
+                Storage::disk('public')->delete($hopital->profile_picture);
+            }
+
+            $hopital->delete();
+
+            return redirect()->route('hopital.index')
+                ->with('success', 'Hôpital supprimé avec succès.');
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => 'Une erreur est survenue lors de la suppression : ' . $e->getMessage()]);
+        }
+    }
+
+
+
 
     public function logout(){
         Auth::guard('hopital')->logout();

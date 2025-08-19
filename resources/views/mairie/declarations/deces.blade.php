@@ -61,8 +61,8 @@
   }
 
   .table thead th {
-    background-color: #637ec8;
-    color: var(--secondary-color);
+    background-color: #f1f5ff;
+    color: #0033c4;
     font-weight: 600;
     border: none;
     padding: 12px 15px;

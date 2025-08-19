@@ -16,9 +16,11 @@ class DecesSimple extends Model
         'documentMariage',
         'RequisPolice',
         'commune',
+        'statut_livraison',
         'etat',
         'user_id',  // Ajout de user_id
         'agent_id',  // Ajout de agent_id
+        'livreur_id',  // Ajout de livreur_id
     ];
 
     // Définir la relation avec l'utilisateur
@@ -30,6 +32,10 @@ class DecesSimple extends Model
     public function agent()
     {
         return $this->belongsTo(Agent::class, 'agent_id');
+    }
+    public function livreur()
+    {
+        return $this->belongsTo(Livreur::class, 'livreur_id');
     }
 
     public static function getNextId()

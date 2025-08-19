@@ -61,16 +61,43 @@ class DemandeMariageAgentController extends Controller
     {
         $mariage = Mariage::findOrFail($id);
         
-        // Validation de l'état (si nécessaire)
+        // Validation de l'état
         $request->validate([
-            'etat' => 'required|string|in:en attente,réçu,terminé', // Ajouter les états possibles
+            'etat' => 'required|string|in:en attente,réçu,terminé',
         ]);
 
         // Mise à jour de l'état
         $mariage->etat = $request->etat;
+
+        // Si l'état est "terminé" ET choix_option = "livraison" ET pas encore de code
+        if ($mariage->etat === 'terminé' && $mariage->choix_option === 'livraison' && is_null($mariage->livraison_code)) {
+            // Générer un code de livraison unique
+            $livraisonCode = 'LIVM' . str_pad(mt_rand(1, 9999999), 7, '0', STR_PAD_LEFT);
+
+            // Vérifier que le code est unique
+            while (Mariage::where('livraison_code', $livraisonCode)->exists()) {
+                $livraisonCode = 'LIVM' . str_pad(mt_rand(1, 9999999), 7, '0', STR_PAD_LEFT);
+            }
+
+            // Mettre à jour la demande
+            $mariage->livraison_id = 1; // à adapter si tu as une vraie gestion des livraisons
+            $mariage->livraison_code = $livraisonCode;
+            $mariage->statut_livraison = 'en attente';
+        }
+
+        // Sauvegarder
         $mariage->save();
-        
-        return redirect()->route('agent.demandes.wedding.index')->with('success', 'Etat de la demande a été mis à jour.');
+
+        // Redirection en fonction de l'état
+        if ($mariage->etat === 'terminé') {
+            return redirect()->route('agent.history.taskendmariages')
+                ->with('success', 'État mis à jour avec succès' .
+                    ($mariage->choix_option === 'livraison' ? ' et livraison initiée (Code: ' . $mariage->livraison_code . ')' : ''));
+        } else {
+            return redirect()->route('agent.demandes.wedding.index')
+                ->with('success', 'État mis à jour avec succès');
+        }
     }
+
 
 }
