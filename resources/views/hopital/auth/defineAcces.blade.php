@@ -13,7 +13,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background-image: url({{ asset('assets/images/profiles/doctorbg.jpg') }});
+      background-image: url({{ asset('assets/assets/img/bavk.jpg') }});
       background-size: cover;
       height: 100vh;
       margin: 0;

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User\Extrait\Deces;
 use App\Http\Controllers\Controller;
 use App\Models\DecesCertificat;
 use App\Models\DecesSimple;
+use App\Services\InfobipService;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
@@ -19,8 +20,8 @@ class DecesSimpleConroller extends Controller
         // Récupérer les utilisateurs connecté
         $user = Auth::user();
 
-        $deces = DecesCertificat::where('user_id', $user->id)->paginate(10); 
-        $decesdeja = DecesSimple::where('user_id', $user->id)->paginate(10); 
+        $deces = DecesCertificat::where('user_id', $user->id)->where('etat','!=','terminé')->paginate(10); 
+        $decesdeja = DecesSimple::where('user_id', $user->id)->where('etat','!=','terminé')->paginate(10); 
 
         return view('user.deces.index', compact('deces', 'decesdeja'));
     }
@@ -30,7 +31,7 @@ class DecesSimpleConroller extends Controller
         return view('user.deces.simple.create');
     }
 
-    public function store(Request $request)
+    public function store(Request $request, InfobipService $infobipService)
     {
         $request->validate([
             'name' => 'required',
@@ -128,6 +129,10 @@ class DecesSimpleConroller extends Controller
         }
 
         $decesdeja->save();
+       $phoneNumber = $user->indicatif . $user->contact;
+        $message = "Bonjour {$user->name}, votre demande d'extrait de décès a bien été transmise à la mairie de {$user->commune}. Référence: {$decesdeja->reference}.
+Vous pouvez suivre l'état de votre demande en cliquant sur ce lien : https://edemarchee-ci.com/E-ci-recherche/demande";
+        $infobipService->sendSms($phoneNumber, $message);
 
         return redirect()->route('user.extrait.deces.index')->with('success', 'Demande envoyée avec succès.');
     }

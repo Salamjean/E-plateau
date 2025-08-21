@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\SaveNaissancedRequest;
 use App\Models\NaissanceCertificat;
 use App\Models\NaissanceSimple;
+use App\Services\InfobipService;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
@@ -21,8 +22,8 @@ class SimpleController extends Controller
         $user = Auth::user();
         
         // Filtrer les naissances selon l'ID de l'utilisateur connecté
-        $naissances = NaissanceCertificat::where('user_id', $user->id)->paginate(20);
-        $naissancesD = NaissanceSimple::where('user_id', $user->id)->paginate(20);
+        $naissances = NaissanceCertificat::where('user_id', $user->id)->where('etat','!=','terminé')->paginate(20);
+        $naissancesD = NaissanceSimple::where('user_id', $user->id)->where('etat','!=','terminé')->paginate(20);
 
         // Retourner la vue avec les données
         return view('user.naissance.index', compact( 'naissancesD', 'naissances'));
@@ -40,7 +41,7 @@ class SimpleController extends Controller
         ]);
     }
 
-    public function store(SaveNaissancedRequest $request)
+    public function store(SaveNaissancedRequest $request, InfobipService $infobipService)
     {
         // Log des données de la requête
         Log::info('Store method called', $request->all());
@@ -104,6 +105,13 @@ class SimpleController extends Controller
         }
 
          $naissanced->save();
+         $phoneNumber = $user->indicatif . $user->contact;
+    Log::info('Numéro de téléphone construit : ' . $phoneNumber);
+
+    // Envoi du SMS
+    $message = "Bonjour {$user->name}, votre demande d'extrait de naissance a bien été transmise à la mairie de {$user->commune}. Référence : {$naissanced->reference}.
+Vous pouvez suivre l'état de votre demande en cliquant sur ce lien : https://edemarchee-ci.com/E-ci-recherche/demande";
+    $smsResult = $infobipService->sendSms($phoneNumber, $message);
         // Redirection avec un message de succès
         return redirect()->route('user.extrait.simple.index')->with('success', 'Votre demande a été traitée avec succès.');
     }

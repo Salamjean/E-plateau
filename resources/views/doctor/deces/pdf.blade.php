@@ -34,7 +34,7 @@
             height: 130px;
             position: absolute;
             left: -50px;
-            margin-left: 0;
+            margin-left: 20px;
             margin-top: 0;
         }
         .logo {
@@ -73,8 +73,8 @@
     <header>
         <div class="logo_g">
             <div class="logo">
-                <img src="assets/assets/img/sante.jpg" class="logo2" alt="Logo">
-                <img src="assets/assets/img/gouv_ci.png" class="logo1" alt="Logo">
+                <img src="assets/assets/img/logo plateau.png" class="logo2" alt="Logo">
+                <img src="assets/assets/img/sante.jpg" class="logo1" alt="Logo">
             </div>
         </div>
         <br><br><br><br><br><br><br><br>

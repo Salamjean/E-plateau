@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\AgentAdminController;
 use App\Http\Controllers\Admin\AuthenticateAdmin;
+use App\Http\Controllers\Admin\DemandesDeclarationsController;
 use App\Http\Controllers\Agent\AgentController;
 use App\Http\Controllers\Agent\AgentDashboard;
 use App\Http\Controllers\Agent\AuthenticateAgent;
@@ -56,6 +58,17 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('/')->group( function(){
     Route::get('/',[HomeController::class,'home'])->name('home');
+    Route::match(['get', 'post'], 'home/search', [HomeController::class, 'recherche'])->name('recherche.demande');
+    Route::get('home/about', [HomeController::class, 'about'])->name('about.demande');
+    Route::get('home/service', [HomeController::class, 'service'])->name('service.demande');
+    Route::get('home/department', [HomeController::class, 'department'])->name('department.demande');
+
+    //Les routes des actes civils 
+    Route::get('home/birth', [HomeController::class, 'birth'])->name('home.birth');
+    Route::get('home/death', [HomeController::class, 'death'])->name('home.death');
+    Route::get('home/wedding', [HomeController::class, 'wedding'])->name('home.wedding');
+    Route::get('home/rendezvous', [HomeController::class, 'rendezvous'])->name('home.rendezvous');
+    Route::get('home/contact', [HomeController::class, 'contact'])->name('home.contact');
 });
 
 //Les routes de gestion du @super admin
@@ -64,10 +77,11 @@ Route::prefix('admin')->group(function () {
     Route::post('/login', [AuthenticateAdmin::class, 'handleLogin'])->name('admin.handleLogin');
 });
 
-Route::middleware('auth:admin')->prefix('admin')->group(function () {
+Route::middleware('admin')->prefix('admin')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/logout', [AdminController::class, 'logout'])->name('admin.logout');
 
+    //Les routes de gestion de la mairie par l'admin
     Route::prefix('mairie')->group(function(){
         Route::get('/index', [MairieController::class, 'index'])->name('admin.index');
         Route::get('/index/archive', [MairieController::class, 'archive'])->name('admin.archive');
@@ -79,6 +93,19 @@ Route::middleware('auth:admin')->prefix('admin')->group(function () {
         Route::put('/mairie/unarchive/{id}', [MairieController::class, 'unarchive'])->name('mairie.unarchive');
         Route::delete('/{vendor}/delete', [MairieController::class, 'vendordelete'])->name('vendor.delete');
     });
+
+    //Les routes de gestions de demandes et declarations par l'admin
+    Route::get('/birth/request', [DemandesDeclarationsController::class, 'naissance'])->name('admin.demandes.naissance');
+    Route::get('/death/request', [DemandesDeclarationsController::class, 'deces'])->name('admin.demandes.deces');
+    Route::get('/wedding/request', [DemandesDeclarationsController::class, 'mariage'])->name('admin.demandes.mariage');
+    Route::get('/birth/statement', [DemandesDeclarationsController::class, 'declarationNaissance'])->name('admin.declaration.naissance');
+    Route::get('death/statement', [DemandesDeclarationsController::class, 'declarationDeces'])->name('admin.declaration.deces');
+
+    //les routes de gestions des personnels par l'admin
+    Route::get('/agent/all', [AgentAdminController::class, 'agent'])->name('admin.agent');
+    Route::get('/personal/all', [AgentAdminController::class, 'personal'])->name('admin.personal');
+    Route::get('/caisse/all', [AgentAdminController::class, 'caisse'])->name('admin.caisse');
+
 
 });        
 
@@ -113,6 +140,7 @@ Route::middleware('auth')->prefix('user')->group(function(){
      Route::get('/create', [CertificatNaissance::class, 'create'])->name('user.extrait.certificat');
      Route::post('/create', [CertificatNaissance::class, 'store'])->name('user.extrait.certificat.store');
      Route::get('/naissance/delete/{naissance}', [CertificatNaissance::class, 'delete'])->name('user.extrait.certificat.delete');
+     Route::post('/update/prenom/{id}', [CertificatNaissance::class, 'updateprenom'])->name('modifier.prenom');
 
     //Les routes d'extrait deces avec certificat
     Route::get('/extract/death/certificat', [DecesCertificatController::class, 'create'])->name('user.extrait.deces.certificat');
@@ -126,7 +154,6 @@ Route::middleware('auth')->prefix('user')->group(function(){
     Route::get('/wedding/delete/{mariage}', [MariageController::class, 'delete'])->name('user.extrait.mariage.delete');
     
 
-
      //La route de verification du CMN
      Route::post('/verifier-code-dm', [VerificationCM::class, 'verifierCMN'])->name('code.verifie.cmn');
      Route::post('/deces/verifierCodeCMD', [VerificationCM::class, 'verifierCMD'])->name('code.verifie.cmd');
@@ -136,6 +163,10 @@ Route::middleware('auth')->prefix('user')->group(function(){
         Route::get('/rendezvous/index', [RendezvousController::class, 'index'])->name('user.rendezvous.index');
         Route::get('/rendezvous/create', [RendezvousController::class, 'create'])->name('user.rendezvous.create');
         Route::post('/rendezvous', [RendezvousController::class, 'store'])->name('user.rendezvous.store');
+
+    //la route de gestion des historiques 
+        Route::get('/history/ends',[UserAuthenticate::class,'history'])->name('user.history');
+        Route::get('/demande-details/{type}/{id}', [UserAuthenticate::class, 'getDemandeDetails'])->name('demande.details.json');
 });
 
 

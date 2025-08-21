@@ -104,7 +104,7 @@
     color: var(--secondary-color);
   }
 
-  .status-refusee {
+  .status-terminé {
     background-color: var(--danger-color);
     color: var(--secondary-color);
   }

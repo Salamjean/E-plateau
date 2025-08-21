@@ -6,11 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\saveNaissanceRequest;
 use App\Models\DeclarationNaissance;
 use App\Models\NaissanceCertificat;
+use App\Services\InfobipService;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class CertificatNaissance extends Controller
@@ -20,7 +22,7 @@ class CertificatNaissance extends Controller
         return view('user.naissance.certificat.create', compact('naisshop'));
     }
 
-    public function store(saveNaissanceRequest $request)
+    public function store(saveNaissanceRequest $request, InfobipService $infobipService)
     {
         Log::info('Store method called', $request->all());
         $imageBaseLink = '/images/naissances/';
@@ -91,6 +93,10 @@ class CertificatNaissance extends Controller
         }
 
         $naissance->save();
+         $phoneNumber = $user->indicatif . $user->contact;
+        $message = "Bonjour {$user->name}, votre demande d'extrait de naissance a bien été transmise à la mairie de {$user->commune}. Référence: {$naissance->reference}.
+Vous pouvez suivre l'état de votre demande en cliquant sur ce lien : https://edemarchee-ci.com/E-ci-recherche/demande";
+        $infobipService->sendSms($phoneNumber, $message);
 
         return redirect()->route('user.extrait.simple.index')->with('success', 'Votre demande a été traitée avec succès.');
     }
@@ -106,5 +112,63 @@ class CertificatNaissance extends Controller
             // Rediriger avec un message d'erreur
             return redirect()->route('user.extrait.simple.index')->with('error1', 'Une erreur est survenue lors de la suppression de la demande.');
         }
+    }
+
+    public function updateprenom(Request $request, $id)
+    {
+        Log::info('Méthode updateprenom appelée avec ID:', ['id' => $id]);
+        
+        // Validation des données
+        $request->validate([
+            'newPrenom' => 'required|string|max:255',
+            'identiteDeclarant' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'cdnaiss' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048'
+        ]);
+
+        $naissance = NaissanceCertificat::find($id);
+
+        if (!$naissance) {
+            return response()->json(['success' => false, 'message' => 'Enregistrement non trouvé']);
+        }
+
+        // Mettre à jour le prénom
+        $naissance->prenom = $request->newPrenom;
+        
+        // Gérer le fichier identiteDeclarant
+        if ($request->hasFile('identiteDeclarant')) {
+            // Supprimer l'ancien fichier s'il existe
+            if ($naissance->identiteDeclarant && Storage::exists($naissance->identiteDeclarant)) {
+                Storage::delete($naissance->identiteDeclarant);
+            }
+            
+            // Stocker le nouveau fichier
+            $path = $request->file('identiteDeclarant')->store('documents', 'public');
+            $naissance->identiteDeclarant = $path;
+        }
+        
+        // Gérer le fichier cdnaiss
+        if ($request->hasFile('cdnaiss')) {
+            // Supprimer l'ancien fichier s'il existe
+            if ($naissance->cdnaiss && Storage::exists($naissance->cdnaiss)) {
+                Storage::delete($naissance->cdnaiss);
+            }
+            
+            // Stocker le nouveau fichier
+            $path = $request->file('cdnaiss')->store('documents', 'public');
+            $naissance->cdnaiss = $path;
+        }
+        
+        // Réinitialiser les champs d'archivage
+        $naissance->archived_at = null;
+        $naissance->motif_annulation = null;
+        $naissance->autre_motif_text = null;
+        $naissance->etat = 'en attente';
+        
+        $naissance->save();
+
+        return response()->json([
+            'success' => true, 
+            'message' => 'Modifications enregistrées avec succès'
+        ]);
     }
 }

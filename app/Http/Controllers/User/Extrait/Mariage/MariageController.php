@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User\Extrait\Mariage;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\saveMariageRequest;
 use App\Models\Mariage;
+use App\Services\InfobipService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -35,7 +36,7 @@ class MariageController extends Controller
         }
 
         // Récupérer tous les mariages correspondant aux critères de filtrage
-        $mariages = $query->get();
+        $mariages = $query->where('etat','!=','terminé')->get();
 
         // Fusionner les deux collections en une seule
         $allMariages = $mariages;
@@ -48,7 +49,7 @@ class MariageController extends Controller
         return view('user.mariage.create');
     }
 
-    public function store(saveMariageRequest $request)
+    public function store(saveMariageRequest $request, InfobipService $infobipService)
     {
         $imageBaseLink = '/images/mariages/';
 
@@ -115,6 +116,10 @@ class MariageController extends Controller
         }
 
         $mariage->save();
+        $phoneNumber = $user->indicatif . $user->contact;
+        $message = "Bonjour {$user->name}, votre demande d'extrait de mariage a bien été transmise à la mairie de {$user->commune}. Référence: {$mariage->reference}.
+Vous pouvez suivre l'état de votre demande en cliquant sur ce lien : https://edemarchee-ci.com/E-ci-recherche/demande";
+        $infobipService->sendSms($phoneNumber, $message);
 
         return redirect()->route('user.extrait.mariage.index')->with('success', 'Votre demande a été traitée avec succès.');
     }

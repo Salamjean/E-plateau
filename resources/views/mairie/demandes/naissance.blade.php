@@ -98,12 +98,12 @@
     color: var(--dark-color);
   }
 
-  .status-validee {
+  .status-termine {
     background-color: var(--success-color);
     color: var(--secondary-color);
   }
 
-  .status-refusee {
+  .status-terminé {
     background-color: var(--danger-color);
     color: var(--secondary-color);
   }

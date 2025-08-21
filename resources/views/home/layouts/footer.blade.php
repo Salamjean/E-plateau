@@ -23,10 +23,9 @@
         <div class="col-lg-4 col-md-3 footer-links">
           <h4>Liens rapide</h4>
           <ul>
-            <li><a href="#">A propos de nous</a></li>
-            <li><a href="#">Services</a></li>
-            <li><a href="#">Départements</a></li>
-            <li><a href="#">Actes civils</a></li>
+            <li><a href="{{route('about.demande')}}">A propos de nous</a></li>
+            <li><a href="{{route('service.demande')}}">Services</a></li>
+            <li><a href="{{route('department.demande')}}">Départements</a></li>
             <li><a href="#">Contactez-nous</a></li>
           </ul>
         </div>
@@ -39,8 +38,6 @@
             <li><a href="#">Réservation de Salle</a></li>
             <li><a href="#">Certificat de Vie et d'Entretien</a></li>
             <li><a href="#">Certificat de non remariage et Non divorce</a></li>
-            <li><a href="#">Déclaration d'une Activité</a></li>
-            <li><a href="#">Couverture Maladie Universelle</a></li>
           </ul>
         </div>
       </div>

@@ -56,7 +56,7 @@ class DeclarationNaissance extends Controller
             'commune' => 'required', // Commune, toujours nécessaire
             'codeCMU' => 'required',
             'lien' => 'required',
-            'CNI_Pere' => 'required',
+            'CNI_Pere' => 'nullable',
         ];
 
         // Règles de validation dynamiques pour les informations des enfants

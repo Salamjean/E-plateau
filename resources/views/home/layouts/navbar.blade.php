@@ -26,22 +26,23 @@
         <nav id="navmenu" class="navmenu">
           <ul>
             <li><a href="{{route('home')}}" class="active">Accueil<br></a></li>
-            <li><a href="#about">A propos de nous</a></li>
-            <li><a href="#services">Services</a></li>
-            <li><a href="#departments">Departements</a></li>
+            <li><a href="{{route('about.demande')}}">A propos de nous</a></li>
+            <li><a href="{{route('service.demande')}}">Services</a></li>
+            <li><a href="{{route('department.demande')}}">Departements</a></li>
             <li class="dropdown"><a href="#"><span>Actes civils</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
               <ul>
-                <li><a href="#">Acte de naissance</a></li>
-                <li><a href="#">Acte de décès</a></li>
+                <li><a href="{{route('home.birth')}}">Acte de naissance</a></li>
+                <li><a href="{{route('home.death')}}">Acte de décès</a></li>
                 <li class="dropdown"><a href="#"><span>Mariage</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
                   <ul>
-                    <li><a href="#">Acte de mariage</a></li>
-                    <li><a href="#">Rendez-vous</a></li>
+                    <li><a href="{{route('home.wedding')}}">Acte de mariage</a></li>
+                    <li><a href="{{route('home.rendezvous')}}">Rendez-vous</a></li>
                   </ul>
                 </li>
               </ul>
             </li>
-             <li><a href="#departments">Contactez-nous</a></li>
+             <li><a href="{{route('home.contact')}}">Contactez-nous</a></li>
+             <li><a href="{{route('recherche.demande')}}">Recherche </a></li>
           </ul>
           <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
         </nav>

@@ -102,7 +102,8 @@
     }
 
     .btn-new-request:hover {
-        background-color: #27ae60;
+        background-color: #1990f8;
+        color: white;
         transform: translateY(-2px);
     }
 
@@ -173,19 +174,16 @@
         font-size: 0.8rem;
     }
 </style>
-
-{{-- @if($naissances->contains(function ($naissance) { return $naissance->archived_at; }))
-    <div class="marquee-alert">
-        <i class="fas fa-exclamation-triangle me-2"></i>
-        @foreach($naissances as $naissance)
-            @if($naissance->archived_at)
-                Motif d'annulation pour {{ $naissance->nom.' '.$naissance->prenom }} : 
-                {{ $naissance->autre_motif_text ?? $naissance->motif_annulation }}
-            @endif
-        @endforeach
-    </div>
-@endif --}}
-
+@if($naissances->contains(function ($naissance) { return $naissance->archived_at; }))
+    @foreach($naissances as $naissance)
+        @if($naissance->archived_at)
+            <marquee behavior="" direction="left" style="font-size:15px; color:red; font-weight:bold">
+                Motif d'annulation de demande pour l'extrait de {{ $naissance->nom.' '.$naissance->prenom  }} : 
+                 {{ $naissance->autre_motif_text ?? $naissance->motif_annulation }}
+            </marquee>
+        @endif
+    @endforeach
+@endif
 <div class="row flex-grow form-background">
     <div class="col-12 grid-margin stretch-card">
         <div class="card card-rounded">
@@ -395,23 +393,35 @@
     </div>
 </div>
 
-<!-- Modales de modification (garder celles existantes) -->
-{{-- @foreach($naissances as $naissance)
+<!-- Modales de modification (DÉCOMMENTÉE) -->
+@foreach($naissances as $naissance)
     @if($naissance->archived_at)
     <div class="modal fade" id="modifierModal{{ $naissance->id }}" tabindex="-1" role="dialog" aria-labelledby="modifierModalLabel{{ $naissance->id }}" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modifierModalLabel{{ $naissance->id }}">Modifier le prénom</h5>
+                    <h5 class="modal-title" id="modifierModalLabel{{ $naissance->id }}">Modifier les informations</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="modifierForm{{ $naissance->id }}">
+                    <form id="modifierForm{{ $naissance->id }}" enctype="multipart/form-data">
                         @csrf
                         @method('POST')
                         <div class="form-group mb-3">
                             <label for="newPrenom{{ $naissance->id }}" class="form-label">Nouveau prénom</label>
-                            <input type="text" class="form-control" id="newPrenom{{ $naissance->id }}" name="newPrenom" required>
+                            <input type="text" class="form-control" id="newPrenom{{ $naissance->id }}" name="newPrenom" value="{{ $naissance->prenom }}" required>
+                        </div>
+                        
+                        <div class="form-group mb-3">
+                            <label for="identiteDeclarant{{ $naissance->id }}" class="form-label">Pièce d'identité du déclarant</label>
+                            <input type="file" class="form-control" id="identiteDeclarant{{ $naissance->id }}" name="identiteDeclarant" accept="image/*,.pdf">
+                            <small class="text-muted">Formats acceptés: JPG, PNG, PDF. Laisser vide pour ne pas modifier.</small>
+                        </div>
+                        
+                        <div class="form-group mb-3">
+                            <label for="cdnaiss{{ $naissance->id }}" class="form-label">Certificat de naissance</label>
+                            <input type="file" class="form-control" id="cdnaiss{{ $naissance->id }}" name="cdnaiss" accept="image/*,.pdf">
+                            <small class="text-muted">Formats acceptés: JPG, PNG, PDF. Laisser vide pour ne pas modifier.</small>
                         </div>
                     </form>
                 </div>
@@ -423,7 +433,7 @@
         </div>
     </div>
     @endif
-@endforeach --}}
+@endforeach
 
 <!-- Scripts -->
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -467,7 +477,60 @@
         });
     }
 
-  
+   function submitForm(id) {
+    const form = document.getElementById('modifierForm' + id);
+    const formData = new FormData(form);
+    
+    // Afficher un indicateur de chargement
+    Swal.fire({
+        title: 'Traitement en cours',
+        text: 'Veuillez patienter...',
+        allowOutsideClick: true,
+        didOpen: () => {
+            Swal.showLoading()
+        }
+    });
+    
+    // Envoyer la requête
+    fetch('{{ route("modifier.prenom", ":id") }}'.replace(':id', id), {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        Swal.close();
+        if (data.success) {
+            Swal.fire({
+                title: 'Succès',
+                text: data.message || 'Modifications enregistrées avec succès',
+                icon: 'success',
+                confirmButtonColor: '#3085d6'
+            }).then(() => {
+                location.reload();
+            });
+        } else {
+            Swal.fire({
+                title: 'Erreur',
+                text: data.message || 'Une erreur est survenue',
+                icon: 'error',
+                confirmButtonColor: '#3085d6'
+            });
+        }
+    })
+    .catch(error => {
+        Swal.close();
+        Swal.fire({
+            title: 'Erreur',
+            text: 'Une erreur est survenue lors de la modification',
+            icon: 'error',
+            confirmButtonColor: '#3085d6'
+        });
+    });
+}
 
     // Notifications
     @if(session('success'))

@@ -74,6 +74,9 @@ class AuthenticateCaisse extends Controller
     }
 
     public function login(){
+        if (auth('caisse')->check()) {
+            return redirect()->route('caisse.dashboard');
+        }
         return view('caisse.auth.login');
     }
 

@@ -74,6 +74,9 @@ class AuthenticateDelivery extends Controller
     }
 
     public function login(){
+        if (auth('livreur')->check()) {
+            return redirect()->route('delivery.dashboard');
+        }
         return view('livreur.auth.login');
     }
 

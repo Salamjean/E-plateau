@@ -59,6 +59,9 @@ class MairieAuthenticate extends Controller
     }
 
     public function login(){
+        if (auth('mairie')->check()) {
+            return redirect()->route('mairie.dashboard');
+        }
         return view('mairie.auth.login');
     }
 

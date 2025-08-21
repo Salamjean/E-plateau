@@ -78,6 +78,9 @@ class AuthenticateDirector extends Controller
     }
 
     public function login(){
+         if (auth('director')->check()) {
+            return redirect()->route('directeur.dashboard');
+        }
         return view('director.auth.login');
     }
 

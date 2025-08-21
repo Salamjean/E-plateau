@@ -24,7 +24,7 @@ class DoctorDashboard extends Controller
                     ->where('doctor_id', $sousAdminId) // Filtrer par ID de sous-administrateur
                     ->whereDate('created_at', now()->format('Y-m-d')) // Filtrer par date
                     ->orderBy('created_at', 'desc')
-                    ->take(3)
+                    ->take(1)
                     ->get();
 
                 // Récupérer les déclarations de décès du jour en cours
@@ -32,7 +32,7 @@ class DoctorDashboard extends Controller
                     ->where('doctor_id', $sousAdminId) // Filtrer par ID de sous-administrateur
                     ->whereDate('created_at', now()->format('Y-m-d')) // Filtrer par date
                     ->orderBy('created_at', 'desc')
-                    ->take(3)
+                    ->take(1)
                     ->get();
 
                 // Compter les déclarations par mois

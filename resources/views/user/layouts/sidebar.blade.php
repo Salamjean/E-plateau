@@ -4,7 +4,7 @@
                      <div class="logo_section">
                         <a href="{{route('user.dashboard')}}"><img class="logo_icon img-responsive" src="{{ optional(Auth::user())->profile_picture 
                                                 ? asset('storage/' . Auth::user()->profile_picture) 
-                                                : asset('assets/images/profiles/useriii.jpeg') }}" alt="#" /></a>
+                                                : asset('assets/assets/img/Avato.png') }}" alt="#" /></a>
                      </div>
                   </div>
                   <div class="sidebar_user_info">
@@ -61,6 +61,7 @@
                            <li><a href="{{route('user.rendezvous.index')}}">> <span>Liste des rendez-vous</span></a></li>
                         </ul>
                      </li>
+                     <li><a href="{{route('user.history')}}"><i class="fa fa-dashboard yellow_color"></i> <span>Historique</span></a></li>
                   </ul>
                </div>
                

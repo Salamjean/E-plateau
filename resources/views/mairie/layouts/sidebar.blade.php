@@ -91,10 +91,10 @@
             <div class="collapse" id="ui-Hôpital">
               <ul class="nav flex-column sub-menu text-white">
                 <li class="nav-item text-white" >
-                  <a class="nav-link text-white" href="{{route('hopital.create')}}">Ajout d'un hôpital</a>
+                  <a class="nav-link text-white" href="{{route('hopital.create')}}">Ajout du service</a>
                 </li>
                 <li class="nav-item ">
-                  <a class="nav-link text-white" href="{{route('hopital.index')}}">Listes des hôpitaux</a>
+                  <a class="nav-link text-white" href="{{route('hopital.index')}}">Information sur le service</a>
                 </li>
               </ul>
             </div>

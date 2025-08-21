@@ -31,7 +31,7 @@
     min-height: 100vh;
     background: 
       linear-gradient(rgba(0, 51, 196, 0.1), rgba(0, 51, 196, 0.9)),
-      url('{{ asset('assets/assets/img/backgroud.jpg') }}');
+      url('{{ asset('assets/assets/img/arrierep.jpg') }}');
     background-size: cover;
     background-position: center;
     padding: 2rem;

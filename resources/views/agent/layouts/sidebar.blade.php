@@ -39,8 +39,9 @@
           <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#ui-deces" aria-expanded="false" aria-controls="ui-deces">
               <i class="mdi mdi-crosshairs-gps menu-icon text-white"></i>
-              <span class="menu-title text-white">Décès</span>
-              <i class="menu-arrow"></i>
+              <span class="menu-title text-white">Décès </span> 
+              <i class="fa fa-chevron-right"></i>
+
             </a>
             <div class="collapse" id="ui-deces">
               <ul class="nav flex-column sub-menu text-white">
@@ -59,20 +60,11 @@
               <span class="menu-title text-white">Mariage</span>
             </a>
           </li>
-           
-           <li class="nav-item">
-            <a class="nav-link" data-toggle="collapse" href="#ui-Livreur" aria-expanded="false" aria-controls="ui-Livreur">
-              <i class="mdi mdi-crosshairs-gps menu-icon text-white"></i>
+          <li class="nav-item">
+            <a class="nav-link" href="{{route('agent.delivery')}}">
+              <i class="mdi mdi-account menu-icon text-white"></i>
               <span class="menu-title text-white">Livreur</span>
-              <i class="menu-arrow"></i>
             </a>
-            <div class="collapse" id="ui-Livreur">
-              <ul class="nav flex-column sub-menu text-white">
-                <li class="nav-item ">
-                  <a class="nav-link text-white" href="{{route('agent.delivery')}}">Listes des Livreurs</a>
-                </li>
-              </ul>
-            </div>
           </li>
            <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#ui-Historique" aria-expanded="false" aria-controls="ui-Historique">

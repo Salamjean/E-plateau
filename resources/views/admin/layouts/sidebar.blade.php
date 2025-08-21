@@ -2,7 +2,7 @@
   <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('admin.dashboard') }}">
     <div>
       <img src="{{ asset('assets/assets/img/logo plateau.png') }}" style="height:70px" class="mr-7">
-      <div class="sidebar-brand-text mx-3" style="font-size: 30px">E-CI</div>
+      <div class="sidebar-brand-text mx-3" style="font-size: 30px"></div>
     </div>
   </a>
   <hr class="sidebar-divider my-0">
@@ -29,8 +29,8 @@
     <div id="collapseBootstrap" class="collapse" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar">
       <div class="bg-white py-2 collapse-inner rounded">
         <h6 class="collapse-header">Naissance</h6>
-        <a class="collapse-item" href="#">Déclaration-Naissance</a>
-        <a class="collapse-item" href="">Extrait-Naissance</a>
+        <a class="collapse-item" href="{{route('admin.declaration.naissance')}}">Déclaration-Naissance</a>
+        <a class="collapse-item" href="{{route('admin.demandes.naissance')}}">Extrait-Naissance</a>
       </div>
     </div>
   </li>
@@ -44,16 +44,16 @@
     <div id="collapseForm" class="collapse" aria-labelledby="headingForm" data-parent="#accordionSidebar">
       <div class="bg-white py-2 collapse-inner rounded">
         <h6 class="collapse-header">Décès</h6>
-        <a class="collapse-item" href="">Déclaration-Décès</a>
-        <a class="collapse-item" href="">Extrait-Décès</a>
+        <a class="collapse-item" href="{{route('admin.declaration.deces')}}">Déclaration-Décès</a>
+        <a class="collapse-item" href="{{route('admin.demandes.deces')}}">Extrait-Décès</a>
       </div>
     </div>
   </li>
 
   <li class="nav-item">
-    <a class="nav-link" href="">
+    <a class="nav-link" href="{{route('admin.demandes.mariage')}}">
       <i class="fab fa-fw fa-wpforms"></i>
-      <span>Acte de mariage</span>
+      <span>Extrait de mariage</span>
     </a>
   </li>
 
@@ -80,7 +80,7 @@
     </div>
   </li>
 
-   <!-- Section CAGRAE -->
+   {{-- <!-- Section CAGRAE -->
 <li class="nav-item">
   <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCnps"
     aria-expanded="true" aria-controls="collapseCnps">
@@ -130,7 +130,7 @@
           <a class="collapse-item" href="">Ministère archivés</a>
         </div>
       </div>
-    </li>
+    </li> --}}
   
 
   <hr class="sidebar-divider">
@@ -146,18 +146,18 @@
   <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAgent"
     aria-expanded="true" aria-controls="collapseAgent">
     <i class="fa fa-user"></i>
-    <span>Agents</span>
+    <span>Agent d'etat civil</span>
   </a>
   <div id="collapseAgent" class="collapse" aria-labelledby="headingAgent" data-parent="#accordionSidebar">
     <div class="bg-white py-2 collapse-inner rounded">
       <h6 class="collapse-header">Gestion des Agents</h6>
-      <a class="collapse-item" href="">Tous les agents</a>
+      <a class="collapse-item" href="{{route('admin.agent')}}">Tous les agents</a>
     </div>
   </div>
 </li>
 
   <!-- Section Maire -->
-  <li class="nav-item">
+  {{-- <li class="nav-item">
     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMaire"
       aria-expanded="true" aria-controls="collapseMaire">
       <i class="fa fa-user"></i>
@@ -169,19 +169,19 @@
         <a class="collapse-item" href="">Tous les huissiers</a>
       </div>
     </div>
-  </li>
+  </li> --}}
 
   <!-- Section Hôpital -->
   <li class="nav-item">
     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseHopital"
       aria-expanded="true" aria-controls="collapseHopital">
       <i class="fa fa-hospital"></i>
-      <span>Hôpital</span>
+      <span>Agent de déclartion</span>
     </a>
     <div id="collapseHopital" class="collapse" aria-labelledby="headingHopital" data-parent="#accordionSidebar">
       <div class="bg-white py-2 collapse-inner rounded">
-        <h6 class="collapse-header">Gestion des Hôpitaux</h6>
-        <a class="collapse-item" href="">Tous les hôputaux</a>
+        <h6 class="collapse-header">Gestion des agents</h6>
+        <a class="collapse-item" href="{{route('admin.personal')}}">Tous les agents</a>
       </div>
     </div>
   </li>
@@ -191,19 +191,19 @@
   <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCaisse"
     aria-expanded="true" aria-controls="collapseCaisse">
     <i class="fa fa-hospital"></i>
-    <span>Caisse</span>
+    <span>Finance</span>
   </a>
   <div id="collapseCaisse" class="collapse" aria-labelledby="headingCaisse" data-parent="#accordionSidebar">
     <div class="bg-white py-2 collapse-inner rounded">
-      <h6 class="collapse-header">Gestion des caisses</h6>
-      <a class="collapse-item" href="">Tous les caissiés</a>
+      <h6 class="collapse-header">Gestion des financiers</h6>
+      <a class="collapse-item" href="{{route('admin.caisse')}}">Tous les financiers</a>
     </div>
   </div>
 </li>
 
 
 <!-- Section Docteur -->
-<li class="nav-item">
+{{-- <li class="nav-item">
   <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseDocteur"
     aria-expanded="true" aria-controls="collapseDocteur">
     <i class="fa fa-hospital"></i>
@@ -215,5 +215,5 @@
       <a class="collapse-item" href="">Tous les docteurs</a>
     </div>
   </div>
-</li>
+</li> --}}
 </ul>

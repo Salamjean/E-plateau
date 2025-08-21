@@ -414,7 +414,7 @@
   <div class="welcome-card">
     <div class="row align-items-center">
       <div class="col-md-8">
-        <h2>Bonjour, {{ Auth::guard('caisse')->user()->name }}!</h2>
+        <h2>Bonjour, {{ Auth::guard('caisse')->user()->name }} {{ Auth::guard('caisse')->user()->prenom }}!</h2>
         <p>Bienvenue sur votre tableau de bord de gestion des demandes</p>
         <div class="d-flex align-items-center mt-2">
           <span class="badge badge-primary me-2">

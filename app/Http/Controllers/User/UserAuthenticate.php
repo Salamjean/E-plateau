@@ -5,16 +5,25 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserLoginRequest;
 use App\Http\Requests\UserRegisterRequest;
+use App\Models\DecesCertificat;
+use App\Models\DecesSimple;
+use App\Models\Mariage;
+use App\Models\NaissanceCertificat;
+use App\Models\NaissanceSimple;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 
 class UserAuthenticate extends Controller
 {
     public function login(){
+         // Vérifier si l'utilisateur est déjà authentifié
+        if (auth('web')->check()) {
+            return redirect()->route('user.dashboard');
+        }
         return view('user.auth.login');
     }
 
@@ -64,6 +73,124 @@ class UserAuthenticate extends Controller
         } catch (\Exception $e) {
             Log::error('Error during registration: ' . $e->getMessage());
             return back()->withErrors(['error' => 'Une erreur est survenue. Veuillez réessayer.'])->withInput();
+        }
+    }
+
+    public function history() {
+        $userId = Auth::user()->id;
+        
+        $historique = DB::table('naissance_simples')
+            ->select(
+                'id',
+                'reference',
+                'type as demande_type',
+                'etat',
+                'statut_livraison',
+                'created_at',
+                DB::raw("'naissance_simple' as table_name")
+            )
+            ->where('user_id', $userId)
+            ->where('etat','terminé')
+            
+            ->unionAll(
+                DB::table('naissance_certificats')
+                    ->select(
+                        'id',
+                        'reference',
+                        DB::raw("'Naissance' as demande_type"),
+                        'etat',
+                        'statut_livraison',
+                        'created_at',
+                        DB::raw("'naissance_certificat' as table_name")
+                    )
+                    ->where('user_id', $userId)
+                    ->where('etat','terminé')
+            )
+            
+            ->unionAll(
+                DB::table('deces_simples')
+                    ->select(
+                        'id',
+                        'reference',
+                        DB::raw("'Décès' as demande_type"),
+                        'etat',
+                        'statut_livraison',
+                        'created_at',
+                        DB::raw("'deces_simple' as table_name")
+                    )
+                    ->where('user_id', $userId)
+                    ->where('etat','terminé')
+            )
+            
+            ->unionAll(
+                DB::table('deces_certificats')
+                    ->select(
+                        'id',
+                        'reference',
+                        DB::raw("'Décès' as demande_type"),
+                        'etat',
+                        'statut_livraison',
+                        'created_at',
+                        DB::raw("'deces_certificat' as table_name")
+                    )
+                    ->where('user_id', $userId)
+                    ->where('etat','terminé')
+            )
+            
+            ->unionAll(
+                DB::table('mariages')
+                    ->select(
+                        'id',
+                        'reference',
+                        DB::raw("'Mariage' as demande_type"),
+                        'etat',
+                        'statut_livraison',
+                        'created_at',
+                        DB::raw("'mariage' as table_name")
+                    )
+                    ->where('user_id', $userId)
+                    ->where('etat','terminé')
+            )
+            
+            ->orderBy('created_at', 'desc')
+            ->get();
+        
+        return view('user.history', compact('historique'));
+    }
+
+    public function getDemandeDetails($type, $id)
+    {
+        $userId = Auth::user()->id;
+        
+        try {
+            switch($type) {
+                case 'naissance_simple':
+                    $demande = NaissanceSimple::where('user_id', $userId)->findOrFail($id);
+                    break;
+                case 'naissance_certificat':
+                    $demande = NaissanceCertificat::where('user_id', $userId)->findOrFail($id);
+                    break;
+                case 'deces_simple':
+                    $demande = DecesSimple::where('user_id', $userId)->findOrFail($id);
+                    break;
+                case 'deces_certificat':
+                    $demande = DecesCertificat::where('user_id', $userId)->findOrFail($id);
+                    break;
+                case 'mariage':
+                    $demande = Mariage::where('user_id', $userId)->findOrFail($id);
+                    break;
+                default:
+                    return response()->json(['error' => 'Type de demande non trouvé'], 404);
+            }
+            
+            return response()->json([
+                'success' => true,
+                'demande' => $demande,
+                'type' => $type
+            ]);
+            
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(['error' => 'Demande non trouvée'], 404);
         }
     }
 }

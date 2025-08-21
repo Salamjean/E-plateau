@@ -395,7 +395,6 @@
                     <th>Contact</th>
                     <th>Commune</th>
                     <th>Cas d'urgence</th>
-                    <th colspan="2" class="text-center">Action</th>
               </tr>
             </thead>
              <tbody>
@@ -407,27 +406,10 @@
                         <td>{{ $livreur->contact }}</td>
                         <td>{{ $livreur->commune }}</td>
                         <td>{{ $livreur->cas_urgence }}</td>
-                        <td>
-                            <form action="#" method="GET">
-                                @csrf
-                                <button style="margin-left:50%" type="submit" ><a href="#" class="edit"><i class="fas fa-edit"></i></a></button>
-                            </form>
-                        </td>
-                        <td>
-                        <form action="#" method="POST" onsubmit="return confirm('Voulez-vous vraiment supprimer cet livreur ?');" 
-                            style="display: flex; justify-content:center; align-items:center">
-                            @csrf
-                            @method('DELETE')
-                                <button type="button" class="delete" 
-                                onclick="confirmDelete('#')">
-                                <i class="fas fa-trash"></i>
-                                </button>
-                        </form>
-                    </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="9" class="text-center">Aucun livreur inscrire</td>
+                        <td colspan="6" class="text-center">Aucun livreur inscrire</td>
                     </tr>
                 @endforelse
             </tbody>

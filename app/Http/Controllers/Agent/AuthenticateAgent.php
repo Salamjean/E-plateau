@@ -79,6 +79,9 @@ class AuthenticateAgent extends Controller
     }
 
     public function login(){
+        if (auth('agent')->check()) {
+            return redirect()->route('agent.dashboard');
+        }
         return view('agent.auth.login');
     }
 

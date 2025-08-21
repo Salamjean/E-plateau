@@ -44,9 +44,6 @@
           </form>
         </div>
       </div>
-      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#statsModal">
-        <i class="fas fa-chart-line me-2"></i>Vue d'ensemble
-      </button>
     </div>
   </div>
 

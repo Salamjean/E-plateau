@@ -35,7 +35,7 @@
             margin: 0;
             background: 
                 linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
-                url('{{ asset('assets/images/profiles/Bguser.jpg') }}');
+                url('{{ asset('assets/assets/img/arrierep.jpg') }}');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;

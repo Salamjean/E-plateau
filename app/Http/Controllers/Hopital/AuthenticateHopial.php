@@ -78,6 +78,9 @@ class AuthenticateHopial extends Controller
     }
 
      public function login(){
+        if (auth('hopital')->check()) {
+            return redirect()->route('hopital.dashboard');
+        }
         return view('hopital.auth.login');
     }
 

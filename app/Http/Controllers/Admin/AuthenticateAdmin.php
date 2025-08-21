@@ -9,6 +9,9 @@ use Illuminate\Http\Request;
 class AuthenticateAdmin extends Controller
 {
     public function login(){
+        if (auth('admin')->check()) {
+            return redirect()->route('admin.dashboard');
+        }
         return view('admin.auth.login');
     }
 

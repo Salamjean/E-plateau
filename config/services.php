@@ -36,9 +36,14 @@ return [
     ],
 
     'cinetpay' => [
-    'api_key' => env('CINETPAY_API_KEY'),
-    'site_id' => env('CINETPAY_SITE_ID'),
-    'mode' => env('CINETPAY_MODE', 'TEST')
+        'api_key' => env('CINETPAY_API_KEY'),
+        'site_id' => env('CINETPAY_SITE_ID'),
+        'mode' => env('CINETPAY_MODE', 'TEST')
+    ],
+
+    'infobip' => [
+        'api_key' => env('INFOBIP_API_KEY'),
+        'base_url' => env('INFOBIP_BASE_URL'),
     ],
 
 ];

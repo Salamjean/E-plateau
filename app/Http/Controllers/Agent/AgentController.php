@@ -125,7 +125,7 @@ class AgentController extends Controller
             } else {
                 $demande->autre_motif_text = null; 
             }
-            $demande->etat = "terminé";
+            $demande->etat = "réçu";
             $demande->save(); 
 
             $demande->archive();

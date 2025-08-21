@@ -98,7 +98,7 @@
     color: white;
   }
 
-  .status-refusee {
+  .status-terminé {
     background-color: var(--danger-color);
     color: white;
   }

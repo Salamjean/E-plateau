@@ -74,6 +74,9 @@ class AuthenticatePoste extends Controller
     }
 
     public function login(){
+        if (auth('poste')->check()) {
+            return redirect()->route('post.dashboard');
+        }
         return view('poste.auth.login');
     }
 

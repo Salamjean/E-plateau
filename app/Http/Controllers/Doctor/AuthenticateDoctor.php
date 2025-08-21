@@ -78,6 +78,9 @@ class AuthenticateDoctor extends Controller
 
 
      public function login(){
+        if (auth('doctor')->check()) {
+            return redirect()->route('doctor.dashboard');
+        }
         Auth::guard('doctor')->logout();
         return view('doctor.auth.login');
     }

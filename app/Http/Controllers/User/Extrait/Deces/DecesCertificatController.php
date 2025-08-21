@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User\Extrait\Deces;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\saveDecesRequest;
 use App\Models\DecesCertificat;
+use App\Services\InfobipService;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
@@ -19,7 +20,7 @@ class DecesCertificatController extends Controller
         return view('user.deces.certificat.create');
     }
 
-    public function store(saveDecesRequest $request)
+    public function store(saveDecesRequest $request, InfobipService $infobipService)
     {
         $imageBaseLink = '/images/deces/';
 
@@ -85,6 +86,10 @@ class DecesCertificatController extends Controller
         }
 
         $deces->save();
+        $phoneNumber = $user->indicatif . $user->contact;
+        $message = "Bonjour {$user->name}, votre demande d'extrait de décès a bien été transmise à la mairie de {$user->commune}. Référence: {$deces->reference}
+Vous pouvez suivre l'état de votre demande en cliquant sur ce lien : https://edemarchee-ci.com/E-ci-recherche/demande";
+        $infobipService->sendSms($phoneNumber, $message);
 
         return redirect()->route('user.extrait.deces.index')->with('success', 'Votre demande a été traitée avec succès.');
     }
