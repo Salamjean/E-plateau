@@ -949,102 +949,103 @@
     }
 
     function initializeCinetPay(formData) {
-        // Configuration CinetPay
-        CinetPay.setConfig({
-            apikey: '{{ config("services.cinetpay.api_key") }}',
-            site_id: '{{ config("services.cinetpay.site_id") }}',
-            mode: 'PRODUCTION'
-        });
+    // Configuration CinetPay
+    CinetPay.setConfig({
+        apikey: '{{ config("services.cinetpay.api_key") }}',
+        site_id: '{{ config("services.cinetpay.site_id") }}',
+        mode: 'PRODUCTION'
+    });
 
-        // ID de transaction
-        const transactionId = 'EXT-' + Date.now();
-        
-        // Montant total
-        const totalAmount = formData.montant_timbre + formData.montant_livraison;
+    // ID de transaction
+    const transactionId = 'EXT-' + Date.now();
+    
+    // Montant total
+    const totalAmount = formData.montant_timbre + formData.montant_livraison;
 
-        // Chargement
-        Swal.fire({
-            title: 'Redirection en cours',
-            html: 'Préparation du paiement...',
-            allowOutsideClick: true,
-            didOpen: () => Swal.showLoading()
-        });
+    // Chargement
+    Swal.fire({
+        title: 'Redirection en cours',
+        html: 'Préparation du paiement...',
+        allowOutsideClick: true,
+        didOpen: () => Swal.showLoading()
+    });
 
-        // Données client
-        const customer = {
-            name: '{{ Auth::user()->name ?? "Client" }}',
-            email: '{{ Auth::user()->email ?? "contact@client.com" }}',
-            phone: '{{ Auth::user()->telephone ?? "00000000" }}'
-        };
+    // Données client
+    const customer = {
+        name: '{{ Auth::user()->name ?? "Client" }}',
+        email: '{{ Auth::user()->email ?? "contact@client.com" }}',
+        phone: '{{ Auth::user()->telephone ?? "00000000" }}'
+    };
 
-        // Paiement
-        CinetPay.getCheckout({
-            transaction_id: transactionId,
-            amount: totalAmount,
-            currency: 'XOF',
-            channels: 'ALL',
-            description: `Paiement pour livraison d'extrait de naissance`,
-            customer_name: customer.name,
-            customer_email: customer.email,
-            customer_phone_number: customer.phone,
-            customer_address: formData.adresse_livraison,
-            customer_city: formData.ville,
-            customer_country: 'CI',
-            customer_state: 'CI',
-            customer_zip_code: '00225'
-        });
+    // Paiement
+    CinetPay.getCheckout({
+        transaction_id: transactionId,
+        amount: totalAmount,
+        currency: 'XOF',
+        channels: 'ALL',
+        description: `Paiement pour livraison d'extrait de naissance`,
+        customer_name: customer.name,
+        customer_email: customer.email,
+        customer_phone_number: customer.phone,
+        customer_address: formData.adresse_livraison,
+        customer_city: formData.ville,
+        customer_country: 'CI',
+        customer_state: 'CI',
+        customer_zip_code: '00225'
+    });
 
-        // Gestion réponse
-        CinetPay.waitResponse(function(data) {
-            Swal.close();
-            if (data.status === "ACCEPTED") {
-                // Ajouter les données de livraison au formulaire
-                const form = document.getElementById('naissanceForm');
-                
-                // Créer des champs cachés pour les données de livraison
-                const hiddenFields = [
-                    { name: 'livraison_nom', value: formData.nom_destinataire },
-                    { name: 'livraison_prenom', value: formData.prenom_destinataire },
-                    { name: 'livraison_email', value: formData.email_destinataire },
-                    { name: 'livraison_telephone', value: formData.contact_destinataire },
-                    { name: 'livraison_adresse', value: formData.adresse_livraison },
-                    { name: 'livraison_ville', value: formData.ville },
-                    { name: 'livraison_commune', value: formData.commune_livraison },
-                    { name: 'livraison_quartier', value: formData.quartier },
-                    { name: 'montant_total', value: totalAmount },
-                    { name: 'transaction_id', value: transactionId }
-                ];
+    // Gestion réponse
+    CinetPay.waitResponse(function(data) {
+        Swal.close();
+        if (data.status === "ACCEPTED") {
+            // Ajouter les données de livraison au formulaire
+            const form = document.getElementById('naissanceForm');
+            
+            // Créer des champs cachés pour les données de livraison
+            const hiddenFields = [
+                { name: 'nom_destinataire', value: formData.nom_destinataire },
+                { name: 'prenom_destinataire', value: formData.prenom_destinataire },
+                { name: 'email_destinataire', value: formData.email_destinataire },
+                { name: 'contact_destinataire', value: formData.contact_destinataire },
+                { name: 'adresse_livraison', value: formData.adresse_livraison },
+                { name: 'ville', value: formData.ville },
+                { name: 'commune_livraison', value: formData.commune_livraison },
+                { name: 'quartier', value: formData.quartier },
+                { name: 'montant_timbre', value: formData.montant_timbre },
+                { name: 'montant_livraison', value: formData.montant_livraison },
+                { name: 'transaction_id', value: transactionId }
+            ];
 
-                hiddenFields.forEach(field => {
-                    const input = document.createElement('input');
-                    input.type = 'hidden';
-                    input.name = field.name;
-                    input.value = field.value;
-                    form.appendChild(input);
-                });
+            hiddenFields.forEach(field => {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = field.name;
+                input.value = field.value;
+                form.appendChild(input);
+            });
 
-                // Soumettre le formulaire
-                formSubmitted = true;
-                form.submit();
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Échec du paiement',
-                    text: data.message || 'Erreur lors du traitement'
-                });
-            }
-        });
-
-        // Gestion erreurs
-        CinetPay.onError(function(error) {
-            Swal.close();
+            // Soumettre le formulaire
+            formSubmitted = true;
+            form.submit();
+        } else {
             Swal.fire({
                 icon: 'error',
-                title: 'Erreur',
-                html: `Une erreur est survenue<br><small>${error.message || 'Veuillez réessayer'}</small>`
+                title: 'Échec du paiement',
+                text: data.message || 'Erreur lors du traitement'
             });
+        }
+    });
+
+    // Gestion erreurs
+    CinetPay.onError(function(error) {
+        Swal.close();
+        Swal.fire({
+            icon: 'error',
+            title: 'Erreur',
+            html: `Une erreur est survenue<br><small>${error.message || 'Veuillez réessayer'}</small>`
         });
-    }
+    });
+}
         });
     </script>
 @endsection
