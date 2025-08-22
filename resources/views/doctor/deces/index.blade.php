@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liste des Patients</title>
+    <title>Liste des Déclarations de Décès</title>
     
     <!-- Insertion de SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -17,147 +17,311 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         /* Styling global */
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f8f9fa;
-            padding: 0;
-            color: #333;
+        :root {
+            --primary-color: #009efb;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --text-color: #34495e;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
         }
 
-        .container {
+        body {
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .main-container {
             width: 95%;
-            margin: 0 auto;
-            justify-content: center;
+            margin: 20px auto;
             background: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 25px;
+            transition: var(--transition);
         }
 
         h1 {
             text-align: center;
-            color: black;
-            margin-bottom: 20px;
-            font-size: 40px;
+            color: var(--primary-color);
+            margin-bottom: 25px;
+            font-size: 32px;
+            font-weight: 700;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        h1:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--secondary-color);
+            border-radius: 2px;
         }
 
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
         }
 
-        .header .search-bar {
-            display: flex;
-            align-items: center;
-            width: 70%;
-        }
-
-        .header input[type="text"] {
+        .search-container {
+            position: relative;
             flex: 1;
-            padding: 10px 15px;
-            border: 1px solid #ccc;
-            border-radius: 25px;
+            max-width: 500px;
+        }
+
+        .search-container i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #7f8c8d;
+        }
+
+        .search-container input {
+            width: 100%;
+            padding: 12px 15px 12px 45px;
+            border: 1px solid #ddd;
+            border-radius: 30px;
             outline: none;
-            transition: all 0.3s ease;
+            transition: var(--transition);
             font-size: 14px;
+            background: #f8f9fa;
         }
 
-        .header input[type="text"]:focus {
-            border-color: #009efb;
-            box-shadow: 0 0 5px rgba(0, 158, 251, 0.5);
+        .search-container input:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+            background: #fff;
         }
 
-        .add-patient {
-            background-color: #009efb;
+        .add-btn {
+            background: linear-gradient(135deg, var(--secondary-color), #009efb);
             color: white;
-            padding: 10px 20px;
+            padding: 12px 25px;
             border: none;
-            border-radius: 25px;
-            font-size: 14px;
+            border-radius: 30px;
+            font-size: 15px;
+            font-weight: 600;
             cursor: pointer;
             text-decoration: none;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            transition: var(--transition);
+            box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
         }
 
-        .add-patient i {
+        .add-btn i {
             margin-right: 8px;
         }
 
-        .add-patient:hover {
-            background-color: #007acd;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        .add-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(52, 152, 219, 0.4);
+        }
+
+        /* Table styling */
+        .table-container {
+            overflow-x: auto;
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
 
         table {
             width: 100%;
-            border-collapse: collapse;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: #fff;
         }
 
         table thead th {
-            background-color: #009efb;
+            background: linear-gradient(to bottom, var(--primary-color), #009efb);
             color: white;
-            padding: 10px;
+            padding: 15px 12px;
             text-align: left;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            border: none;
+        }
+
+        table thead th:first-child {
+            border-top-left-radius: var(--border-radius);
+        }
+
+        table thead th:last-child {
+            border-top-right-radius: var(--border-radius);
         }
 
         table tbody tr {
-            background-color: #f9f9f9;
-            border-bottom: 1px solid #dddddd;
-            transition: background-color 0.3s ease;
+            background-color: #fff;
+            transition: var(--transition);
+        }
+
+        table tbody tr:nth-child(even) {
+            background-color: #f8f9fa;
         }
 
         table tbody tr:hover {
-            background-color: #f1faff;
+            background-color: #e8f4fc;
+            transform: scale(1.002);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
 
         table tbody td {
-            padding: 10px;
+            padding: 14px 12px;
+            border-bottom: 1px solid #eaeaea;
+            vertical-align: middle;
         }
 
-        table tbody td:last-child {
+        .action-cell {
             text-align: center;
+            white-space: nowrap;
         }
 
-        button {
-            border: none;
-            background: none;
-            cursor: pointer;
-            font-size: 16px;
+        .btn-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            margin: 0 3px;
+            transition: var(--transition);
+            color: #fff;
+            text-decoration: none;
         }
 
-        a .edit {
-            color: #28a745;
-            transition: color 0.3s ease;
-        }
-        a .eye {
-            color: #3047b8;
-            transition: color 0.3s ease;
+        .btn-edit {
+            background-color: var(--success-color);
         }
 
-        a .delete {
-            color: #dc3545;
-            transition: color 0.3s ease;
+        .btn-delete {
+            background-color: var(--accent-color);
         }
 
-        .edit:hover {
-            color: #1e7e34;
+        .btn-view {
+            background-color: var(--secondary-color);
         }
-        .eye:hover {
-            color: #1e617e;
+
+        .btn-download {
+            background-color: #9b59b6;
         }
-        .delete:hover {
-            color: #c82333;
+
+        .btn-icon:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .btn-icon i {
+            font-size: 14px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-hospital {
+            background-color: #ffeaa7;
+            color: #d35400;
+        }
+
+        .empty-row td {
+            text-align: center;
+            padding: 30px;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-container {
+                max-width: 100%;
+            }
+            
+            .add-btn {
+                align-self: flex-end;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 15px;
+                width: 98%;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+            
+            table thead {
+                display: none;
+            }
+            
+            table tbody tr {
+                display: block;
+                margin-bottom: 15px;
+                border-radius: var(--border-radius);
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            
+            table tbody td {
+                display: block;
+                text-align: right;
+                padding: 10px 15px;
+                position: relative;
+                padding-left: 50%;
+            }
+            
+            table tbody td:before {
+                content: attr(data-label);
+                position: absolute;
+                left: 15px;
+                width: 45%;
+                padding-right: 15px;
+                text-align: left;
+                font-weight: 600;
+                color: var(--primary-color);
+            }
+            
+            .action-cell {
+                text-align: center;
+            }
+            
+            .action-cell:before {
+                display: none;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="row" style="width:100%; justify-content:center">
-        <div class="row" style="width:100%; justify-content:center">
+    <div class="main-container">
+        <div class="alert-container">
             @if (Session::get('success1')) <!-- Pour la suppression -->
                 <script>
                     Swal.fire({
@@ -166,7 +330,7 @@
                         text: '{{ Session::get('success1') }}',
                         showConfirmButton: true,
                         confirmButtonText: 'OK',
-                        color: '#b30000'
+                        confirmButtonColor: '#27ae60'
                     });
                 </script>
             @endif
@@ -179,7 +343,7 @@
                         text: '{{ Session::get('success') }}',
                         showConfirmButton: true,
                         confirmButtonText: 'OK',
-                        color: '#006600'
+                        confirmButtonColor: '#27ae60'
                     });
                 </script>
             @endif
@@ -192,128 +356,118 @@
                         text: '{{ Session::get('error') }}',
                         showConfirmButton: true,
                         confirmButtonText: 'OK',
-                        color: 'red'
+                        confirmButtonColor: '#e74c3c'
                     });
                 </script>
             @endif
         </div>
 
-        <div class="container col-11">
-            <h1>Liste des déclarations de décès</h1>
-            <div class="header">
-                <div class="search-bar">
-                    <input type="text" id="search" placeholder="Rechercher une déclaration...">
-                </div>
-                <a href="{{ route('statement.create.death') }}" class="add-patient"><i class="fas fa-plus"></i> Ajouter une nouvelle déclaration</a>
+        <h1>Liste des Déclarations de Décès</h1>
+        
+        <div class="header">
+            <div class="search-container">
+                <i class="fas fa-search"></i>
+                <input type="text" id="search" placeholder="Rechercher une déclaration...">
             </div>
-            
-            <table id="patients-table" class="display">
-                <thead style="text-align: center">
-                    <tr class="text-center">
+            <a href="{{ route('statement.create.death') }}" class="add-btn">
+                <i class="fas fa-plus-circle"></i> Nouvelle déclaration
+            </a>
+        </div>
+        
+        <div class="table-container">
+            <table id="declarations-table">
+                <thead>
+                    <tr>
                         <th class="text-center">N° CMD</th>
                         <th class="text-center">Nom du défunt</th>
-                        <th class="text-center">Prénoms du défunt</th>
+                        <th class="text-center">Prénoms</th>
                         <th class="text-center">Date de naissance</th>
                         <th class="text-center">Date de décès</th>
                         <th class="text-center">Lieu de décès</th>
-                        <th class="text-center">Causes du décès</th>
-                        <th class="text-center">Commune de décès</th>
-                        <th colspan="3" style="text-align: center">Action</th>
-                        <th colspan="2" style="text-align: center">Télécharger</th>
+                        <th class="text-center">Causes</th>
+                        <th class="text-center">Commune</th>
+                        <th class="text-center">Actions</th>
+                        <th class="text-center">Téléchargements</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse ($deceshops as $deceshop)
-                    <tr class="text-center">
-                        <td>{{ $deceshop->codeCMD }}</td>
-                        <td>{{ $deceshop->NomM }}</td>
-                        <td>{{ $deceshop->PrM }}</td>
-                        <td>{{ $deceshop->DateNaissance }}</td>
-                        <td>{{ $deceshop->DateDeces }}</td>
-                        <td>{{ $deceshop->choix }} l'hôpital</td>
-                        <td>{{ $deceshop->Remarques }}</td>
-                        <td>{{ $deceshop->commune }}</td>
-                        <td>
-                            <button class="edit"><a href="{{ route('statement.edit.death', $deceshop->id) }}" class="edit"><i class="fas fa-edit"></i></a></button>
+                    <tr>
+                        <td  class="text-center" data-label="N° CMD"><strong>{{ $deceshop->codeCMD }}</strong></td>
+                        <td  class="text-center" data-label="Nom">{{ $deceshop->NomM }}</td>
+                        <td  class="text-center" data-label="Prénoms">{{ $deceshop->PrM }}</td>
+                        <td class="text-center" data-label="Naissance">{{ $deceshop->DateNaissance }}</td>
+                        <td class="text-center" data-label="Décès">{{ $deceshop->DateDeces }}</td>
+                        <td class="text-center" data-label="Lieu">
+                            <span class="badge badge-hospital">{{ $deceshop->choix }} l'hôpital</span>
                         </td>
-                        <td>
-                            <button class="delete" onclick="confirmDelete('{{ route('statement.delete.death', $deceshop->id) }}')">
+                        <td class="text-center" data-label="Causes">{{ Str::limit($deceshop->Remarques, 20) }}</td>
+                        <td class="text-center" data-label="Commune">{{ $deceshop->commune }}</td>
+                        <td class="text-center" data-label="Actions" class="action-cell">
+                            <a href="{{ route('statement.edit.death', $deceshop->id) }}" class="btn-icon btn-edit" title="Modifier">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a href="{{ route('statement.show.death', $deceshop->id) }}" class="btn-icon btn-view" title="Voir détails">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            <a href="#" onclick="confirmDelete('{{ route('statement.delete.death', $deceshop->id) }}')" class="btn-icon btn-delete" title="Supprimer">
                                 <i class="fas fa-trash"></i>
-                            </button>
+                            </a>
                         </td>
-                        <td>
-                            <button class="eye"><a href="{{ route('statement.show.death', $deceshop->id) }}" class="eye"><i class="fas fa-eye"></i></a></button>
-                        </td>
-                        <td>
-                            <button class="eye">
-                                <a href="{{ route('statement.download.death', $deceshop->id) }}" style="color: #009efb">
-                                    <i class="fas fa-download" style="color: blue"></i><br> Déclaration
-                                </a>
-                            </button>
-                        </td>
-                        <td>
-                            <button class="eye">
-                                <a href="{{ route('statement.downloadcontagion.death', $deceshop->id) }}" style="color: #009efb">
-                                    <i class="fas fa-download" style="color: blue"></i> <br>Contagion
-                                </a>
-                            </button>
+                        <td data-label="Téléchargements" class="action-cell">
+                            <a href="{{ route('statement.download.death', $deceshop->id) }}" class="btn-icon btn-download" title="Télécharger Déclaration">
+                                <i class="fas fa-file-pdf"></i>
+                            </a>
+                            <a href="{{ route('statement.downloadcontagion.death', $deceshop->id) }}" class="btn-icon btn-download" title="Télécharger Contagion">
+                                <i class="fas fa-file-medical"></i>
+                            </a>
                         </td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="12" class="text-center">Aucun Décès Déclaré</td>
+                        <td colspan="10" class="empty-row">
+                            <i class="fas fa-inbox" style="font-size: 48px; margin-bottom: 15px; color: #bdc3c7;"></i>
+                            <br>
+                            Aucune déclaration de décès enregistrée
+                        </td>
                     </tr>
                     @endforelse
                 </tbody>
             </table>
-            
-            <script>
-                document.getElementById('search').addEventListener('keyup', function() {
-                    const filter = this.value.toLowerCase();
-                    const rows = document.querySelectorAll('#patients-table tbody tr');
-            
-                    rows.forEach(row => {
-                        const cells = row.querySelectorAll('td');
-                        const match = Array.from(cells).some(cell => 
-                            cell.textContent.toLowerCase().includes(filter)
-                        );
-                        row.style.display = match ? '' : 'none';
-                    });
-                });
-            </script>
         </div>
     </div>
 
     <script>
         $(document).ready(function() {
-            $('#patients-table').DataTable({
+            $('#declarations-table').DataTable({
                 pageLength: 10,
                 lengthMenu: [5, 10, 15, 20],
                 language: {
                     url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/French.json"
                 },
-                dom: 'rt<"bottom"lp>'
-            });
-
-            // Recherche personnalisée
-            $('#search').on('input', function() {
-                $('#patients-table').DataTable().search(this.value).draw();
+                dom: '<"top"f>rt<"bottom"lip><"clear">',
+                initComplete: function() {
+                    // Mettre à jour la recherche DataTables avec la valeur de l'input personnalisé
+                    $('#search').on('input', function() {
+                        $('#declarations-table').DataTable().search(this.value).draw();
+                    });
+                }
             });
         });
 
         function confirmDelete(route) {
             Swal.fire({
                 title: 'Êtes-vous sûr?',
-                text: "Vous ne pourrez pas revenir en arrière!",
+                text: "Cette action est irréversible!",
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
+                confirmButtonColor: '#e74c3c',
+                cancelButtonColor: '#7f8c8d',
                 confirmButtonText: 'Oui, supprimer!',
-                cancelButtonText: 'Annuler'
+                cancelButtonText: 'Annuler',
+                reverseButtons: true
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Rediriger vers l'URL de suppression
                     window.location.href = route;
                 }
             });

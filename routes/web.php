@@ -234,6 +234,8 @@ Route::middleware('mairie')->prefix('mairie')->group(function(){
      //Les routes de gestion des rendez-vous par la mairie 
      Route::get('/rendezvous/index', [MairieRendezVousController::class, 'index'])->name('mairie.rendezvous.index');
      Route::put('/rendezvous/{id}', [MairieRendezVousController::class, 'update'])->name('rendezvous.update');
+     Route::post('/mairie/rendezvous/{id}/confirm', [MairieRendezVousController::class, 'confirm'])->name('rendezvous.confirm');
+     Route::get('/rendezvous/{id}/confirmation', [MairieRendezVousController::class, 'confirmation'])->name('rendezvous.confirmation');
 
 });
 
@@ -257,10 +259,10 @@ Route::middleware('hopital')->prefix('hopital')->group(function(){
 
      //Les routes de gestion des personnels par l'hopital 
      Route::prefix('personal')->group(function(){
-        Route::get('/index',[DoctorController::class, 'index'])->name('doctor.index');
-        Route::get('/create',[DoctorController::class, 'create'])->name('doctor.create');
+        Route::get('/indexperso',[DoctorController::class, 'index'])->name('doctor.index');
+        Route::get('/createperso',[DoctorController::class, 'create'])->name('doctor.create');
         Route::post('/create',[DoctorController::class, 'store'])->name('doctor.store');
-        Route::get('/edit/{doctor}',[DoctorController::class, 'edit'])->name('doctor.edit');
+        Route::get('/edit/{doctor}/editperso',[DoctorController::class, 'edit'])->name('doctor.edit');
         Route::put('/edit/{doctor}',[DoctorController::class, 'update'])->name('doctor.update');
         Route::delete('/delete/{doctor}',[DoctorController::class, 'delete'])->name('doctor.delete');
      });
@@ -269,7 +271,7 @@ Route::middleware('hopital')->prefix('hopital')->group(function(){
      Route::prefix('director')->group(function(){
          Route::get('/create-director',[DirectorController::class, 'create'])->name('directeur.create');
          Route::post('/create-director',[DirectorController::class, 'store'])->name('directeur.store');
-         Route::get('/edit-director/{director}',[DirectorController::class, 'edit'])->name('directeur.edit');
+         Route::get('/edit-director/{director}/editdire',[DirectorController::class, 'edit'])->name('directeur.edit');
          Route::put('/edit-director/{director}',[DirectorController::class, 'update'])->name('directeur.update');
          Route::get('/delete-director/{director}',[DirectorController::class, 'delete'])->name('directeur.delete');
      });
@@ -295,11 +297,11 @@ Route::middleware('doctor')->prefix('doctor')->group(function(){
         Route::get('/indexbirth', [DeclarationNaissance::class, 'index'])->name('statement.index');
         Route::get('/birth/createbirth', [DeclarationNaissance::class, 'create'])->name('statement.create');
         Route::post('/birth/create', [DeclarationNaissance::class, 'store'])->name('statement.store');
-        Route::get('/birth/editbirth/{naisshop}', [DeclarationNaissance::class, 'edit'])->name('statement.edit');
+        Route::get('/birth/{naisshop}/editbirth', [DeclarationNaissance::class, 'edit'])->name('statement.edit');
         Route::put('/birth/editbirth/{naisshop}', [DeclarationNaissance::class, 'update'])->name('statement.update');
         Route::get('/birth/delete/{naisshop}', [DeclarationNaissance::class, 'delete'])->name('statement.delete');
         Route::get('/birth/download/{id}', [DeclarationNaissance::class, 'download'])->name('statement.download');
-        Route::get('/showbirth/{id}', [DeclarationNaissance::class, 'show'])->name('statement.show');
+        Route::get('/show/{id}/birthed', [DeclarationNaissance::class, 'show'])->name('statement.show');
         Route::get('/mairie/{id}', [DeclarationNaissance::class, 'mairieshow'])->name('naissHopmairie.show');
     });
 
@@ -308,12 +310,12 @@ Route::middleware('doctor')->prefix('doctor')->group(function(){
         Route::get('/death', [DeclarationDeces::class, 'index'])->name('statement.index.death');
         Route::get('/death/createdeath', [DeclarationDeces::class, 'create'])->name('statement.create.death');
         Route::post('/death/create', [DeclarationDeces::class, 'store'])->name('statement.store.death');
-        Route::get('/death/edit/{deceshop}', [DeclarationDeces::class, 'edit'])->name('statement.edit.death');
+        Route::get('/death/{deceshop}/editdeath', [DeclarationDeces::class, 'edit'])->name('statement.edit.death');
         Route::put('/death/edit/{deceshop}', [DeclarationDeces::class, 'update'])->name('statement.update.death');
         Route::get('/death/delete/{deceshop}', [DeclarationDeces::class, 'delete'])->name('statement.delete.death');
         Route::get('/death/download/{id}', [DeclarationDeces::class, 'download'])->name('statement.download.death');
         Route::get('/download-contagion/{id}', [DeclarationDeces::class, 'downloadcontagion'])->name('statement.downloadcontagion.death');
-        Route::get('/death/{id}', [DeclarationDeces::class, 'show'])->name('statement.show.death');
+        Route::get('/death/{id}/deathed', [DeclarationDeces::class, 'show'])->name('statement.show.death');
         Route::get('/mairie/{id}', [DeclarationDeces::class, 'mairieshow'])->name('naissHopmairie.show.death');
     });
     

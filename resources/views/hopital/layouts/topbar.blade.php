@@ -4,11 +4,6 @@
       <span class="ms-toggler-bar bg-white"></span>
       <span class="ms-toggler-bar bg-white"></span>
   </div>
-  <div class="logo-sn logo-sm ms-d-block-sm">
-      <a class="pl-0 ml-0 text-center navbar-brand mr-0" href="index.html">
-          <img src="https://via.placeholder.com/84x41" alt="logo"> 
-      </a>
-  </div>
 
   {{-- Ajoute un logo ici centré --}}
   {{-- <div class="text-center my-2">

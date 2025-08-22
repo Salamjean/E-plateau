@@ -1,7 +1,7 @@
 @extends('hopital.layouts.template')
 
 @section('content')
-    <title>Liste des docteurs</title>
+    <title>Liste des centres de santé</title>
 
     <!-- Insertion de SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -10,259 +10,381 @@
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <div class="ms-content-wrapper">
+        <div class="row">
+            <div class="col-md-12">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb pl-0">
+                        <li class="breadcrumb-item">
+                            <a href="#">
+                                <i class="material-icons">home</i> Tableau de bord
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">Liste des centres de santé</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xl-12 col-md-12">
+                <div class="ms-panel">
+                    <div class="ms-panel-header ms-panel-custome">
+                        <h6 class="text-white">Liste des centres de santé du plateau</h6>
+                        <a href="{{ route('sanitary.create') }}" class="add-patient">
+                            <i class="fas fa-plus"></i> Ajouter un centre
+                        </a>
+                    </div>
+                    <div class="ms-panel-body">
+                        @if (Session::get('success1'))
+                            <script>
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Suppression réussie',
+                                    text: '{{ Session::get('success1') }}',
+                                    showConfirmButton: true,
+                                    confirmButtonText: 'OK',
+                                    color: '#b30000'
+                                });
+                            </script>
+                        @endif
+                    
+                        @if (Session::get('success'))
+                            <script>
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Action réussie',
+                                    text: '{{ Session::get('success') }}',
+                                    showConfirmButton: true,
+                                    confirmButtonText: 'OK',
+                                    color: '#006600'
+                                });
+                            </script>
+                        @endif
+                    
+                        @if (Session::get('error'))
+                            <script>
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Erreur',
+                                    text: '{{ Session::get('error') }}',
+                                    showConfirmButton: true,
+                                    confirmButtonText: 'OK',
+                                    color: 'red'
+                                });
+                            </script>
+                        @endif
+
+                        <div class="table-header">
+                            <div class="search-bar">
+                                <i class="fas fa-search"></i>
+                                <input type="text" id="search" placeholder="Rechercher un centre...">
+                            </div>
+                        </div>
+                    
+                        <table id="centres-table" class="modern-table display">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Nom du centre de santé</th>
+                                    <th class="text-center">Type du centre de santé</th>
+                                    <th class="text-center">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($sanitaires as $centre)
+                                <tr>
+                                    <td class="text-center">{{ $centre->name_hospial }}</td>
+                                    <td class="text-center">
+                                        @switch($centre->type)
+                                            @case('hôpital-general')
+                                                Hôpital Général
+                                                @break
+                                            @case('clinique')
+                                                Clinique
+                                                @break
+                                            @case('pmi')
+                                                PMI
+                                                @break
+                                            @case('chu')
+                                                CHU
+                                                @break
+                                            @case('fsu')
+                                                FSU
+                                                @break
+                                            @default
+                                                {{ $centre->type }}
+                                        @endswitch
+                                    </td>
+                                    <td class="action-cell text-center">
+                                        <div class="btn-group">
+                                            <a href="#" class="btn-action btn-edit" title="Modifier">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <button class="btn-action btn-delete" onclick="confirmDelete('#')" title="Supprimer">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="3" class="text-center no-data">Aucun centre de santé trouvé</td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <style>
-        /* Styling global */
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f8f9fa;
-            padding: 0;
-            color: #333;
+        :root {
+            --primary-color: #009efb;
+            --primary-hover: #0088e0;
+            --light-bg: #f8f9fa;
+            --border-radius: 10px;
+            --box-shadow: 0 5px 15px rgba(0, 158, 251, 0.1);
+            --success-color: #28a745;
+            --danger-color: #dc3545;
         }
-
-        .container {
-            width: 95%;
-            margin-left: 0 3%;
-            justify-content: center;
-            background: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        
+        .ms-panel {
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            border: none;
+            overflow: hidden;
+        }
+        
+        .ms-panel-header {
+            background: var(--primary-color);
+            color: white;
             padding: 20px;
-        }
-
-        h1 {
-            text-align: center;
-            color: black;
-            margin-bottom: 20px;
-            font-size: 40px;
-        }
-
-        .header {
+            border-radius: var(--border-radius) var(--border-radius) 0 0 !important;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
         }
-
-        .header .search-bar {
-            display: flex;
-            align-items: center;
-            width: 70%;
+        
+        .ms-panel-header h6 {
+            margin: 0;
+            font-weight: 600;
+            font-size: 1.2rem;
         }
-
-        .header input[type="text"] {
-            flex: 1;
-            padding: 10px 15px;
-            border: 1px solid #ccc;
-            border-radius: 25px;
-            outline: none;
-            transition: all 0.3s ease;
-            font-size: 14px;
-        }
-
-        .header input[type="text"]:focus {
-            border-color: #009efb;
-            box-shadow: 0 0 5px rgba(0, 158, 251, 0.5);
-        }
-
+        
         .add-patient {
-            background-color: #009efb;
-            color: white;
+            background-color: white;
+            color: var(--primary-color);
             padding: 10px 20px;
-            border: none;
-            border-radius: 25px;
+            border-radius: 30px;
             font-size: 14px;
-            cursor: pointer;
+            font-weight: 500;
             text-decoration: none;
             display: flex;
             align-items: center;
-            justify-content: center;
-            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
-
-        .add-patient i {
-            margin-right: 8px;
-        }
-
+        
         .add-patient:hover {
-            background-color: #007acd;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        table thead th {
-            background-color: #009efb;
+            background-color: var(--primary-hover);
             color: white;
-            padding: 10px;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .ms-panel-body {
+            padding: 30px;
+            background-color: white;
+        }
+        
+        .table-header {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+        }
+        
+        .search-bar {
+            position: relative;
+            width: 300px;
+        }
+        
+        .search-bar i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #adb5bd;
+        }
+        
+        .search-bar input {
+            width: 100%;
+            padding: 12px 15px 12px 45px;
+            border: 2px solid #e9ecef;
+            border-radius: 30px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .search-bar input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 158, 251, 0.2);
+            outline: none;
+        }
+        
+        .modern-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .modern-table thead {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .modern-table th {
+            padding: 15px;
+            font-weight: 600;
             text-align: left;
         }
-
-        table tbody tr {
-            background-color: #f9f9f9;
-            border-bottom: 1px solid #dddddd;
-            transition: background-color 0.3s ease;
+        
+        .modern-table tbody tr {
+            background-color: white;
+            border-bottom: 1px solid #e9ecef;
+            transition: all 0.3s ease;
         }
-
-        table tbody tr:hover {
-            background-color: #f1faff;
+        
+        .modern-table tbody tr:hover {
+            background-color: #f8fbff;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0, 158, 251, 0.1);
         }
-
-        table tbody td {
-            padding: 10px;
+        
+        .modern-table td {
+            padding: 15px;
+            vertical-align: middle;
         }
-
-        table tbody td:last-child {
-            text-align: center;
+        
+        .action-cell {
+            width: 120px;
         }
-
-        button {
+        
+        .btn-group {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn-action {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
             border: none;
-            background: none;
             cursor: pointer;
-            font-size: 16px;
+            text-decoration: none;
         }
-
-        a .edit{
-            color: #28a745;
-            transition: color 0.3s ease;
+        
+        .btn-edit {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: var(--success-color);
         }
-
-        a .delete{
-            color: #dc3545;
-            transition: color 0.3s ease;
+        
+        .btn-edit:hover {
+            background-color: var(--success-color);
+            color: white;
+            transform: scale(1.1);
         }
-
-        .edit {
-            color: #28a745;
-            transition: color 0.3s ease;
+        
+        .btn-delete {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: var(--danger-color);
         }
-
-        .edit:hover {
-            color: #1e7e34;
+        
+        .btn-delete:hover {
+            background-color: var(--danger-color);
+            color: white;
+            transform: scale(1.1);
         }
-
-        .delete {
-            color: #dc3545;
-            transition: color 0.3s ease;
+        
+        .no-data {
+            padding: 30px;
+            color: #6c757d;
+            font-style: italic;
         }
-
-        .delete:hover {
-            color: #c82333;
+        
+        .breadcrumb {
+            background-color: transparent;
+            padding: 0;
+            margin-bottom: 20px;
+        }
+        
+        .breadcrumb-item a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        
+        .breadcrumb-item a:hover {
+            color: var(--primary-hover);
+            text-decoration: underline;
+        }
+        
+        .breadcrumb-item.active {
+            color: #6c757d;
+        }
+        
+        @media (max-width: 768px) {
+            .ms-panel-header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .table-header {
+                justify-content: center;
+            }
+            
+            .search-bar {
+                width: 100%;
+            }
+            
+            .modern-table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .btn-group {
+                justify-content: center;
+            }
         }
     </style>
-</head>
-<body>
-    <div class="row" style="width:100%; justify-content:center">
-        <div class="row" style="width:100%; justify-content:center">
-            @if (Session::get('success1')) <!-- Pour la suppression -->
-                <script>
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Suppression réussie',
-                        text: '{{ Session::get('success1') }}',
-                        showConfirmButton: true,  // Afficher le bouton OK
-                        confirmButtonText: 'OK',  // Texte du bouton
-                        color: '#b30000'          // Texte rouge foncé
-                    });
-                </script>
-            @endif
-        
-            @if (Session::get('success')) <!-- Pour la modification -->
-                <script>
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Action réussie',
-                        text: '{{ Session::get('success') }}',
-                        showConfirmButton: true,  // Afficher le bouton OK
-                        confirmButtonText: 'OK',  // Texte du bouton
-                        color: '#006600'          // Texte vert foncé
-                    });
-                </script>
-            @endif
-        
-            @if (Session::get('error')) <!-- Pour une erreur générale -->
-                <script>
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Erreur',
-                        text: '{{ Session::get('error') }}',
-                        showConfirmButton: true,  // Afficher le bouton OK
-                        confirmButtonText: 'OK',  // Texte du bouton
-                        color: 'red'          // Texte blanc
-                    });
-                </script>
-            @endif
-        </div>
 
-        <div class="container col-11">
-            <h1>Liste des centres de santés du plateau </h1>
-            <div class="header">
-                <div class="search-bar">
-                    <input type="text" id="search" placeholder="Rechercher d''un centre'...">
-                </div>
-                <a href="{{ route('sanitary.create') }}" class="add-patient"><i class="fas fa-plus"></i> Ajouter d'un centre</a>
-            </div>
-        
-            <table id="patients-table" class="display">
-                <thead class="text-center">
-                    <tr>
-                        <th class="text-center">Nom du centre de santé</th>
-                        <th class="text-center">Le type du centre de snaté</th>
-                        <th class="text-center" colspan="2">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse ($sanitaires as $doctor)
-                    <tr class="text-center">
-                        <td>{{ $doctor->name_hospial }}</td>
-                        <td>{{ $doctor->type }}</td>
-                        <td>
-                            <button class="edit"><a href="#" class="edit"><i class="fas fa-edit"></i></a></button>
-                            <button class="delete" onclick="confirmDelete('#')">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="9" class="text-center">Aucun centre de santé trouvé</td>
-                    </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-        
-        <script>
-            document.getElementById('search').addEventListener('keyup', function() {
-                const filter = this.value.toLowerCase();
-                const rows = document.querySelectorAll('#patients-table tbody tr');
-        
-                rows.forEach(row => {
-                    const cells = row.querySelectorAll('td');
-                    const match = Array.from(cells).some(cell => 
-                        cell.textContent.toLowerCase().includes(filter)
-                    );
-                    row.style.display = match ? '' : 'none';
-                });
-            });
-        </script>
     <script>
         $(document).ready(function() {
-            $('#patients-table').DataTable({
+            $('#centres-table').DataTable({
                 pageLength: 10,
                 lengthMenu: [5, 10, 15, 20],
                 language: {
                     url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/French.json"
                 },
-                dom: 'rt<"bottom"lp>'
+                dom: 'rt<"bottom"lp>',
+                responsive: true,
+                ordering: true,
+                order: [[0, 'asc']]
             });
 
             // Recherche personnalisée
             $('#search').on('input', function() {
-                $('#patients-table').DataTable().search(this.value).draw();
+                $('#centres-table').DataTable().search(this.value).draw();
             });
         });
 
@@ -278,24 +400,9 @@
                 cancelButtonText: 'Annuler'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Rediriger vers l'URL de suppression
                     window.location.href = route;
                 }
             });
         }
     </script>
-
 @endsection
-<script>
-    function showImage(imageElement) {
-      const modalImage = document.getElementById('modalImage');
-  
-      // Vérifier si l'image utilise déjà la valeur de remplacement (image par défaut)
-      if (imageElement.src.includes('assets/images/profiles/bébé.jpg')) {
-          modalImage.src = imageElement.src; // Utiliser l'image par défaut
-      } else {
-          modalImage.src = imageElement.src; // Utiliser l'image actuelle (valide)
-      }
-  }
-  
-  </script>

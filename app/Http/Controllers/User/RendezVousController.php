@@ -25,6 +25,8 @@ class RendezVousController extends Controller
         return view('user.rendezvous.create');
     }
 
+    
+
     public function store(Request $request)
     {
        $validated = $request->validate([

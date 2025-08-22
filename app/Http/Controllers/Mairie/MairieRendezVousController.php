@@ -26,7 +26,28 @@ class MairieRendezVousController extends Controller
         $rendezvous->statut = 'confirmé';
         $rendezvous->save();
 
-        return redirect()->back()->with('success', 'Rendez-vous modifié avec succès');
+        return redirect()->route('mairie.rendezvous.index')->with('success', 'Rendez-vous modifié avec succès');
     }
+
+    public function confirmation($id)
+    {
+        $rendezvous = RendezVous::findOrFail($id);
+        return view('mairie.rendezvous.confirmation', compact('rendezvous'));
+    }
+
+    public function confirm(Request $request, $id)
+    {
+        try {
+            $rendezvous = RendezVous::findOrFail($id);
+            
+            // Mettre à jour le statut du rendez-vous
+            $rendezvous->statut = 'confirmé';
+            $rendezvous->save();
+            
+            return response()->json(['success' => true, 'message' => 'Rendez-vous confirmé avec succès']);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Erreur lors de la confirmation du rendez-vous']);
+        }
+        }
 
 }

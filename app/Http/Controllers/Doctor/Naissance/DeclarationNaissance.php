@@ -56,7 +56,7 @@ class DeclarationNaissance extends Controller
             'commune' => 'required', // Commune, toujours nécessaire
             'codeCMU' => 'required',
             'lien' => 'required',
-            'CNI_Pere' => 'nullable',
+            'CNI_Pere' => 'nullable|mimes:jpeg,png,jpg,pdf|max:2048',
         ];
 
         // Règles de validation dynamiques pour les informations des enfants
@@ -118,6 +118,15 @@ class DeclarationNaissance extends Controller
             $uploadedPaths['CNI_mere'] = $imageBaseLink . "cni/" . $newFileName;
         }
 
+        // Traitement du fichier CNI de l'accompagnateur
+        if ($request->hasFile('CNI_Pere')) {
+            $file = $request->file('CNI_Pere');
+            $extension = $file->getClientOriginalExtension();
+            $newFileName = (string) Str::uuid() . '.' . $extension;
+            $file->storeAs('public/images/naissances/cni/', $newFileName);
+            $uploadedPaths['CNI_Pere'] = $imageBaseLink . "cni/" . $newFileName;
+        }
+
         $doctor = Auth::guard('doctor')->user();
         // Création dans la base de données NaissHop
         $declaration = ModelsDeclarationNaissance::create([
@@ -133,7 +142,7 @@ class DeclarationNaissance extends Controller
             'commune' => $validatedData['commune'],
             'codeCMU' => $validatedData['codeCMU'],
             'lien' => $validatedData['lien'],
-            'CNI_Pere' => $validatedData['CNI_Pere'],
+            'CNI_Pere' => $uploadedPaths['CNI_Pere'] ?? $validatedData['CNI_Pere'],
             'doctor_id' => $doctor->id,
         ]);
 
@@ -232,7 +241,7 @@ class DeclarationNaissance extends Controller
         return view('doctor.naissance.edit', compact('naisshop'));
     }
 
-    public function update(Request $request, ModelsDeclarationNaissance $naisshop)
+   public function update(Request $request, ModelsDeclarationNaissance $naisshop)
     {
         try {
             // Validation des données
@@ -244,31 +253,51 @@ class DeclarationNaissance extends Controller
                 'NomP' => 'required',
                 'PrP' => 'required',
                 'contP' => 'required',
-                'CNI_Pere' => 'required',
+                'CNI_Pere' => 'nullable|mimes:jpeg,png,jpg,pdf|max:2048',
                 'lien' => 'required',
                 'codeCMU' => 'required',
                 'nombreEnf' => 'required|integer|min:1',
                 'NomEnf' => 'required',
                 'commune' => 'required',
             ]);
-    
+
             // Gestion du fichier CNI de la mère
             if ($request->hasFile('CNI_mere')) {
                 // Supprimer l'ancien fichier s'il existe
-                if ($naisshop->CNI_mere && Storage::exists($naisshop->CNI_mere)) {
-                    Storage::delete($naisshop->CNI_mere);
+                if ($naisshop->CNI_mere && Storage::exists('public/' . $naisshop->CNI_mere)) {
+                    Storage::delete('public/' . $naisshop->CNI_mere);
                 }
-    
-                $path = $request->file('CNI_mere')->store('public/images/naissances/cni');
-                $validatedData['CNI_mere'] = str_replace('public/', '', $path);
+
+                $file = $request->file('CNI_mere');
+                $extension = $file->getClientOriginalExtension();
+                $newFileName = (string) Str::uuid() . '.' . $extension;
+                $file->storeAs('public/images/naissances/cni/', $newFileName);
+                $validatedData['CNI_mere'] = '/images/naissances/cni/' . $newFileName;
             }
-    
+
+            // Gestion du fichier CNI du père (accompagnateur)
+            if ($request->hasFile('CNI_Pere')) {
+                // Supprimer l'ancien fichier s'il existe
+                if ($naisshop->CNI_Pere && Storage::exists('public/' . $naisshop->CNI_Pere)) {
+                    Storage::delete('public/' . $naisshop->CNI_Pere);
+                }
+
+                $file = $request->file('CNI_Pere');
+                $extension = $file->getClientOriginalExtension();
+                $newFileName = (string) Str::uuid() . '.' . $extension;
+                $file->storeAs('public/images/naissances/cni/', $newFileName);
+                $validatedData['CNI_Pere'] = '/images/naissances/cni/' . $newFileName;
+            } else {
+                // Conserver l'ancienne valeur si aucun nouveau fichier n'est uploadé
+                $validatedData['CNI_Pere'] = $naisshop->CNI_Pere;
+            }
+
             // Mise à jour des informations principales
             $naisshop->update($validatedData);
-    
+
             // Gestion des enfants
             $naisshop->enfants()->delete(); // Supprime les anciens enfants
-    
+
             // Crée les nouveaux enfants
             for ($i = 1; $i <= $request->nombreEnf; $i++) {
                 Enfant::create([
@@ -278,10 +307,10 @@ class DeclarationNaissance extends Controller
                     'nombreEnf' => $request->nombreEnf
                 ]);
             }
-    
+
             return redirect()->route('statement.index')
                 ->with('success', 'Déclaration de naissance mise à jour avec succès');
-    
+
         } catch (Exception $e) {
             return back()->withInput()
                 ->with('error', 'Erreur lors de la mise à jour: '.$e->getMessage());

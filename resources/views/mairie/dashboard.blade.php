@@ -218,49 +218,50 @@
     </div>
 
     <!-- Graphique des actes hôpitaux -->
-    <div class="col-lg-6">
-      <div class="card border-0 shadow-sm h-100">
-        <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center">
-          <h5 class="mb-0">Actes hospitaliers</h5>
-          <div class="dropdown">
-            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-              <i class="fas fa-ellipsis-v"></i>
-            </button>
-            <ul class="dropdown-menu dropdown-menu-end">
-              <li><a class="dropdown-item" href="#">Exporter</a></li>
-              <li><a class="dropdown-item" href="#">Imprimer</a></li>
-            </ul>
-          </div>
-        </div>
-        <div class="card-body">
-          <div class="row">
-            <div class="col-md-6">
-              <div class="d-flex align-items-center mb-3">
-                <div class="bg-primary bg-opacity-10 p-2 rounded me-3">
-                  <i class="fas fa-baby-carriage text-primary"></i>
-                </div>
-                <div>
-                  <h5 class="mb-0">{{ $naisshopsdash }}</h5>
-                  <span class="text-muted small">Naissances</span>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="d-flex align-items-center mb-3">
-                <div class="bg-danger bg-opacity-10 p-2 rounded me-3">
-                  <i class="fas fa-book-dead text-danger"></i>
-                </div>
-                <div>
-                  <h5 class="mb-0">{{ $deceshopsdash }}</h5>
-                  <span class="text-muted small">Décès</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <canvas id="hospitalActsChart" height="120"></canvas>
-        </div>
+    <!-- Graphique des actes hôpitaux - Évolution -->
+<div class="col-lg-6">
+  <div class="card border-0 shadow-sm h-100">
+    <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center">
+      <h5 class="mb-0">Évolution des actes hospitaliers</h5>
+      <div class="dropdown">
+        <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+          <i class="fas fa-ellipsis-v"></i>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end">
+          <li><a class="dropdown-item" href="#">Exporter</a></li>
+          <li><a class="dropdown-item" href="#">Imprimer</a></li>
+        </ul>
       </div>
     </div>
+    <div class="card-body">
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <div class="d-flex align-items-center">
+            <div class="bg-primary bg-opacity-10 p-2 rounded me-3">
+              <i class="fas fa-baby-carriage text-primary"></i>
+            </div>
+            <div>
+              <h5 class="mb-0">{{ $naisshopsdash }}</h5>
+              <span class="text-muted small">Naissances</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="d-flex align-items-center">
+            <div class="bg-danger bg-opacity-10 p-2 rounded me-3">
+              <i class="fas fa-book-dead text-danger"></i>
+            </div>
+            <div>
+              <h5 class="mb-0">{{ $deceshopsdash }}</h5>
+              <span class="text-muted small">Décès</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <canvas id="hospitalEvolutionChart" height="120"></canvas>
+    </div>
+  </div>
+</div>
 
     <!-- Derniers enregistrements -->
     <!-- Derniers enregistrements -->
@@ -651,43 +652,104 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
   
-  // Chart Hospital Acts
-  const hospitalCtx = document.getElementById('hospitalActsChart').getContext('2d');
-  const hospitalChart = new Chart(hospitalCtx, {
-    type: 'bar',
-    data: {
-      labels: ['Naissances', 'Décès'],
-      datasets: [{
-        data: [{{ $naisshopsdash }}, {{ $deceshopsdash }}],
-        backgroundColor: [
-          '#0d6efd',
-          '#dc3545'
+// Chart Hospital Acts - Évolution (courbe) avec données réelles
+const hospitalCtx = document.getElementById('hospitalEvolutionChart').getContext('2d');
+const hospitalChart = new Chart(hospitalCtx, {
+  type: 'line',
+  data: {
+    labels: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc'],
+    datasets: [
+      {
+        label: 'Naissances',
+        data: [
+          {{ $monthlyHospitalData['naissances'][1] ?? 0 }},
+          {{ $monthlyHospitalData['naissances'][2] ?? 0 }},
+          {{ $monthlyHospitalData['naissances'][3] ?? 0 }},
+          {{ $monthlyHospitalData['naissances'][4] ?? 0 }},
+          {{ $monthlyHospitalData['naissances'][5] ?? 0 }},
+          {{ $monthlyHospitalData['naissances'][6] ?? 0 }},
+          {{ $monthlyHospitalData['naissances'][7] ?? 0 }},
+          {{ $monthlyHospitalData['naissances'][8] ?? 0 }},
+          {{ $monthlyHospitalData['naissances'][9] ?? 0 }},
+          {{ $monthlyHospitalData['naissances'][10] ?? 0 }},
+          {{ $monthlyHospitalData['naissances'][11] ?? 0 }},
+          {{ $monthlyHospitalData['naissances'][12] ?? 0 }}
         ],
-        borderRadius: 8
-      }]
-    },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true,
-          grid: {
-            display: false
-          }
+        borderColor: '#0d6efd',
+        backgroundColor: 'rgba(13, 110, 253, 0.1)',
+        tension: 0.4,
+        fill: true,
+        pointBackgroundColor: '#0d6efd',
+        pointBorderColor: '#fff',
+        pointRadius: 4,
+        pointHoverRadius: 6
+      },
+      {
+        label: 'Décès',
+        data: [
+          {{ $monthlyHospitalData['deces'][1] ?? 0 }},
+          {{ $monthlyHospitalData['deces'][2] ?? 0 }},
+          {{ $monthlyHospitalData['deces'][3] ?? 0 }},
+          {{ $monthlyHospitalData['deces'][4] ?? 0 }},
+          {{ $monthlyHospitalData['deces'][5] ?? 0 }},
+          {{ $monthlyHospitalData['deces'][6] ?? 0 }},
+          {{ $monthlyHospitalData['deces'][7] ?? 0 }},
+          {{ $monthlyHospitalData['deces'][8] ?? 0 }},
+          {{ $monthlyHospitalData['deces'][9] ?? 0 }},
+          {{ $monthlyHospitalData['deces'][10] ?? 0 }},
+          {{ $monthlyHospitalData['deces'][11] ?? 0 }},
+          {{ $monthlyHospitalData['deces'][12] ?? 0 }}
+        ],
+        borderColor: '#dc3545',
+        backgroundColor: 'rgba(220, 53, 69, 0.1)',
+        tension: 0.4,
+        fill: true,
+        pointBackgroundColor: '#dc3545',
+        pointBorderColor: '#fff',
+        pointRadius: 4,
+        pointHoverRadius: 6
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      y: {
+        beginAtZero: true,
+        grid: {
+          display: true,
+          drawBorder: false
         },
-        x: {
-          grid: {
-            display: false
+        ticks: {
+          precision: 0,
+          callback: function(value) {
+            if (value % 1 === 0) {
+              return value;
+            }
           }
         }
       },
-      plugins: {
-        legend: {
+      x: {
+        grid: {
           display: false
         }
       }
+    },
+    plugins: {
+      legend: {
+        position: 'top',
+        labels: {
+          boxWidth: 12,
+          usePointStyle: true
+        }
+      },
+      tooltip: {
+        mode: 'index',
+        intersect: false
+      }
     }
-  });
-  
+  }
+});
   // Stats Modal Chart
   const statsCtx = document.getElementById('statsChart').getContext('2d');
   const statsChart = new Chart(statsCtx, {

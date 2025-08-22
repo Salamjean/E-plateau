@@ -36,7 +36,7 @@
         <div class="input-grid">
           <div class="input-group">
             <label for="NomM">Nom de la mère  <span style="color:red">*</span></label>
-            <input type="text" id="NomM" name="NomM" placeholder="Entrez le nom de la mère" />
+            <input type="text" id="NomM" name="NomM" value="{{old('NomM')}}" placeholder="Entrez le nom de la mère" />
             @error('NomM')
             <div class="error-message">{{ $message }}</div>
             @enderror
@@ -44,7 +44,7 @@
           
           <div class="input-group">
             <label for="PrM">Prénom de la mère <span style="color:red">*</span></label>
-            <input type="text" id="PrM" name="PrM" placeholder="Entrez le prénom de la mère" />
+            <input type="text" id="PrM" name="PrM" value="{{old('PrM')}}" placeholder="Entrez le prénom de la mère" />
             @error('PrM')
             <div class="error-message">{{ $message }}</div>
             @enderror
@@ -54,7 +54,7 @@
         <div class="input-grid">
           <div class="input-group">
             <label for="dateM">Date de naissance de la mère <span style="color:red">*</span></label>
-            <input type="date" id="dateM" name="dateM" />
+            <input type="date" id="dateM" value="{{old('dateM')}}" name="dateM" />
             @error('dateM')
             <div class="error-message">{{ $message }}</div>
             @enderror
@@ -99,7 +99,7 @@
         <div class="input-grid">
           <div class="input-group">
             <label for="contM">Numéro de téléphone de la mère <span style="color:red">*</span></label>
-            <input type="text" id="contM" name="contM" placeholder="Entrez le numéro de téléphone" />
+            <input type="text" id="contM" name="contM" value="{{old('contM')}}" placeholder="Entrez le numéro de téléphone" />
             @error('contM')
             <div class="error-message">{{ $message }}</div>
             @enderror
@@ -107,7 +107,7 @@
           
           <div class="input-group">
             <label for="codeCMU">Numéro CMU de la mère <span style="color:red">*</span></label>
-            <input type="text" id="codeCMU" name="codeCMU" placeholder="Entrez le numéro CMU" />
+            <input type="text" id="codeCMU" name="codeCMU" value="{{old('codeCMU')}}" placeholder="Entrez le numéro CMU" />
             @error('codeCMU')
             <div class="error-message">{{ $message }}</div>
             @enderror
@@ -127,7 +127,7 @@
         <div class="input-grid">
           <div class="input-group">
             <label for="NomP">Nom de l'accompagnateur <span style="color:red">*</span></label>
-            <input type="text" id="NomP" name="NomP" placeholder="Entrez le nom de l'accompagnateur" />
+            <input type="text" id="NomP" name="NomP" value="{{old('NomP')}}" placeholder="Entrez le nom de l'accompagnateur" />
             @error('NomP')
             <div class="error-message">{{ $message }}</div>
             @enderror
@@ -135,7 +135,7 @@
           
           <div class="input-group">
             <label for="PrP">Prénom de l'accompagnateur <span style="color:red">*</span></label>
-            <input type="text" id="PrP" name="PrP" placeholder="Entrez le prénom de l'accompagnateur" />
+            <input type="text" id="PrP" name="PrP" value="{{old('PrP')}}" placeholder="Entrez le prénom de l'accompagnateur" />
             @error('PrP')
             <div class="error-message">{{ $message }}</div>
             @enderror
@@ -145,15 +145,42 @@
         <div class="input-grid">
           <div class="input-group">
             <label for="contP">Numéro de téléphone de l'accompagnateur <span style="color:red">*</span></label>
-            <input type="text" id="contP" name="contP" placeholder="Entrez le numéro de téléphone" />
+            <input type="text" id="contP" name="contP" value="{{old('contP')}}" placeholder="Entrez le numéro de téléphone" />
             @error('contP')
             <div class="error-message">{{ $message }}</div>
             @enderror
           </div>
           
           <div class="input-group">
-            <label for="CNI_Pere">Numéro CNI/CMU/Passeport</label>
-            <input type="text" id="CNI_Pere" name="CNI_Pere" placeholder="Entrez le numéro CNI/CMU/Passeport" />
+            <label>Joindre copie CNI/passeport/extrait de l'accompagnateur</label>
+            <div class="upload-interface">
+              <div class="upload-options">
+                <button type="button" class="option-button camera-option" id="takePhotoBtnPere">
+                  <i class="icon-camera"></i> Prendre une photo
+                </button>
+                <button type="button" class="option-button upload-option" id="uploadFileBtnPere">
+                  <i class="icon-upload"></i> Télécharger un fichier
+                </button>
+              </div>
+              
+              <div class="camera-container" id="cameraContainerPere">
+                <video id="cameraPreviewPere" autoplay playsinline></video>
+                <div class="camera-buttons">
+                  <button type="button" class="btn-primary" id="captureBtnPere">Capturer</button>
+                  <button type="button" class="btn-secondary" id="cancelCameraBtnPere">Annuler</button>
+                </div>
+              </div>
+              
+              <input type="file" id="fileInputPere" name="CNI_Pere" accept="image/*,.pdf" style="display: none;" />
+              
+              <div class="file-preview-container">
+                <img id="imagePreviewPere" class="file-preview" alt="Aperçu de l'image">
+                <div id="pdfPreviewPere" class="pdf-preview">
+                  <i class="icon-pdf"></i>
+                  <p>Fichier PDF sélectionné</p>
+                </div>
+              </div>
+            </div>
             @error('CNI_Pere')
             <div class="error-message">{{ $message }}</div>
             @enderror
@@ -162,7 +189,7 @@
         
         <div class="input-group">
           <label for="lien">Lien parental <span style="color:red">*</span></label>
-          <input type="text" id="lien" name="lien" placeholder="Entrez le lien parental" />
+          <input type="text" id="lien" name="lien" value="{{old('lien')}}" placeholder="Entrez le lien parental" />
           @error('lien')
           <div class="error-message">{{ $message }}</div>
           @enderror
@@ -193,7 +220,7 @@
         
         <div class="input-group">
           <label for="nombre_enfants">Nombre d'enfant(s) né(s) <span style="color:red">*</span></label>
-          <select name="nombreEnf" id="nombre_enfants" class="styled-select">
+          <select name="nombreEnf" id="nombre_enfants" value="{{old('nombre_enfants')}}" class="styled-select">
             <option value="1">1</option>
             <option value="2">2</option>
             <option value="3">3</option>
@@ -430,9 +457,9 @@
     border-radius: 8px;
   }
   
-  #cameraPreview {
+  #cameraPreview, #cameraPreviewPere {
     width: 100%;
-    max-width: 300px;
+    max-width: 200px;
     background-color: #f7fafc;
     border-radius: 6px;
   }
@@ -738,5 +765,117 @@
       genererChampsEnfants(parseInt(nombreEnfantsSelect.value));
     });
   });
+
+  // Gestion de la caméra et de l'upload de fichiers pour l'accompagnateur
+const takePhotoBtnPere = document.getElementById('takePhotoBtnPere');
+const uploadFileBtnPere = document.getElementById('uploadFileBtnPere');
+const cameraContainerPere = document.getElementById('cameraContainerPere');
+const cameraPreviewPere = document.getElementById('cameraPreviewPere');
+const captureBtnPere = document.getElementById('captureBtnPere');
+const cancelCameraBtnPere = document.getElementById('cancelCameraBtnPere');
+const fileInputPere = document.getElementById('fileInputPere');
+const imagePreviewPere = document.getElementById('imagePreviewPere');
+const pdfPreviewPere = document.getElementById('pdfPreviewPere');
+
+let streamPere = null;
+
+// Prendre une photo pour l'accompagnateur
+takePhotoBtnPere.addEventListener('click', function() {
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    alert("Votre navigateur ne supporte pas l'accès à la caméra.");
+    return;
+  }
+  
+  cameraContainerPere.style.display = 'flex';
+  uploadFileBtnPere.style.display = 'none';
+  takePhotoBtnPere.style.display = 'none';
+  
+  navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+    .then(function(mediaStream) {
+      streamPere = mediaStream;
+      cameraPreviewPere.srcObject = mediaStream;
+    })
+    .catch(function(error) {
+      console.error("Erreur d'accès à la caméra:", error);
+      alert("Impossible d'accéder à la caméra: " + error.message);
+      resetCameraUIPere();
+    });
+});
+
+// Capturer une photo pour l'accompagnateur
+captureBtnPere.addEventListener('click', function() {
+  const canvas = document.createElement('canvas');
+  canvas.width = cameraPreviewPere.videoWidth;
+  canvas.height = cameraPreviewPere.videoHeight;
+  const context = canvas.getContext('2d');
+  context.drawImage(cameraPreviewPere, 0, 0, canvas.width, canvas.height);
+  
+  // Convertir l'image en blob
+  canvas.toBlob(function(blob) {
+    // Créer un fichier à partir du blob
+    const file = new File([blob], 'cni_photo_pere.jpg', { type: 'image/jpeg' });
+    
+    // Créer un DataTransfer pour définir le fichier sur l'input
+    const dataTransfer = new DataTransfer();
+    dataTransfer.items.add(file);
+    fileInputPere.files = dataTransfer.files;
+    
+    // Afficher l'aperçu
+    imagePreviewPere.src = URL.createObjectURL(blob);
+    imagePreviewPere.style.display = 'block';
+    pdfPreviewPere.style.display = 'none';
+    
+    // Fermer la caméra
+    closeCameraPere();
+    resetCameraUIPere();
+  }, 'image/jpeg', 0.8);
+});
+
+// Annuler la capture photo pour l'accompagnateur
+cancelCameraBtnPere.addEventListener('click', function() {
+  closeCameraPere();
+  resetCameraUIPere();
+});
+
+function closeCameraPere() {
+  if (streamPere) {
+    streamPere.getTracks().forEach(track => track.stop());
+    streamPere = null;
+  }
+  cameraContainerPere.style.display = 'none';
+}
+
+function resetCameraUIPere() {
+  uploadFileBtnPere.style.display = 'block';
+  takePhotoBtnPere.style.display = 'block';
+  cameraContainerPere.style.display = 'none';
+}
+
+// Télécharger un fichier pour l'accompagnateur
+uploadFileBtnPere.addEventListener('click', function() {
+  fileInputPere.click();
+});
+
+// Aperçu du fichier sélectionné pour l'accompagnateur
+fileInputPere.addEventListener('change', function() {
+  if (this.files && this.files[0]) {
+    const file = this.files[0];
+    
+    if (file.type === 'application/pdf') {
+      // Fichier PDF
+      pdfPreviewPere.style.display = 'block';
+      imagePreviewPere.style.display = 'none';
+    } else if (file.type.startsWith('image/')) {
+      // Fichier image
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        imagePreviewPere.src = e.target.result;
+        imagePreviewPere.style.display = 'block';
+        pdfPreviewPere.style.display = 'none';
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+});
 </script>
 @endsection
