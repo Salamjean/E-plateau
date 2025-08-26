@@ -22,6 +22,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin' => \App\Http\Middleware\AdminMiddleware::class,
             'poste' => \App\Http\Middleware\PosteMiddleware::class,
             'livreur' => \App\Http\Middleware\LivreurMiddleware::class,
+            'finance' => \App\Http\Middleware\FinanceMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

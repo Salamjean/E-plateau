@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Caisse;
+namespace App\Http\Controllers\Finance;
 
 use App\Http\Controllers\Controller;
-use App\Models\Caisse;
 use App\Models\DecesCertificat;
 use App\Models\DecesSimple;
+use App\Models\Finance;
 use App\Models\Mairie;
 use App\Models\Mariage;
 use App\Models\NaissanceCertificat;
@@ -15,15 +15,15 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class CaisseDashboard extends Controller
+class FinanceDashboard extends Controller
 {
-    public function dashboard()
-    {
-        // Récupérer l'utilisateur connecté
-        $admin = Auth::guard('caisse')->user();
+    public function dashboard(){
+         // Récupérer l'utilisateur connecté
+        $admin = Auth::guard('finance')->user();
+        $financeId = Auth::guard('finance')->user()->id;
 
         // Récupérer les caisses de la commune de l'utilisateur
-        $caisses = Caisse::where('communeM', $admin->communeM)->paginate(10);
+        $caisses = Finance::where('communeM', $admin->communeM)->paginate(10);
 
         // Date du mois en cours
         $currentMonthStart = Carbon::now()->startOfMonth();
@@ -83,9 +83,9 @@ class CaisseDashboard extends Controller
         $monthEnd = Carbon::now()->endOfMonth();
 
         // Requêtes pour les timbres
-        $timbresAujourdhui = abs(Timbre::whereDate('created_at', $today)->where('nombre_timbre', '<', 0)->sum('nombre_timbre'));
-        $timbresSemaine = abs(Timbre::whereBetween('created_at', [$weekStart, $weekEnd])->where('nombre_timbre', '<', 0)->sum('nombre_timbre'));
-        $timbresMois = abs( Timbre::whereBetween('created_at', [$monthStart, $monthEnd])->where('nombre_timbre', '<', 0)->sum('nombre_timbre'));
+        $timbresAujourdhui = abs(Timbre::where('finance_id', $financeId)->whereDate('created_at', $today)->where('nombre_timbre', '<', 0)->sum('nombre_timbre'));
+        $timbresSemaine = abs(Timbre::where('finance_id', $financeId)->whereBetween('created_at', [$weekStart, $weekEnd])->where('nombre_timbre', '<', 0)->sum('nombre_timbre'));
+        $timbresMois = abs( Timbre::where('finance_id', $financeId)->whereBetween('created_at', [$monthStart, $monthEnd])->where('nombre_timbre', '<', 0)->sum('nombre_timbre'));
 
 
         // Calcul des montants
@@ -174,7 +174,7 @@ class CaisseDashboard extends Controller
             'mariages' => $this->getYearlyStats(Mariage::class, $admin->communeM)
         ];
 
-        return view('caisse.dashboard', 
+        return view('finance.dashboard',
             compact(
                 'total', 'soldeActuel', 'soldeDebite', 'soldeRestant',
                 'decesnombre', 'decesdejanombre', 'naissancenombre', 'naissanceDnombre', 'mariagenombre',
@@ -186,6 +186,7 @@ class CaisseDashboard extends Controller
                 'timbresMois', 'montantMois',
             ));
     }
+
     private function combineStats(array $stats1, array $stats2)
     {
         $combined = [];
@@ -238,8 +239,7 @@ class CaisseDashboard extends Controller
     }
 
     public function logout(){
-        Auth::guard('caisse')->logout();
-        return redirect()->route('caisse.login');
+        Auth::guard('finance')->logout();
+        return redirect()->route('finance.login');
     }
-
 }

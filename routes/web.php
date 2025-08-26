@@ -14,6 +14,7 @@ use App\Http\Controllers\Agent\Demandes\DemandeMariageAgentController;
 use App\Http\Controllers\Caisse\AuthenticateCaisse;
 use App\Http\Controllers\Caisse\CaisseController;
 use App\Http\Controllers\Caisse\CaisseDashboard;
+use App\Http\Controllers\Caisse\Timbre\CaisseTimbreController;
 use App\Http\Controllers\Delivery\AuthenticateDelivery;
 use App\Http\Controllers\Delivery\DeliveryController;
 use App\Http\Controllers\Delivery\DeliveryDashboard;
@@ -28,6 +29,10 @@ use App\Http\Controllers\Doctor\DoctorController;
 use App\Http\Controllers\Doctor\DoctorDashboard;
 use App\Http\Controllers\Doctor\Naissance\DeclarationNaissance;
 use App\Http\Controllers\Doctor\StatistiqueController;
+use App\Http\Controllers\Finance\AuthenticateFinance;
+use App\Http\Controllers\Finance\FinanceController;
+use App\Http\Controllers\Finance\FinanceDashboard;
+use App\Http\Controllers\Finance\Timbre\TimbreController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Hopital\AddHopitalController;
 use App\Http\Controllers\Hopital\AuthenticateHopial;
@@ -407,8 +412,44 @@ Route::prefix('caisse')->group(function() {
 Route::middleware('auth:caisse')->prefix('caisse')->group(function(){
     Route::get('/dahboard', [CaisseDashboard::class, 'dashboard'])->name('caisse.dashboard');
     Route::get('/logout', [CaisseDashboard::class, 'logout'])->name('caisse.logout');
+
+    //les routes des financiers de la caisse
+    Route::prefix('financial')->group(function () {
+        Route::get('/index',[FinanceController::class, 'index'])->name('finance.index');
+        Route::get('/create',[FinanceController::class, 'create'])->name('finance.create');
+        Route::post('/create',[FinanceController::class, 'store'])->name('finance.store');
+        Route::get('/edit/{finance}',[FinanceController::class, 'edit'])->name('finance.edit');
+        Route::put('/edit/{finance}',[FinanceController::class, 'update'])->name('finance.update');
+        Route::delete('/delete/{finance}',[FinanceController::class, 'delete'])->name('finance.delete');
+        Route::get('/caisse/finance/export-pdf/{id}', [FinanceController::class, 'exportPdf'])->name('caisse.finance.export-pdf');
+    });
+
+    //Les routes de timbres 
+    Route::get('/stamp/refill', [CaisseTimbreController::class, 'recharge'])->name('caisse.timbre.recharge');
+    Route::post('/stamp/refill', [CaisseTimbreController::class, 'store'])->name('caisse.timbre.store');
+    Route::get('/stamp/history', [CaisseTimbreController::class, 'history'])->name('caisse.timbre.history');
+    Route::get('/stamp/statistiques', [CaisseTimbreController::class, 'statistiques'])->name('caisse.timbre.statistiques');
+    Route::get('/stamp/sell', [CaisseTimbreController::class, 'vente'])->name('caisse.timbre.vente');
+    Route::get('/caisse/statistiques/pdf', [CaisseTimbreController::class, 'generatePDF'])->name('caisse.stats.pdf');
 });
 
+//Les routes de getsion de @finances 
+Route::prefix('financial')->group(function() {
+    Route::get('/login', [AuthenticateFinance::class, 'login'])->name('finance.login');
+    Route::post('/login', [AuthenticateFinance::class, 'handleLogin'])->name('finance.handleLogin');
+});
+
+Route::middleware('auth:finance')->prefix('finance')->group(function(){
+    Route::get('/dahboard', [FinanceDashboard::class, 'dashboard'])->name('finance.dashboard');
+    Route::get('/logout', [FinanceDashboard::class, 'logout'])->name('finance.logout');
+
+    //les routes des timbres 
+     Route::get('/stamp', [TimbreController::class, 'create'])->name('timbre.create');
+     Route::post('/stamp/sell', [TimbreController::class, 'store'])->name('finance.timbre.storeVente');
+     Route::get('/stamp/history', [TimbreController::class, 'history'])->name('finance.timbre.history');
+     Route::get('/timbre/statistiques', [TimbreController::class, 'statistiques'])->name('finance.timbre.statistiques');
+     Route::get('/timbre/tendance-ventes', [TimbreController::class, 'tendanceVentes'])->name('finance.timbre.tendanceVentes');
+});
 
 //Les routes de getsion de @postes 
 Route::prefix('post')->group(function() {
@@ -480,5 +521,7 @@ Route::get('/validate-post-account/{email}', [AuthenticatePoste::class, 'defineA
 Route::post('/validate-post-account/{email}', [AuthenticatePoste::class, 'submitDefineAccess'])->name('post.validate');
 Route::get('/validate-delivery-account/{email}', [AuthenticateDelivery::class, 'defineAccess']);
 Route::post('/validate-delivery-account/{email}', [AuthenticateDelivery::class, 'submitDefineAccess'])->name('delivery.validate');
+Route::get('/validate-finance-account/{email}', [AuthenticateFinance::class, 'defineAccess']);
+Route::post('/validate-finance-account/{email}', [AuthenticateFinance::class, 'submitDefineAccess'])->name('finance.validate');
  
 

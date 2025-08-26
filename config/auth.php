@@ -72,6 +72,10 @@ return [
             'driver' => 'session',
             'provider' => 'livreurs',
         ],
+        'finance' => [
+            'driver' => 'session',
+            'provider' => 'finances',
+        ],
         'admin' => [
             'driver' => 'session',
             'provider' => 'admins',
@@ -135,6 +139,10 @@ return [
         'livreurs' => [
             'driver' => 'eloquent',
             'model' => env('AUTH_MODEL', App\Models\Livreur::class),
+        ],
+        'finances' => [
+            'driver' => 'eloquent',
+            'model' => env('AUTH_MODEL', App\Models\Finance::class),
         ],
 
         // 'users' => [

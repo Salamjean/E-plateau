@@ -64,7 +64,7 @@ class LivraisonDelivery extends Controller
         
         foreach ($modeles as $modele) {
             $classeModele = "App\\Models\\$modele";
-            $demandesModele = $classeModele::where('livraison_id', $livreur->id)
+            $demandesModele = $classeModele::where('livreur_id', $livreur->id)
                 ->with('user','livreur') // Si vous avez une relation avec l'utilisateur
                 ->where('statut_livraison','livré')
                 ->get()

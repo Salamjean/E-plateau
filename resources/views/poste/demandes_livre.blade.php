@@ -281,7 +281,7 @@
                         <span>{{ $demande->montant_livraison }} FCFA</span>
                     </div>
                     
-                    <span class="small-card-status status-{{ Str::slug($demande->statut_livraison) }}">
+                    <span class="small-card-status status-{{ Str::slug($demande->statut_livraison) }}" style="margin-left: 73%;">
                         {{ $demande->statut_livraison }}
                     </span>
                 </div>

@@ -1,4 +1,4 @@
-@extends('caisse.layouts.template')
+@extends('finance.layouts.template')
 @section('content')
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.2.96/css/materialdesignicons.min.css" rel="stylesheet">
@@ -445,14 +445,14 @@
   <div class="welcome-card">
     <div class="row align-items-center">
       <div class="col-md-8">
-        <h2>Bonjour, {{ Auth::guard('caisse')->user()->name }} {{ Auth::guard('caisse')->user()->prenom }}!</h2>
+        <h2>Bonjour, {{ Auth::guard('finance')->user()->name }} {{ Auth::guard('finance')->user()->prenom }}!</h2>
         <p>Bienvenue sur votre tableau de bord de gestion des demandes</p>
         <div class="d-flex align-items-center mt-2">
           <span class="badge badge-primary me-2">
-            <i class="mdi mdi-city me-1"></i> {{ Auth::guard('caisse')->user()->communeM }}
+            <i class="mdi mdi-city me-1"></i> {{ Auth::guard('finance')->user()->communeM }}
           </span>
           <span class="badge badge-primary">
-            <i class="mdi mdi-identifier me-1"></i> Responsable financier
+            <i class="mdi mdi-identifier me-1"></i> Caisse N° {{ Auth::guard('finance')->user()->id }}
           </span>
         </div>
       </div>
@@ -462,7 +462,7 @@
     </div>
   </div>
 
-  <!-- Statistics Cards -->
+  {{-- <!-- Statistics Cards -->
   <div class="row mb-4">
     <!-- Total Requests -->
     <div class="col-xl-3 col-md-6 mb-4">
@@ -519,7 +519,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> --}}
 
   <!-- Monthly Statistics Cards -->
   <div class="row">

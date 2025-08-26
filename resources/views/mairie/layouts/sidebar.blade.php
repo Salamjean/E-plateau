@@ -102,16 +102,16 @@
            <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#ui-Caissier" aria-expanded="false" aria-controls="ui-Caissier">
               <i class="mdi mdi-crosshairs-gps menu-icon text-white"></i>
-              <span class="menu-title text-white">Agent Financier</span>
+              <span class="menu-title text-white">Service Financier</span>
               <i class="menu-arrow"></i>
             </a>
             <div class="collapse" id="ui-Caissier">
               <ul class="nav flex-column sub-menu text-white">
                 <li class="nav-item text-white" >
-                  <a class="nav-link text-white" href="{{route('caisse.create')}}">Ajout d'un financier</a>
+                  <a class="nav-link text-white" href="{{route('caisse.create')}}">Ajout du service</a>
                 </li>
                 <li class="nav-item ">
-                  <a class="nav-link text-white" href="{{route('caisse.index')}}">Listes des financiers</a>
+                  <a class="nav-link text-white" href="{{route('caisse.index')}}">Information sur le service</a>
                 </li>
               </ul>
             </div>
