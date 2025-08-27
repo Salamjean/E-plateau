@@ -27,7 +27,7 @@ return new class extends Migration
             $table->boolean('is_read')->default(false); 
             $table->foreignId('user_id')->constrained()->onDelete('cascade'); 
             $table->foreignId('agent_id')->nullable()->constrained('agents')->onDelete('set null'); 
-            $table->foreignId('livraison_id')->nullable()->constrained('livraisons')->onDelete('set null'); 
+            $table->foreignId('livraison_id')->nullable()->constrained('postes')->onDelete('set null'); 
             $table->foreignId('livreur_id')->nullable()->constrained('livreurs')->onDelete('set null'); // Ajout de livreur
 
             //informations de livraison 

@@ -35,7 +35,7 @@ return new class extends Migration
             $table->string('statut_livraison')->nullable(); // État par défaut
             $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Ajout de user_id
             $table->foreignId('agent_id')->nullable()->constrained('agents')->onDelete('set null'); // Ajout de agent_id
-            $table->foreignId('livraison_id')->nullable()->constrained('livraisons')->onDelete('set null'); // Ajout de livraison
+            $table->foreignId('livraison_id')->nullable()->constrained('postes')->onDelete('set null'); // Ajout de livraison
             $table->foreignId('livreur_id')->nullable()->constrained('livreurs')->onDelete('set null'); // Ajout de livreur
 
             //informations de livraison 
