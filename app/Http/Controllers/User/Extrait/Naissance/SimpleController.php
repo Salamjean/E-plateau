@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\User\Extrait\Naissance;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\SaveNaissancedRequest;
+use App\Http\Requests\saveNaissanceDRequest;
 use App\Models\NaissanceCertificat;
 use App\Models\NaissanceSimple;
 use App\Services\InfobipService;
@@ -41,7 +41,7 @@ class SimpleController extends Controller
         ]);
     }
 
-    public function store(SaveNaissanceDRequest $request, InfobipService $infobipService)
+    public function store(saveNaissanceDRequest $request, InfobipService $infobipService)
     {
         // Log des données de la requête
         Log::info('Store method called', $request->all());
