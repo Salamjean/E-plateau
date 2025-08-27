@@ -41,7 +41,7 @@ class SimpleController extends Controller
         ]);
     }
 
-    public function store(SaveNaissancedRequest $request, InfobipService $infobipService)
+    public function store(SaveNaissanceDRequest $request, InfobipService $infobipService)
     {
         // Log des données de la requête
         Log::info('Store method called', $request->all());
