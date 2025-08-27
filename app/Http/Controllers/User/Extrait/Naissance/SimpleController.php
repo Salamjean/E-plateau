@@ -41,8 +41,29 @@ class SimpleController extends Controller
         ]);
     }
 
-    public function store(saveNaissanceDRequest $request, InfobipService $infobipService)
+    public function store(Request $request, InfobipService $infobipService)
     {
+        $validated = $request->validate([
+            'type' => 'required',
+            'name' => 'required',
+            'prenom' => 'required',
+            'number' => 'required',
+            'DateR' => 'required',
+            'CMU' => 'nullable',
+            'commune' => 'required',
+            'CNI' => 'required|mimes:png,jpg,jpeg,pdf|max:1000',
+        ],[
+             'type.required' => 'le type d\'extrait que vous-voulez demander est obligatoire',
+            'name.required' => 'Le nom est obligatoire',
+            'prenom.required' => 'Le prénom est obligatoire',
+            'number.required' => 'Le numéro de registre sur l\'extrait est obligatoire',
+            'DateR.required' => 'La date de registre est obligatoire',
+            'CMU.required' => 'Le numéro de CMU est obligatoire',
+            'commune.required' => 'La commune est obligatoire',
+            'CNI.required' => 'Le champ CNI est obligatoire',
+            'CNI.mimes' => 'Le format du fichier doit être PNG, JPG, JPEG ou PDF',
+            'CNI.max' => 'Le fichier ne doit pas dépasser 1Mo',
+        ]);
         // Log des données de la requête
         Log::info('Store method called', $request->all());
 
