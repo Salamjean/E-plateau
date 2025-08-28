@@ -86,10 +86,10 @@ class DecesCertificatController extends Controller
         }
 
         $deces->save();
-//         $phoneNumber = $user->indicatif . $user->contact;
-//         $message = "Bonjour {$user->name}, votre demande d'extrait de décès a bien été transmise à la mairie de {$user->commune}. Référence: {$deces->reference}
-// Vous pouvez suivre l'état de votre demande en cliquant sur ce lien : https://edemarchee-ci.com/E-ci-recherche/demande";
-//         $infobipService->sendSms($phoneNumber, $message);
+        $phoneNumber = $user->indicatif . $user->contact;
+        $message = "Bonjour {$user->name}, votre demande d'extrait de décès a bien été transmise à la mairie de {$user->commune}. Référence: {$deces->reference}
+Vous pouvez suivre l'état de votre demande en cliquant sur ce lien : https://plateau-apps.com/home/search";
+        $infobipService->sendSms($phoneNumber, $message);
 
         return redirect()->route('user.extrait.deces.index')->with('success', 'Votre demande a été traitée avec succès.');
     }

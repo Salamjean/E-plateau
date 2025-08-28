@@ -132,16 +132,7 @@
                                 </div>
                             </div>
                             
-                            <!-- Valeur du stock -->
-                            <div class="stats-card secondary">
-                                <div class="stats-icon">
-                                    <i class="fas fa-coins"></i>
-                                </div>
-                                <div class="stats-content">
-                                    <div class="stats-label">Valeur totale du stock</div>
-                                    <div class="stats-value">{{ number_format($solde_timbres * 500, 0, ',', ' ') }} FCFA</div>
-                                </div>
-                            </div>
+                           
                             
                             <!-- Statistiques de vente -->
                             <div class="stats-card">

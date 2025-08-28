@@ -31,7 +31,7 @@ class UserAuthenticate extends Controller
     {
         if (!Auth::attempt($request->only('email', 'password'), $request->filled('remember'))) {
             return redirect()->route('login')->withErrors([
-                'email' => 'Le mot de passe incorrect.',
+                'password' => 'Le mot de passe incorrect.',
             ]);
         }
 

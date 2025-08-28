@@ -1,6 +1,11 @@
 @extends('caisse.layouts.template')
 @section('content')
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- Ajout des bibliothèques pour l'export -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+
 <div class="container-fluid py-4">
     <div class="row">
         <div class="col-12">
@@ -91,7 +96,7 @@
                     <!-- Tableau d'historique -->
                     <div class="table-container">
                         <table class="data-table" id="tableHistorique">
-                            <thead >
+                            <thead>
                                 <tr>
                                     <th>Date & Heure</th>
                                     <th>Type</th>
@@ -172,10 +177,13 @@
                     </div>
                     @endif
 
-                    <!-- Bouton d'export -->
+                    <!-- Boutons d'export -->
                     <div class="export-container">
-                        <button class="btn-export" onclick="exporterExcel()">
+                        <button class="btn-export excel" onclick="exporterExcel()">
                             <i class="fas fa-file-excel me-2"></i> Exporter en Excel
+                        </button>
+                        <button class="btn-export pdf" onclick="exporterPDF()">
+                            <i class="fas fa-file-pdf me-2"></i> Exporter en PDF
                         </button>
                     </div>
                 </div>
@@ -523,6 +531,43 @@
         transform: translateY(-2px);
     }
 
+     .export-container {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 1.5rem;
+        gap: 1rem;
+    }
+
+    .btn-export {
+        padding: 0.75rem 1.5rem;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+    }
+
+    .btn-export.excel {
+        background: var(--success);
+    }
+
+    .btn-export.excel:hover {
+        background: #05c28f;
+        transform: translateY(-2px);
+    }
+
+    .btn-export.pdf {
+        background: var(--danger);
+    }
+
+    .btn-export.pdf:hover {
+        background: #e5365a;
+        transform: translateY(-2px);
+    }
+
     /* Responsive */
     @media (max-width: 768px) {
         .filter-row {
@@ -550,6 +595,9 @@
 </style>
 
 <script>
+    // Initialisation des bibliothèques
+    window.jsPDF = window.jspdf.jsPDF;
+
     document.addEventListener('DOMContentLoaded', function() {
         // Afficher les messages de session avec Toast
         @if(session('success'))
@@ -597,9 +645,134 @@
         });
     }
 
+    // Fonction pour exporter en Excel
     function exporterExcel() {
-        // Fonctionnalité d'export Excel
-        alert('Fonctionnalité d\'export Excel sera implémentée prochainement');
+        try {
+            // Préparer les données
+            let data = [];
+            const headers = ['Date', 'Heure', 'Type', 'Quantité', 'Montant', 'Solde', 'Vendeur'];
+            data.push(headers);
+            
+            // Récupérer les lignes du tableau
+            const rows = document.querySelectorAll('#tableHistorique tbody tr.operation-row');
+            
+            rows.forEach(row => {
+                if (row.style.display !== 'none') { // Ne prendre que les lignes visibles
+                    const cells = row.querySelectorAll('td');
+                    const dateTime = cells[0].querySelector('.date-cell');
+                    const date = dateTime.querySelector('.date').textContent;
+                    const time = dateTime.querySelector('.time').textContent;
+                    const type = cells[1].textContent.trim();
+                    const quantite = cells[2].textContent.trim();
+                    const montant = cells[3].textContent.trim();
+                    const solde = cells[4].textContent.trim();
+                    const vendeur = cells[5].textContent.trim();
+                    
+                    data.push([date, time, type, quantite, montant, solde, vendeur]);
+                }
+            });
+            
+            // Créer un classeur Excel
+            const ws = XLSX.utils.aoa_to_sheet(data);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Historique Timbres");
+            
+            // Générer le fichier Excel
+            const dateExport = new Date().toISOString().slice(0, 10);
+            XLSX.writeFile(wb, `historique_timbres_${dateExport}.xlsx`);
+            
+            showToast('Succès', 'Export Excel terminé avec succès', 'success');
+        } catch (error) {
+            console.error('Erreur lors de l\'export Excel:', error);
+            showToast('Erreur', 'Une erreur est survenue lors de l\'export Excel', 'error');
+        }
+    }
+
+    // Fonction pour exporter en PDF
+    function exporterPDF() {
+        try {
+            // Créer un nouveau document PDF
+            const doc = new jsPDF();
+            
+            // Titre du document
+            const dateExport = new Date().toLocaleDateString('fr-FR');
+            doc.setFontSize(16);
+            doc.text('Historique des Timbres', 14, 15);
+            doc.setFontSize(10);
+            doc.setTextColor(100);
+            doc.text(`Export du ${dateExport}`, 14, 22);
+            
+            // Préparer les données du tableau
+            const headers = [['Date', 'Heure', 'Type', 'Quantité', 'Montant', 'Solde', 'Vendeur']];
+            const rows = [];
+            
+            // Récupérer les lignes du tableau
+            const tableRows = document.querySelectorAll('#tableHistorique tbody tr.operation-row');
+            
+            tableRows.forEach(row => {
+                if (row.style.display !== 'none') { // Ne prendre que les lignes visibles
+                    const cells = row.querySelectorAll('td');
+                    const dateTime = cells[0].querySelector('.date-cell');
+                    const date = dateTime.querySelector('.date').textContent;
+                    const time = dateTime.querySelector('.time').textContent;
+                    const type = cells[1].textContent.trim();
+                    const quantite = cells[2].textContent.trim();
+                    const montant = cells[3].textContent.trim();
+                    const solde = cells[4].textContent.trim();
+                    const vendeur = cells[5].textContent.trim();
+                    
+                    rows.push([date, time, type, quantite, montant, solde, vendeur]);
+                }
+            });
+            
+            // Générer le tableau dans le PDF
+            doc.autoTable({
+                head: headers,
+                body: rows,
+                startY: 30,
+                theme: 'grid',
+                styles: {
+                    fontSize: 8,
+                    cellPadding: 2
+                },
+                headStyles: {
+                    fillColor: [0, 51, 196],
+                    textColor: 255
+                },
+                alternateRowStyles: {
+                    fillColor: [240, 240, 240]
+                }
+            });
+            
+            // Ajouter les statistiques en pied de page
+            const lastPage = doc.internal.getNumberOfPages();
+            doc.setPage(lastPage);
+            
+            const totalRecharges = "{{ number_format($total_recharges, 0, ',', ' ') }}";
+            const totalVentes = "{{ number_format($total_ventes, 0, ',', ' ') }}";
+            const soldeActuel = "{{ number_format($solde_actuel, 0, ',', ' ') }}";
+            const chiffreAffaires = "{{ number_format($total_ventes * 500, 0, ',', ' ') }}";
+            
+            const finalY = doc.lastAutoTable.finalY + 10;
+            
+            doc.setFontSize(10);
+            doc.setTextColor(0);
+            doc.setFont(undefined, 'bold');
+            doc.text('Récapitulatif:', 14, finalY);
+            doc.setFont(undefined, 'normal');
+            doc.text(`Total Recharges: ${totalRecharges} timbres`, 14, finalY + 7);
+            doc.text(`Total Ventes: ${totalVentes} timbres`, 14, finalY + 14);
+            doc.text(`Solde Actuel: ${soldeActuel} timbres`, 14, finalY + 21);
+            doc.text(`Chiffre d'Affaires: ${chiffreAffaires} FCFA`, 14, finalY + 28);
+            
+            // Sauvegarder le PDF
+            doc.save(`historique_timbres_${new Date().toISOString().slice(0, 10)}.pdf`);
+            
+            showToast('Succès', 'Export PDF terminé avec succès', 'success');
+        } catch (error) {
+            console.error('Erreur lors de l\'export PDF:', error);
+            showToast('Erreur', 'Une erreur est survenue lors de l\'export PDF', 'error');
+        }
     }
 </script>
 @endsection
