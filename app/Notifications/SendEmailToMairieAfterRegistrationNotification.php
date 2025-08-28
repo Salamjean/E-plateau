@@ -22,7 +22,7 @@ class SendEmailToMairieAfterRegistrationNotification extends Notification
     {
         $this->code = $codeToSend;
         $this->email = $sendToemail;
-        $this->logoUrl = asset('assets/assets/img/logo plateau.png'); // URL du logo
+        $this->logoUrl = asset('assets/assets/img/logoplateau.png'); // URL du logo
     }
 
     /**

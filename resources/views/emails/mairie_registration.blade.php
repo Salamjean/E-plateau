@@ -7,7 +7,7 @@
     <table width="100%" cellpadding="0" cellspacing="0">
         <tr>
             <td align="center">
-                <img src="{{ $logoUrl }}" alt="Logo E-CI" width="150">
+                <img src="{{ $logoUrl }}" alt="Plateau-Apps" width="150">
             </td>
         </tr>
         <tr>
