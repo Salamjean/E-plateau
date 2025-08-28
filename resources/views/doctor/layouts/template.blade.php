@@ -6,7 +6,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <link rel="icon" href="{{ asset('assets/images/profiles/E-ci-logo.png') }}">
+  <link rel="shortcut icon" href="{{asset('assets/assets/img/logo pla.jpeg')}}" />
   <title>Doctor - Dashboard</title>
   <!-- Iconic Fonts -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">

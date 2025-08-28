@@ -6,7 +6,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="icon" href="{{ asset('assets/images/profiles/E-ci-logo.png') }}">
+    <link rel="shortcut icon" href="{{asset('assets/assets/img/logo pla.jpeg')}}" />
     <title>Delivery login</title>
     <style>
         :root {
@@ -301,7 +301,7 @@
 <body>
     <form class="form-container animate__animated animate__fadeIn" method="POST" action="{{ route('delivery.handleLogin') }}">
         <div class="form-header">
-            <img src="{{asset('assets/assets/img/post.png')}}" style="height: 50%; width:25%" alt="">
+            <img src="{{asset('assets/assets/img/logo plateau.png')}}" style="height: 50%; width:25%" alt="">
             <p class="subtitle">Entrez vos identifiants pour accéder à votre espace livreur</p>
         </div>
 

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="Style.css">
-    <link rel="icon" href="{{ asset('assets/images/profiles/E-ci-logo.png') }}">
+    <link rel="shortcut icon" href="{{asset('assets/assets/img/logo pla.jpeg')}}" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>Doctor - login</title>
 </head>
@@ -114,7 +114,7 @@
    
     
   <form class="form" method="POST" action="{{ route('doctor.handleLogin') }}">
-    <h2>Connexion d'un Docteur</h2>
+    <h2>Connexion agent collecteur</h2>
 
     @method('post')
     @csrf

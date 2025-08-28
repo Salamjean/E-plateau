@@ -14,7 +14,7 @@
       <meta name="description" content="">
       <meta name="author" content="">
       <!-- site icon -->
-      <link rel="icon" href="images/fevicon.png" type="image/png" />
+      <link rel="shortcut icon" href="{{asset('assets/assets/img/logo pla.jpeg')}}" />
       <!-- bootstrap css -->
       <link rel="stylesheet" href="{{asset('userAssets/css/bootstrap.min.css')}}" />
       <!-- site css -->

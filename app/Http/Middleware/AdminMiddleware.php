@@ -16,11 +16,36 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
+        $guards = ['web', 'mairie', 'hopital', 'doctor', 'director', 'agent', 'caisse', 'poste', 'livreur', 'finance', 'admin'];
 
-        if(Auth::guard('admin')->check()){
-            return $next($request);
-        }else{
-            return redirect()->route('admin.login');
+        // Vérifier chaque guard
+        foreach ($guards as $guard) {
+            if (Auth::guard($guard)->check()) {
+                return $next($request);
+            }
         }
+
+        // Déterminer la redirection basée sur le pattern d'URL
+        $patterns = [
+            'mairie/*' => 'login.mairie',
+            'hopital/*' => 'login.hopital',
+            'doctor/*' => 'login.doctor',
+            'director/*' => 'login.director',
+            'agent/*' => 'login.agent',
+            'caisse/*' => 'login.caisse',
+            'poste/*' => 'login.poste',
+            'livreur/*' => 'login.livreur',
+            'finance/*' => 'login.finance',
+            'admin/*' => 'login.admin',
+        ];
+
+        foreach ($patterns as $pattern => $route) {
+            if ($request->is($pattern)) {
+                return redirect()->route($route);
+            }
+        }
+
+        // Fallback vers le login par défaut
+        return redirect()->route('admin.login');
     }
 }

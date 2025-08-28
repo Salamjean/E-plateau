@@ -358,7 +358,7 @@ Route::prefix('agent')->group(function() {
     Route::post('/login', [AuthenticateAgent::class, 'handleLogin'])->name('agent.handleLogin');
 });
 
-Route::middleware('auth:agent')->prefix('agent')->group(function(){
+Route::middleware('agent')->prefix('agent')->group(function(){
         Route::get('/dashboard', [AgentDashboard::class, 'dashboard'])->name('agent.dashboard');
         Route::get('/logout', [AgentController::class, 'logout'])->name('agent.logout');
 
@@ -409,7 +409,7 @@ Route::prefix('caisse')->group(function() {
     Route::post('/login', [AuthenticateCaisse::class, 'handleLogin'])->name('caisse.handleLogin');
 });
 
-Route::middleware('auth:caisse')->prefix('caisse')->group(function(){
+Route::middleware('caisse')->prefix('caisse')->group(function(){
     Route::get('/dahboard', [CaisseDashboard::class, 'dashboard'])->name('caisse.dashboard');
     Route::get('/logout', [CaisseDashboard::class, 'logout'])->name('caisse.logout');
 
@@ -439,7 +439,7 @@ Route::prefix('financial')->group(function() {
     Route::post('/login', [AuthenticateFinance::class, 'handleLogin'])->name('finance.handleLogin');
 });
 
-Route::middleware('auth:finance')->prefix('finance')->group(function(){
+Route::middleware('finance')->prefix('finance')->group(function(){
     Route::get('/dahboard', [FinanceDashboard::class, 'dashboard'])->name('finance.dashboard');
     Route::get('/logout', [FinanceDashboard::class, 'logout'])->name('finance.logout');
 
@@ -457,7 +457,7 @@ Route::prefix('post')->group(function() {
     Route::post('/login', [AuthenticatePoste::class, 'handleLogin'])->name('post.handleLogin');
 });
 
-Route::middleware('auth:poste')->prefix('post')->group(function(){
+Route::middleware('poste')->prefix('post')->group(function(){
     Route::get('/dahboard', [PosteDashboard::class, 'dashboard'])->name('post.dashboard');
     Route::get('/logout', [PosteDashboard::class, 'logout'])->name('post.logout');
 
@@ -487,7 +487,7 @@ Route::prefix('delivery')->group(function() {
     Route::post('/login', [AuthenticateDelivery::class, 'handleLogin'])->name('delivery.handleLogin');
 });
 
-Route::middleware('auth:livreur')->prefix('delivery')->group(function(){
+Route::middleware('livreur')->prefix('delivery')->group(function(){
     Route::get('/dahboard', [DeliveryDashboard::class, 'dashboard'])->name('delivery.dashboard');
     Route::get('/logout', [DeliveryDashboard::class, 'logout'])->name('delivery.logout');
     Route::post('/livreur/toggle-disponibilite', [DeliveryDashboard::class, 'toggleDisponibilite'])->name('livreur.toggleDisponibilite');

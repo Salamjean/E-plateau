@@ -25,7 +25,7 @@
   <!-- Page Specific CSS (Morris Charts.css) -->
   <link href="{{ asset("assetsHopital/assets/css/morris.css") }}" rel="stylesheet">
   <!-- Favicon -->
-  <link rel="icon" href="{{ asset('assets/images/profiles/E-ci-logo.png') }}">
+  <link rel="shortcut icon" href="{{asset('assets/assets/img/logo pla.jpeg')}}" />
 </head>
 
 <body class="ms-body ms-aside-left-open ms-primary-theme ms-has-quickbar">

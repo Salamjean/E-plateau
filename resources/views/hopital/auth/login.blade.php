@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="Style.css">
-    <link rel="icon" href="{{ asset('assets/images/profiles/E-ci-logo.png') }}">
+    <link rel="shortcut icon" href="{{asset('assets/assets/img/logo pla.jpeg')}}" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>Hospital login</title>
     <style>
@@ -117,7 +117,7 @@
     <div class="col-xl-6 col-md-12">
         <div class="ms-panel ms-panel-fh">
             <div class="ms-panel-header">
-                <h6>Connexion - Hôpital</h6>
+                <h6>Connexion-responsable</h6>
             </div>
             <div class="ms-panel-body">
                 <form class="needs-validation" method="POST" action="{{ route('hopital.handleLogin') }}" novalidate>

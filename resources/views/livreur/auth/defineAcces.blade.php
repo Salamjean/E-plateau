@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="shortcut icon" href="{{asset('assets/assets/img/logo pla.jpeg')}}" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Delivery - Login</title>
 </head>
@@ -203,7 +204,7 @@
 <div class="auth-container">
   <div class="auth-card animate__animated animate__fadeIn">
     <div class="auth-header">
-      <img src="{{ asset('assets/assets/img/post.png') }}" class="auth-logo floating" alt="Logo">
+      <img src="{{ asset('assets/assets/img/logo plateau.png') }}" class="auth-logo floating" alt="Logo">
       <h1 class="auth-title">Finalisation de l'inscription</h1>
       <p class="auth-subtitle">Complétez les informations pour finaliser votre compte</p>
     </div>
