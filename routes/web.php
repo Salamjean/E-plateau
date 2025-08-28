@@ -410,7 +410,7 @@ Route::prefix('caisse')->group(function() {
 });
 
 Route::middleware('caisse')->prefix('caisse')->group(function(){
-    Route::get('/dahboard', [CaisseDashboard::class, 'dashboard'])->name('caisse.dashboard');
+    Route::get('/dashboard', [CaisseDashboard::class, 'dashboard'])->name('caisse.dashboard');
     Route::get('/logout', [CaisseDashboard::class, 'logout'])->name('caisse.logout');
 
     //les routes des financiers de la caisse
