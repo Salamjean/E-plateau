@@ -10,7 +10,7 @@
                   <span class="figure">
                     <img src="{{asset('assets/assets/img/logo plateau.png')}}" alt="user" class="user">
                   </span>
-                  <span class="user-name">Livreur {{Auth::user()->name.' '.Auth::user()->prenom}} </span>
+                  <span class="user-name">Livreur {{Auth::guard('livreur')->user()->name.' '.Auth::guard('livreur')->user()->prenom}} </span>
                 </span>
               </button>
               <div class="mdc-menu mdc-menu-surface" tabindex="-1">

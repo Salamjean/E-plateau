@@ -11,7 +11,7 @@ class DeliveryDashboard extends Controller
 {
     public function dashboard()
     {
-        $livreur = Auth::user();
+        $livreur = Auth::guard('livreur')->user();
         $now = Carbon::now();
         $oneWeekAgo = $now->copy()->subWeek();
 

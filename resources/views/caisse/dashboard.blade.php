@@ -445,11 +445,11 @@
   <div class="welcome-card">
     <div class="row align-items-center">
       <div class="col-md-8">
-        <h2>Bonjour, {{ Auth::user()->name }} {{ Auth::user()->prenom }}!</h2>
+        <h2>Bonjour, {{ Auth::guard('caisse')->user()->name }} {{ Auth::guard('caisse')->user()->prenom }}!</h2>
         <p>Bienvenue sur votre tableau de bord de gestion des demandes</p>
         <div class="d-flex align-items-center mt-2">
           <span class="badge badge-primary me-2">
-            <i class="mdi mdi-city me-1"></i> {{ Auth::user()->communeM }}
+            <i class="mdi mdi-city me-1"></i> {{ Auth::guard('caisse')->user()->communeM }}
           </span>
           <span class="badge badge-primary">
             <i class="mdi mdi-identifier me-1"></i> Responsable financier

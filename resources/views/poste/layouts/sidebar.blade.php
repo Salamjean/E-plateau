@@ -6,8 +6,8 @@
       </div>
       <div class="mdc-drawer__content">
         <div class="user-info">
-          <p class="name text-center"> {{Auth::user()->name.' '.Auth::user()->prenom}} </p>
-          <p class="email text-center">{{Auth::user()->email}}</p>
+          <p class="name text-center"> {{Auth::guard('poste')->user()->name.' '.Auth::guard('poste')->user()->prenom}} </p>
+          <p class="email text-center">{{Auth::guard('poste')->user()->email}}</p>
         </div>
         <div class="mdc-list-group">
           <nav class="mdc-list mdc-drawer-menu">

@@ -11,7 +11,7 @@
             </a>
           </li>
           <li class="pt-2 pb-1">
-            <span class="nav-item-head text-white" style="text-align: center">Agent état civil : {{Auth::user()->prenom}} </span>
+            <span class="nav-item-head text-white" style="text-align: center">Agent état civil : {{Auth::guard('agent')->user()->prenom}} </span>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{{route('agent.dashboard')}}">

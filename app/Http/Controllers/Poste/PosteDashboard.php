@@ -18,7 +18,7 @@ class PosteDashboard extends Controller
     public function dashboard()
 {
     Carbon::setLocale('fr');
-    $poste = Auth::user();
+    $poste = Auth::guard('poste')->user();
     $startDate = Carbon::now()->subDays(7);
     
     $modelMap = [
